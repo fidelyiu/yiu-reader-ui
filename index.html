@@ -1,13 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>Yiu Reader</title>
+    <link rel="icon" href="/favicon.ico"/>
+    <style>
+        .preloader{
+            height: 100%;
+            width: 100%;
+            padding: 15px 0 15px;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            /*perspective: 700;*/
+            perspective: 700px;
+        }
+        .loader{
+            text-align: center;
+            margin: 5px;
+            border-radius: 50%;
+            /*border: 4px solid #2c3e50;*/
+            border: 4px solid #444444;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .loader-inner-1{
+            animation-delay: 0.2s;
+            animation: change_first_circle 2s ease-in-out infinite;
+        }
+        .loader-inner-2{
+            animation-delay: 0.2s;
+            animation: change_second_circle 2s ease-in-out infinite;
+        }
+        .loader-inner-3{
+            animation-delay: 0.2s;
+            width: 15px;
+            height: 15px;
+            animation: change_last_circle 3s linear  infinite;
+        }
+        @keyframes change_first_circle {
+            50%{ transform: rotateX(360deg) scale(0.8); }
+        }
+        @keyframes change_second_circle {
+            50%{ transform: rotateY(360deg) scale(0.8); }
+        }
+        @keyframes change_last_circle {
+            50%{ transform: rotateX(360deg) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="preloader">
+        <div class="loader loader-inner-1">
+            <div class="loader loader-inner-2">
+                <div class="loader loader-inner-3">
+                    Y
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
 </html>

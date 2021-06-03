@@ -15,5 +15,5 @@
 # 开发依赖
 1. [less](http://lesscss.cn/) ：less
 2. [typescript](https://www.typescriptlang.org/) ：TS
-3. [vite](https://vitejs.dev/) ：vite
+3. [vite](https://cn.vitejs.dev/) ：vite
 
