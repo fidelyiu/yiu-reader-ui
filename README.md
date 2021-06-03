@@ -16,4 +16,5 @@
 1. [less](http://lesscss.cn/) ：less
 2. [typescript](https://www.typescriptlang.org/) ：TS
 3. [vite](https://cn.vitejs.dev/) ：vite
+4. [eslint-vue-plugin](https://eslint.vuejs.org/) ：vue的es插件
 
