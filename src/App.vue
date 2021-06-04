@@ -17,7 +17,7 @@
     },
     setup() {
       let a1 = 10
-      let a2 = 10
+      // let a2 = 10
       // let a3 = 10
       // let a4 = 10
       // let a5 = 10
