@@ -8,7 +8,8 @@
     "preview": "npm run build && vite preview",
     "preview:dist": "vite preview",
     "lint:eslint": "eslint \"src/**/*.{vue,ts,tsx}\" --fix",
-    "install:husky": "is-ci || husky install"
+    "install:husky": "is-ci || husky install",
+    "postinstall": "npm run install:husky"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
