@@ -190,7 +190,7 @@
 
 "@types/lodash-es@^4.17.4":
   version "4.17.4"
-  resolved "https://registry.nlark.com/@types/lodash-es/download/@types/lodash-es-4.17.4.tgz?cache=0&sync_timestamp=1621241672936&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Flodash-es%2Fdownload%2F%40types%2Flodash-es-4.17.4.tgz"
+  resolved "https://registry.nlark.com/@types/lodash-es/download/@types/lodash-es-4.17.4.tgz?cache=0&sync_timestamp=1621241672936&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Flodash-es%2Fdownload%2F%40types%2Flodash-es-4.17.4.tgz#b2e440d2bf8a93584a9fd798452ec497986c9b97"
   integrity sha1-suRA0r+Kk1hKn9eYRS7El5hsm5c=
   dependencies:
     "@types/lodash" "*"
@@ -1353,7 +1353,7 @@ loader-utils@^1.1.0:
 
 lodash-es@^4.17.21:
   version "4.17.21"
-  resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.21.tgz?cache=0&sync_timestamp=1613836280924&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.21.tgz"
+  resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.21.tgz?cache=0&sync_timestamp=1613836280924&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha1-Q+YmxG5lkbd1C+srUBFzkMYJ4+4=
 
 lodash.camelcase@^4.3.0:
@@ -2145,3 +2145,8 @@ yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/yallist/download/yallist-4.0.0.tgz"
   integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
+
+yiu-js@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.7.tgz#71ca5a2b4bf35b70eab683548bb9612661fea181"
+  integrity sha1-ccpaK0vzW3DqtoNUi7lhJmH+oYE=

@@ -3,7 +3,7 @@
     alt="Vue logo"
     src="./assets/logo.png"
   >
-  <HelloWorld msg="Hello Vue 33 + TypeScript + Vite" />
+  <HelloWorld msg="Hello Vue 31 + TypeScript + Vite" />
 </template>
 
 <script lang="ts">
@@ -16,7 +16,21 @@
       HelloWorld,
     },
     setup() {
-      let a = 6
+      let a1 = 10
+      let a2 = 10
+      let a3 = 10
+      let a4 = 10
+      let a5 = 10
+      let a6 = 10
+      let a7 = 10
+      let a8 = 10
+      let a9 = 10
+      let a0 = 10
+      let a10 = 10
+      let a11 = 10
+      let a12 = 10
+      let a13 = 10
+      let a41 = 10
       return {}
     },
   })
