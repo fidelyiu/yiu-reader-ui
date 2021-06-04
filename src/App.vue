@@ -19,7 +19,7 @@
       let a1 = 1
       // doName()
       let a2 = 10
-      let a3 = 10
+      // let a3 = 10
       // let a4 = 10
       // let a5 = 10
       // let a6 = 10
