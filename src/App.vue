@@ -1,14 +1,14 @@
 <template>
-  <img
-    alt="Vue logo"
-    src="./assets/logo.png"
-  >
-  <HelloWorld msg="Hello Vue 31 + TypeScript + Vite" />
+  <img alt="Vue logo"
+       src="./assets/logo.png">
+  <HelloWorld msg="Hello Vue 31 + TypeScript + Vite"/>
+  {{ name }}
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import HelloWorld from './components/HelloWorld.vue'
+  import { yiuHttp } from '/@/utils/http'
 
   export default defineComponent({
     name: 'App',
@@ -16,7 +16,25 @@
       HelloWorld,
     },
     setup() {
-      return {}
+      const name = ref('Fidel')
+      let cancel = yiuHttp({
+        api: {
+          method: 'GET',
+          url: '/hello',
+        },
+        cancel: true,
+        finally: () => {
+          name.value = 'Yiu'
+        },
+      })
+      setTimeout(() => {
+        if (cancel) {
+          cancel()
+        }
+      }, 500)
+      return {
+        name,
+      }
     },
   })
 </script>
