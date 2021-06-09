@@ -6,6 +6,7 @@ import { YiuRequestConfig } from 'yiu-axios/type'
 const defYiuAxios = yiuAxios.create<any, Ref<boolean>>({
     baseURL: 'http://localhost:8080/',
     timeout: 6000,
+    debug: !import.meta.env.PROD,
     loading: {
         beforeSendFunc: function ({ loading }) {
             if (loading) {
