@@ -1,11 +1,23 @@
-import { YiuAxios } from 'yiu-axios'
+import { yiuAxios } from 'yiu-axios'
 import axios, { Canceler } from 'axios'
-import { YiuRequestConfig } from 'yiu-axios/dist/type'
+import { Ref } from 'vue'
+import { YiuRequestConfig } from 'yiu-axios/type'
 
-const defYiuAxios = new YiuAxios({
+const defYiuAxios = yiuAxios.create<any, Ref<boolean>>({
     baseURL: 'http://localhost:8080/',
-    // timeout: 1000,
-    debug: true,
+    timeout: 6000,
+    loading: {
+        beforeSendFunc: function ({ loading }) {
+            if (loading) {
+                loading.value = true
+            }
+        },
+        finallySendFunc: function ({ loading }) {
+            if (loading) {
+                loading.value = false
+            }
+        },
+    },
 })
 const defAxios = axios.create()
 

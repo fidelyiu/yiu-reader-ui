@@ -2211,14 +2211,23 @@ yallist@^4.0.0:
   resolved "https://registry.npm.taobao.org/yallist/download/yallist-4.0.0.tgz"
   integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
 
-yiu-axios@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.nlark.com/yiu-axios/download/yiu-axios-1.0.6.tgz?cache=0&sync_timestamp=1622982515443&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-axios%2Fdownload%2Fyiu-axios-1.0.6.tgz#6e5f687401f946ea7a4ef49e84d0f132f4d2321c"
-  integrity sha1-bl9odAH5Rup6TvSehNDxMvTSMhw=
+yiu-axios@^1.0.48:
+  version "1.0.48"
+  resolved "https://registry.nlark.com/yiu-axios/download/yiu-axios-1.0.48.tgz?cache=0&sync_timestamp=1623212557429&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-axios%2Fdownload%2Fyiu-axios-1.0.48.tgz#e426cd3539c2229a8b89f354cf3688ae2f69edce"
+  integrity sha1-5CbNNTnCIpqLifNUzzaIri9p7c4=
   dependencies:
     axios "^0.21.1"
+    lodash "^4.17.21"
+    qs "^6.10.1"
 
 yiu-js@^1.0.7:
   version "1.0.7"
   resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.7.tgz#71ca5a2b4bf35b70eab683548bb9612661fea181"
   integrity sha1-ccpaK0vzW3DqtoNUi7lhJmH+oYE=
+
+yiu-learn@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.nlark.com/yiu-learn/download/yiu-learn-1.0.6.tgz?cache=0&sync_timestamp=1623150150037&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-learn%2Fdownload%2Fyiu-learn-1.0.6.tgz#7a29df0539dd5194ef1dca1a72df3015d425fd8c"
+  integrity sha1-einfBTndUZTvHcoact8wFdQl/Yw=
+  dependencies:
+    lodash-es "^4.17.21"

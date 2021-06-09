@@ -6,7 +6,10 @@ export default function vitePluginEslintOnSave() {
         handleHotUpdate({ file, server }) {
             if (file && typeof file === 'string' && file.indexOf(server.config.root + '/src') !== -1) {
                 setTimeout(() => {
-                    execSync('npx eslint ' + file, { stdio: [0, 1, 2] })
+                    try {
+                        execSync('npx eslint ' + file, { stdio: [0, 1, 2] })
+                    } catch (e) {
+                    }
                 })
             }
         },

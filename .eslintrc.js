@@ -36,6 +36,10 @@ module.exports = {
         'vue/html-closing-bracket-newline': 0,
         // 结尾/>不需要空格
         'vue/html-closing-bracket-spacing': 0,
+        // 简单元素内容新起一行
+        'vue/singleline-html-element-content-newline': 0,
+        // 禁止元素自己关闭
+        'vue/html-self-closing': 'off',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
     },
