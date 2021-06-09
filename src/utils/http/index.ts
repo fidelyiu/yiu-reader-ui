@@ -4,7 +4,7 @@ import { Ref } from 'vue'
 import { YiuRequestConfig } from 'yiu-axios/type'
 
 const defYiuAxios = yiuAxios.create<any, Ref<boolean>>({
-    baseURL: 'http://localhost:3100/',
+    // baseURL: 'http://localhost:3100/',
     timeout: 6000,
     debug: !import.meta.env.PROD,
     loading: {
