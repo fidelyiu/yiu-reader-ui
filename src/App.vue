@@ -20,7 +20,7 @@
       const showWorkspace = () => {
         yiuHttp({
           api: {
-            url: '/current/workspace',
+            url: '/api/current/workspace',
             method: MethodEnum.GET,
           },
           success: (res) => {
