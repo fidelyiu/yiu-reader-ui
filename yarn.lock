@@ -2530,10 +2530,10 @@ yallist@^4.0.0:
   resolved "https://registry.npm.taobao.org/yallist/download/yallist-4.0.0.tgz"
   integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
 
-yiu-axios@^1.0.50:
-  version "1.0.50"
-  resolved "https://registry.nlark.com/yiu-axios/download/yiu-axios-1.0.50.tgz?cache=0&sync_timestamp=1623238691356&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-axios%2Fdownload%2Fyiu-axios-1.0.50.tgz#201fa9c35a8986e4e23735d0fca34c0ba38373f8"
-  integrity sha1-IB+pw1qJhuTiNzXQ/KNMC6ODc/g=
+yiu-axios@^1.0.53:
+  version "1.0.53"
+  resolved "https://registry.nlark.com/yiu-axios/download/yiu-axios-1.0.53.tgz#a05a52f4e94cbb5d282e93bd7dbde3e5efee72f6"
+  integrity sha1-oFpS9OlMu10oLpO9fb3j5e/ucvY=
   dependencies:
     axios "^0.21.1"
     lodash "^4.17.21"

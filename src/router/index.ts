@@ -1,6 +1,8 @@
 import { App } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from '/@/router/routes'
+import { yiuHttp } from '/@/utils/http'
+import SERVER_API from '/@/api'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -11,13 +13,15 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
     if (to.path !== '/workspace/select') {
-        setTimeout(() => {
-            if (Math.round(Math.random()) === 1) {
+        yiuHttp({
+            api: SERVER_API.mainApi.getCurrentWorkspace,
+            success: () => {
                 next()
-            } else {
+            },
+            error: () => {
                 next('/workspace/select')
-            }
-        }, 1000)
+            },
+        })
     } else {
         next()
     }
