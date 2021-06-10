@@ -6,7 +6,7 @@ import { Result } from '/#/types'
 import { getEnvObj } from '/@/utils/env'
 
 const defYiuAxios = yiuAxios.create<Result, Ref<boolean>>({
-    baseURL: getEnvObj().API_URL_PREFIX as string || '/api',
+    baseURL: getEnvObj().API_URL_PREFIX as string,
     timeout: 6000,
     debug: !import.meta.env.PROD,
     loading: {
