@@ -2,9 +2,11 @@ import { yiuAxios } from 'yiu-axios'
 import axios, { Canceler } from 'axios'
 import { Ref } from 'vue'
 import { YiuRequestConfig } from 'yiu-axios/type'
+import { Result } from '/#/types'
+import { getEnvObj } from '/@/utils/env'
 
-const defYiuAxios = yiuAxios.create<any, Ref<boolean>>({
-    // baseURL: 'http://localhost:3100/',
+const defYiuAxios = yiuAxios.create<Result, Ref<boolean>>({
+    baseURL: getEnvObj().API_URL_PREFIX as string || '/api',
     timeout: 6000,
     debug: !import.meta.env.PROD,
     loading: {
@@ -22,6 +24,6 @@ const defYiuAxios = yiuAxios.create<any, Ref<boolean>>({
 })
 const defAxios = axios.create()
 
-export function yiuHttp<D = any, T = any>(c: YiuRequestConfig<D, T>): Canceler | undefined {
+export function yiuHttp<D = any, L = any>(c: YiuRequestConfig<Result<D>, L>): Canceler | undefined {
     return defYiuAxios.send(c, defAxios)
 }
