@@ -1,14 +1,15 @@
 <template>
-  <router-view></router-view>
+  <div>WorkspaceSelect</div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
 
   export default defineComponent({
-    name: 'App',
+    name: 'WorkspaceSelect',
   })
 </script>
 
-<style>
+<style scoped>
+
 </style>

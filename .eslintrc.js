@@ -42,5 +42,7 @@ module.exports = {
         'vue/html-self-closing': 'off',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        // 方法没有返回值
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
 }
