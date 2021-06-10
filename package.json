@@ -14,7 +14,7 @@
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
     "@vueuse/core": "^4.11.2",
-    "ant-design-vue": "^1.7.5",
+    "ant-design-vue": "^2.2.0-beta.2",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

@@ -1,20 +1,21 @@
 <template>
   <img alt="Vue logo"
        src="./assets/logo.png">
-  <HelloWorld msg="Hello Vue 31 + TypeScript + Vite"/>
-  <button @click="showWorkspace">获取当前工作空间</button>
+  <Button type="primary">Primary</Button>
+  <!--<button class="mt-2 py-2 px-4 rounded-lg shadow-md bg-green-500 hover:bg-green-700" @click="showWorkspace">获取当前工作空间-->
+  <!--</button>-->
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import HelloWorld from './components/HelloWorld.vue'
   import { yiuHttp } from '/@/utils/http'
   import { MethodEnum } from 'yiu-axios/type'
+  import { Button } from 'ant-design-vue'
 
   export default defineComponent({
     name: 'App',
     components: {
-      HelloWorld,
+      Button,
     },
     setup() {
       const showWorkspace = () => {
