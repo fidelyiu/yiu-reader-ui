@@ -18,3 +18,7 @@
 3. [vite](https://cn.vitejs.dev/) ：vite
 4. [eslint-vue-plugin](https://eslint.vuejs.org/) ：vue的es插件
 
+# 图标地址
+- [MaterialDesignIcons的官网](https://materialdesignicons.com/)
+- [MaterialDesignIcons的iconify](https://iconify.design/icon-sets/mdi/)
+

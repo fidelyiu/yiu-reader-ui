@@ -24,7 +24,7 @@
   resolved "https://registry.npm.taobao.org/@ant-design/icons-svg/download/@ant-design/icons-svg-4.1.0.tgz"
   integrity sha1-SAsCX0sg73/o9H1KSEbk/uhOoGw=
 
-"@ant-design/icons-vue@^6.0.0", "@ant-design/icons-vue@^6.0.1":
+"@ant-design/icons-vue@^6.0.0":
   version "6.0.1"
   resolved "https://registry.npm.taobao.org/@ant-design/icons-vue/download/@ant-design/icons-vue-6.0.1.tgz?cache=0&sync_timestamp=1611990758478&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40ant-design%2Ficons-vue%2Fdownload%2F%40ant-design%2Ficons-vue-6.0.1.tgz"
   integrity sha1-nYBMPHTSz6+XyxjlgtO5QAk09f0=
@@ -105,6 +105,25 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@iconify/iconify@2.0.0-rc.6":
+  version "2.0.0-rc.6"
+  resolved "https://registry.nlark.com/@iconify/iconify/download/@iconify/iconify-2.0.0-rc.6.tgz#e3f5376b63b441dcb3696317784b98e2e678cf46"
+  integrity sha1-4/U3a2O0QdyzaWMXeEuY4uZ4z0Y=
+  dependencies:
+    cross-fetch "^3.0.6"
+
+"@iconify/iconify@>=2.0.0-rc.6", "@iconify/iconify@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.nlark.com/@iconify/iconify/download/@iconify/iconify-2.0.1.tgz#4927812922d50b378699694b5e72e22a1acc9d2f"
+  integrity sha1-SSeBKSLVCzeGmWlLXnLiKhrMnS8=
+  dependencies:
+    cross-fetch "^3.0.6"
+
+"@iconify/json@^1.1.354":
+  version "1.1.354"
+  resolved "https://registry.nlark.com/@iconify/json/download/@iconify/json-1.1.354.tgz#a2024ba18a48931e46121413ea743cddd3638fa6"
+  integrity sha1-ogJLoYpIkx5GEhQT6nQ83dNjj6Y=
+
 "@intlify/core-base@9.1.6":
   version "9.1.6"
   resolved "https://registry.nlark.com/@intlify/core-base/download/@intlify/core-base-9.1.6.tgz"
@@ -181,6 +200,24 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
+
+"@purge-icons/core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.npm.taobao.org/@purge-icons/core/download/@purge-icons/core-0.7.0.tgz#097ba8d4d8b7e8d662df687bd2391eb8b83caba0"
+  integrity sha1-CXuo1Ni36NZi32h70jkeuLg8q6A=
+  dependencies:
+    "@iconify/iconify" "2.0.0-rc.6"
+    axios "^0.21.1"
+    debug "^4.3.2"
+    fast-glob "^3.2.5"
+    fs-extra "^9.1.0"
+
+"@purge-icons/generated@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.nlark.com/@purge-icons/generated/download/@purge-icons/generated-0.7.0.tgz#d87dbb3145e8b9a64e2e12ff660aa3cb13cbeb56"
+  integrity sha1-2H27MUXouaZOLhL/ZgqjyxPL61Y=
+  dependencies:
+    "@iconify/iconify" ">=2.0.0-rc.6"
 
 "@rollup/pluginutils@^4.1.0":
   version "4.1.0"
@@ -849,6 +886,13 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
+
+cross-fetch@^3.0.6:
+  version "3.1.4"
+  resolved "https://registry.npm.taobao.org/cross-fetch/download/cross-fetch-3.1.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcross-fetch%2Fdownload%2Fcross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
+  integrity sha1-lyPzo6JHv4uJA586OAqSROj6Lzk=
+  dependencies:
+    node-fetch "2.6.1"
 
 cross-spawn@^7.0.2:
   version "7.0.3"
@@ -1757,6 +1801,11 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
+node-fetch@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npm.taobao.org/node-fetch/download/node-fetch-2.6.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-fetch%2Fdownload%2Fnode-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha1-BFvTI2Mfdu0uK1VXM5RBa2OaAFI=
+
 node-releases@^1.1.71:
   version "1.1.73"
   resolved "https://registry.nlark.com/node-releases/download/node-releases-1.1.73.tgz?cache=0&sync_timestamp=1623060295334&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnode-releases%2Fdownload%2Fnode-releases-1.1.73.tgz#dd4e81ddd5277ff846b80b52bb40c49edf7a7b20"
@@ -2044,6 +2093,14 @@ rimraf@^3.0.2:
   integrity sha1-8aVAK6YiCtUswSgrrBrjqkn9Bho=
   dependencies:
     glob "^7.1.3"
+
+rollup-plugin-purge-icons@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npm.taobao.org/rollup-plugin-purge-icons/download/rollup-plugin-purge-icons-0.7.0.tgz#4419b810d5d75f1bba3af72a238e70b4a675f03c"
+  integrity sha1-RBm4ENXXXxu6OvcqI45wtKZ18Dw=
+  dependencies:
+    "@purge-icons/core" "^0.7.0"
+    "@purge-icons/generated" "^0.7.0"
 
 rollup@^2.38.5:
   version "2.50.6"
@@ -2391,6 +2448,15 @@ vite-plugin-html@^2.0.7:
     ejs "^3.1.6"
     fs-extra "^9.1.0"
     html-minifier-terser "^5.1.1"
+
+vite-plugin-purge-icons@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npm.taobao.org/vite-plugin-purge-icons/download/vite-plugin-purge-icons-0.7.0.tgz#c460037438fd71372153360ccb9e7d97b030fb58"
+  integrity sha1-xGADdDj9cTchUzYMy559l7Aw+1g=
+  dependencies:
+    "@purge-icons/core" "^0.7.0"
+    "@purge-icons/generated" "^0.7.0"
+    rollup-plugin-purge-icons "^0.7.0"
 
 vite-plugin-style-import@^0.10.1:
   version "0.10.1"

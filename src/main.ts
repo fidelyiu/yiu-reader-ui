@@ -1,8 +1,11 @@
 import { createApp } from 'vue'
+import { isReady, setupRouter } from '/@/router'
+
 import App from './App.vue'
+
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
-import { isReady, setupRouter } from '/@/router'
+import '@purge-icons/generated'
 
 if (import.meta.env.DEV) {
     import('ant-design-vue/dist/antd.less')

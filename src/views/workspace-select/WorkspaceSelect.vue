@@ -1,5 +1,6 @@
 <template>
   <div>WorkspaceSelect</div>
+  <span class="iconify" data-icon="fa:home"></span>
 </template>
 
 <script lang="ts">
