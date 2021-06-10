@@ -1,6 +1,6 @@
 <template>
   <div>Dashboard</div>
-  <Button @click="sendApi" type="primary">发送请求</Button>
+  <Button type="primary" @click="sendApi">发送请求</Button>
 </template>
 
 <script lang="ts">
