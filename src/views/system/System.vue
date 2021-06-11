@@ -2,7 +2,7 @@
   <div class="bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
     <div class="text-2xl text-center p-4 relative">
       <!--返回箭头-->
-      <div class="absolute inset-y-0 left-3 h-full flex flex-col justify-center" v-if="false">
+      <div v-if="false" class="absolute inset-y-0 left-3 h-full flex flex-col justify-center">
         <div class="p-2 text-xs rounded-t hover:bg-gray-200">
           <span class="iconify block text-base" data-icon="mdi:keyboard-backspace" data-inline="false"></span>
         </div>
