@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from '/@/router/routes'
 import { yiuHttp } from '/@/utils/http'
 import SERVER_API from '/@/api'
+import nProgress from 'nprogress'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -11,7 +12,10 @@ const router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
+nProgress.configure({ showSpinner: false })
+
 router.beforeEach((to, _from, next) => {
+    nProgress.start()
     if (to.path !== '/system') {
         yiuHttp({
             api: SERVER_API.mainApi.getCurrentWorkspace,
@@ -21,9 +25,13 @@ router.beforeEach((to, _from, next) => {
             error: () => {
                 next('/system')
             },
+            finally: () => {
+                nProgress.start()
+            },
         })
     } else {
         next()
+        nProgress.start()
     }
 })
 
