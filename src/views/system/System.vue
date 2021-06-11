@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <SystemTab :tabKey="tabKey" @change="onTabKeyChange"></SystemTab>
+    <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>
   </div>
   <div>
     <span class="iconify" data-icon="fa:home"></span>
