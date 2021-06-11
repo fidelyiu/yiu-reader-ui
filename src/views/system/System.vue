@@ -17,10 +17,20 @@
     </div>
     <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>
   </div>
-  <div>
-    <span class="iconify" data-icon="fa:home"></span>
-    {{ tabKey }}
-  </div>
+  <transition name="yiu-x">
+    <div v-if="tabKey==='dbManage'">
+      dbManage
+    </div>
+    <div v-else-if="tabKey==='editSoft'">
+      editSoft
+    </div>
+    <div v-else-if="tabKey==='cacheImage'">
+      cacheImage
+    </div>
+    <div v-else>
+      workspace
+    </div>
+  </transition>
 </template>
 
 <script lang="ts">
