@@ -26,14 +26,15 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { systemTabKey } from '/@/views/system/tab/types'
   import SystemTabItem from '/@/views/system/tab/SystemTabItem.vue'
+  import { systemTabKey } from '/@/views/system/tab/types'
 
   export default defineComponent({
     name: '',
     components: { SystemTabItem },
     props: {
-      tabKey: propTypes.string.def<systemTabKey>('workspace'),
+      tabKey: propTypes.oneOf(new Array<systemTabKey>('workspace', 'editSoft', 'cacheImage', 'dbManage'))
+                       .def('workspace'),
     },
     emits: ['change'],
     setup(props, { emit }) {
@@ -54,10 +55,10 @@
 <style scoped>
 
   .tab-item-icon {
-    @apply text-3xl pr-1
+    @apply text-2xl pr-1
   }
 
   .tab-item-title {
-    @apply flex self-center
+    @apply flex self-center text-base
   }
 </style>
