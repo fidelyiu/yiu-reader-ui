@@ -10,38 +10,35 @@
       <span>系统设置</span>
       <!--问号-->
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
-        <div class="p-2 text-xs rounded-t hover:bg-gray-200" @click="openNg">
+        <div class="p-2 text-xs rounded-t hover:bg-gray-200">
           <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
         </div>
       </div>
     </div>
-    <SystemTab></SystemTab>
+    <SystemTab :tabKey="tabKey" @change="onTabKeyChange"></SystemTab>
   </div>
   <div>
     <span class="iconify" data-icon="fa:home"></span>
+    {{ tabKey }}
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
-  import SystemTab from '/@/views/system/SystemTab.vue'
-  import nProgress from 'nprogress'
+  import { defineComponent, ref } from 'vue'
+  import { systemTabKey } from '/@/views/system/tab/types'
+  import SystemTab from '/@/views/system/tab/SystemTab.vue'
 
   export default defineComponent({
     name: 'System',
-    components: {
-      SystemTab,
-    },
+    components: { SystemTab },
     setup() {
-      const openNg = () => {
-        console.log(1)
-        nProgress.start()
-        setTimeout(() => {
-          nProgress.done()
-        }, 3000)
+      const tabKey = ref<systemTabKey>('workspace')
+      const onTabKeyChange = (key) => {
+        tabKey.value = key
       }
       return {
-        openNg,
+        tabKey,
+        onTabKeyChange,
       }
     },
   })
