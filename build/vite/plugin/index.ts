@@ -1,4 +1,3 @@
-import { configStyleImportPlugin } from './styleImport'
 import { configCompressPlugin } from './compress'
 import { configHtmlPlugin } from './html'
 import { PluginOption } from 'vite'
@@ -26,7 +25,6 @@ export function createVitePlugins(viteEnv: Config.ViteEnv, isBuild: boolean) {
     vitePlugins.push(configHtmlPlugin(viteEnv, isBuild))
     vitePlugins.push(PurgeIcons())
     vitePlugins.push(windiCSS())
-    vitePlugins.push(configStyleImportPlugin(isBuild))
     if (isBuild) {
         vitePlugins.push(configCompressPlugin(VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE))
     }
