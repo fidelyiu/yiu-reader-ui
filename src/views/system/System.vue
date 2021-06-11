@@ -10,7 +10,7 @@
       <span>系统设置</span>
       <!--问号-->
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
-        <div class="p-2 text-xs rounded-t hover:bg-gray-200">
+        <div @click="openNg" class="p-2 text-xs rounded-t hover:bg-gray-200">
           <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
         </div>
       </div>
@@ -25,11 +25,24 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import SystemTab from '/@/views/system/SystemTab.vue'
+  import nProgress from 'nprogress'
 
   export default defineComponent({
     name: 'System',
     components: {
       SystemTab,
+    },
+    setup() {
+      const openNg = () => {
+        console.log(1)
+        nProgress.start()
+        setTimeout(() => {
+          nProgress.done()
+        }, 3000)
+      }
+      return {
+        openNg,
+      }
     },
   })
 </script>

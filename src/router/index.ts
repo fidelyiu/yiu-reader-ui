@@ -12,8 +12,6 @@ const router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
-nProgress.configure({ showSpinner: false })
-
 router.beforeEach((to, _from, next) => {
     nProgress.start()
     if (to.path !== '/system') {
@@ -26,12 +24,12 @@ router.beforeEach((to, _from, next) => {
                 next('/system')
             },
             finally: () => {
-                nProgress.start()
+                nProgress.done()
             },
         })
     } else {
         next()
-        nProgress.start()
+        nProgress.done()
     }
 })
 
