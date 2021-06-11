@@ -1,4 +1,5 @@
 import { execSync } from 'child_process'
+import { isString, startsWith, endsWith } from 'lodash'
 
 export default function vitePluginEslintOnSave(lintOnSave: boolean, isBuild: boolean) {
     return {
@@ -7,12 +8,24 @@ export default function vitePluginEslintOnSave(lintOnSave: boolean, isBuild: boo
             if (isBuild || !lintOnSave) {
                 return
             }
-            if (file && typeof file === 'string' && file.indexOf(server.config.root + '/src') !== -1) {
+            const checkFileType = ['vue', 'ts', 'tsx']
+            let showLint = isString(file) && startsWith(file, server.config.root + '/src')
+            if (showLint) {
+                let isCheckFile = false
+                for (let item of checkFileType) {
+                    if (endsWith(file, item)) {
+                        isCheckFile = true
+                        break
+                    }
+                }
+                showLint = isCheckFile
+            }
+            if (showLint) {
                 setTimeout(() => {
                     try {
                         // const url = `http://localhost:${server.config.server.port}${server.config.base}`
                         // console.log(`Local: ${url}`)
-                        execSync('npx eslint ' + file, { stdio: [0, 1, 2] })
+                        execSync('npx eslint ' + file + ' --debug', { stdio: [0, 1, 2] })
                     } catch (e) {
                     }
                 })

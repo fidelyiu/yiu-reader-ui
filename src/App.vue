@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden">
-    <div class="flex-grow">
+    <div class="flex-grow overflow-auto">
       <router-view></router-view>
     </div>
     <BottomBox></BottomBox>

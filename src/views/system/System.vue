@@ -17,20 +17,72 @@
     </div>
     <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>
   </div>
-  <transition name="yiu-x">
-    <div v-if="tabKey==='dbManage'">
-      dbManage
-    </div>
-    <div v-else-if="tabKey==='editSoft'">
-      editSoft
-    </div>
-    <div v-else-if="tabKey==='cacheImage'">
-      cacheImage
-    </div>
-    <div v-else>
-      workspace
-    </div>
-  </transition>
+  <div class="max-w-[1200px] mx-auto px-[16px] pt-[16px]">
+    <transition name="yiu-x">
+      <div v-if="tabKey==='dbManage'">
+        dbManage
+      </div>
+      <div v-else-if="tabKey==='editSoft'">
+        editSoft
+      </div>
+      <div v-else-if="tabKey==='cacheImage'">
+        cacheImage
+      </div>
+      <div v-else>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+        workspace<br/>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
