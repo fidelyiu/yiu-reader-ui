@@ -18,6 +18,11 @@
 </script>
 
 <style>
+  html body {
+    height: 100vh;
+    width: 100vw;
+  }
+
   body {
     overflow: hidden;
   }
