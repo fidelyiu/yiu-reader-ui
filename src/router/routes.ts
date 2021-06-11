@@ -8,7 +8,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('/@/views/dashboard/Dashboard.vue'),
     },
     {
-        path: '/workspace/select',
-        component: () => import('/@/views/workspace-select/WorkspaceSelect.vue'),
+        path: '/system',
+        component: () => import('/@/views/system/System.vue'),
     },
 ]

@@ -12,14 +12,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _from, next) => {
-    if (to.path !== '/workspace/select') {
+    if (to.path !== '/system') {
         yiuHttp({
             api: SERVER_API.mainApi.getCurrentWorkspace,
             success: () => {
                 next()
             },
             error: () => {
-                next('/workspace/select')
+                next('/system')
             },
         })
     } else {

@@ -1,5 +1,5 @@
 <template>
-  <div>WorkspaceSelect</div>
+  <div>System</div>
   <span class="iconify" data-icon="fa:home"></span>
 </template>
 
@@ -7,7 +7,7 @@
   import { defineComponent } from 'vue'
 
   export default defineComponent({
-    name: 'WorkspaceSelect',
+    name: 'System',
   })
 </script>
 
