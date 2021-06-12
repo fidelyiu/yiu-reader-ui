@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-none bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
+  <div class="flex-none bg-blue-100 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
     <div class="text-2xl text-center p-4 relative">
       <!--返回箭头-->
       <div v-if="false" class="absolute inset-y-0 left-3 h-full flex flex-col justify-center">
@@ -10,7 +10,7 @@
       <span>系统设置</span>
       <!--问号-->
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
-        <div class="p-2 text-xs rounded-t hover:bg-gray-200">
+        <div class="p-2 text-xs rounded-t hover:bg-blue-50">
           <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
         </div>
       </div>

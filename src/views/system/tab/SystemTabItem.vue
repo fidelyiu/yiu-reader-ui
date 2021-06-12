@@ -18,10 +18,10 @@
 
 <style scoped>
   .tab-item {
-    @apply flex self-center px-3 py-2 rounded-t hover:bg-gray-100 transition-all ase-in-out
+    @apply flex self-center px-3 py-2 rounded-t hover:bg-blue-50 transition-all ase-in-out
   }
 
   .active {
-    @apply text-blue-400 border-b-2 border-blue-400
+    @apply text-blue-500 border-b-2 border-blue-400
   }
 </style>
