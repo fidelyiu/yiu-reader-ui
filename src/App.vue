@@ -1,9 +1,9 @@
 <template>
   <div class="h-full flex flex-col overflow-hidden">
-    <div class="flex-grow overflow-auto">
+    <div class="flex-grow flex-shrink-0 flex flex-col h-0">
       <router-view></router-view>
     </div>
-    <BottomBox></BottomBox>
+    <BottomBox class="flex-none"></BottomBox>
   </div>
 </template>
 

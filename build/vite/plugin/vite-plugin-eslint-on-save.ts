@@ -25,7 +25,7 @@ export default function vitePluginEslintOnSave(lintOnSave: boolean, isBuild: boo
                     try {
                         // const url = `http://localhost:${server.config.server.port}${server.config.base}`
                         // console.log(`Local: ${url}`)
-                        execSync('npx eslint ' + file + ' --debug', { stdio: [0, 1, 2] })
+                        execSync('npx eslint ' + file, { stdio: [0, 1, 2] })
                     } catch (e) {
                     }
                 })

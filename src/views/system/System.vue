@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
+  <div class="flex-none bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
     <div class="text-2xl text-center p-4 relative">
       <!--返回箭头-->
       <div v-if="false" class="absolute inset-y-0 left-3 h-full flex flex-col justify-center">
@@ -17,71 +17,23 @@
     </div>
     <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>
   </div>
-  <div class="max-w-[1200px] mx-auto px-[16px] pt-[16px]">
-    <transition name="yiu-x">
-      <div v-if="tabKey==='dbManage'">
-        dbManage
-      </div>
-      <div v-else-if="tabKey==='editSoft'">
-        editSoft
-      </div>
-      <div v-else-if="tabKey==='cacheImage'">
-        cacheImage
-      </div>
-      <div v-else>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-        workspace<br/>
-      </div>
-    </transition>
+  <div class="flex-grow flex-shrink-0 w-full max-w-[1200px] p-[16px] mx-auto h-0">
+    <div class="h-full overflow-y-auto overflow-x-hidden">
+      <transition name="yiu-x">
+        <div v-if="tabKey==='dbManage'">
+          dbManage
+        </div>
+        <div v-else-if="tabKey==='editSoft'">
+          editSoft
+        </div>
+        <div v-else-if="tabKey==='cacheImage'">
+          cacheImage
+        </div>
+        <div v-else>
+          workspace
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
