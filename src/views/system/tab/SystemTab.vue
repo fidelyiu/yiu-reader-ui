@@ -30,7 +30,7 @@
   import { systemTabKey } from '/@/views/system/tab/types'
 
   export default defineComponent({
-    name: '',
+    name: 'SystemTab',
     components: { SystemTabItem },
     props: {
       tabKey: propTypes.oneOf(new Array<systemTabKey>('workspace', 'editSoft', 'cacheImage', 'dbManage'))

@@ -9,7 +9,7 @@
   import { propTypes } from '/@/utils/propTypes'
 
   export default defineComponent({
-    name: '',
+    name: 'SystemTabItem',
     props: {
       isActive: propTypes.bool.def(false),
     },
@@ -18,10 +18,10 @@
 
 <style scoped>
   .tab-item {
-    @apply flex self-center px-3 py-2 rounded-t hover:bg-blue-50 transition-all ase-in-out
+    @apply flex self-center px-3 py-2 rounded-t-md hover:bg-blue-100 transition-all ase-in-out
   }
 
   .active {
-    @apply text-blue-500 border-b-2 border-blue-400
+    @apply text-blue-600 border-b-2 border-blue-600 bg-gray-50 hover:bg-gray-50
   }
 </style>
