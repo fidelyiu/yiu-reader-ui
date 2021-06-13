@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full">
+  <div class="relative" :class="{'h-full': workspaceListLoading}">
     <!--搜索框-->
     <div class="w-full flex px-4 pb-4 sticky top-0 bg-white">
       <div class="flex-grow mr-4">
