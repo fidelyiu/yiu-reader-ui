@@ -10,9 +10,14 @@
       <span>系统设置</span>
       <!--问号-->
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
-        <div class="p-2 text-xs rounded-t hover:bg-blue-100">
-          <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
-        </div>
+        <NTooltip placement="left">
+          <template #trigger>
+            <div class="p-2 text-xs rounded-t hover:bg-blue-100">
+              <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
+            </div>
+          </template>
+          <span>关于</span>
+        </NTooltip>
       </div>
     </div>
     <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>
@@ -42,10 +47,11 @@
   import { systemTabKey } from '/@/views/system/tab/types'
   import SystemTab from '/@/views/system/tab/SystemTab.vue'
   import WorkspaceList from '/@/views/system/workspace-list/WorkspaceList.vue'
+  import { NTooltip } from 'naive-ui'
 
   export default defineComponent({
     name: 'System',
-    components: { SystemTab, WorkspaceList },
+    components: { SystemTab, WorkspaceList, NTooltip },
     setup() {
       const tabKey = ref<systemTabKey>('workspace')
       const onTabKeyChange = (key) => {

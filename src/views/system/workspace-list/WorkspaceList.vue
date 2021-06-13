@@ -104,7 +104,7 @@
             })
           }
           workspaceListLoading.value = false
-        }, 6000)
+        }, 3000)
       }
       // 搜索栏是否激活状态
       const searchActive = ref(false)

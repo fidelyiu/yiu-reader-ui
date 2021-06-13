@@ -11,6 +11,7 @@
 10. [vue-i18n](https://vue-i18n.intlify.dev/) ：国际化
 11. [vue-router](https://next.router.vuejs.org/zh/) ：路由
 12. [vue-types的npm首页](https://dwightjack.github.io/vue-types/#when-to-use) ：prop类型检查
+13. [naiveui](https://www.naiveui.com/zh-CN/os-theme) ：UI组件
 
 # 开发依赖
 1. [less](http://lesscss.cn/) ：less
