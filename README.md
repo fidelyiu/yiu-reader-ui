@@ -18,6 +18,8 @@
 2. [typescript](https://www.typescriptlang.org/) ：TS
 3. [vite](https://cn.vitejs.dev/) ：vite
 4. [eslint-vue-plugin](https://eslint.vuejs.org/) ：vue的es插件
+5. [windicss](https://windicss.org/) ：windicss
+6. [tailwindcss](https://tailwindcss.com/docs) ：tailwindcss
 
 # 图标地址
 - [MaterialDesignIcons的官网](https://materialdesignicons.com/)

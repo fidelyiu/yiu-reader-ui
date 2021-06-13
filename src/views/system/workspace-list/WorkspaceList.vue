@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :class="{'h-full': workspaceListLoading}">
+  <div class="relative" :class="{'h-full': workspaceListLoading||!workspaceList.length}">
     <!--搜索框-->
     <div class="w-full flex px-4 pb-4 sticky top-0 bg-white">
       <div class="flex-grow mr-4">
@@ -19,6 +19,13 @@
         <div class="p-2 bg-blue-100 hover:bg-blue-50">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </div>
+      </div>
+    </div>
+    <!--空数据栏-->
+    <div v-if="!workspaceListLoading && !workspaceList.length" class="absolute inset-0 mt-[32px] grid place-items-center">
+      <div class="flex items-center text-gray-500">
+        <span class="iconify text-2xl" data-icon="mdi:inbox" data-inline="false"></span>
+        <span class="leading-10 text-base">暂无数据</span>
       </div>
     </div>
     <!--加载栏-->
@@ -41,29 +48,38 @@
               data-inline="false"></span>
         </template>
         <div class="flex-grow w-0 mr-4">
-          <div class="w-full truncate text-gray-700 font-medium" :class="{'!text-red-400': !item.isEffective}">{{ item.name }}</div>
-          <div class="w-full truncate text-gray-500 font-light" :class="{'!text-red-300': !item.isEffective}">{{ item.url }}</div>
+          <div class="w-full truncate text-gray-700 font-medium" :class="{'!text-red-400': !item.isEffective}">
+            {{ item.name }}
+          </div>
+          <div class="w-full truncate text-gray-500 font-light" :class="{'!text-red-300': !item.isEffective}">
+            {{ item.url }}
+          </div>
         </div>
         <div class="flex-none flex">
           <div class="self-center mr-4">
-            <div class="p-2 bg-blue-100 hover:bg-gray-50">
+            <SquareButton>
+              <span class="iconify block" data-icon="mdi:help-circle" data-inline="false"></span>
+            </SquareButton>
+          </div>
+          <div class="self-center mr-4">
+            <SquareButton :disable="!item.isEffective">
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
-            </div>
+            </SquareButton>
           </div>
           <div class="self-center mr-4">
-            <div class="p-2 bg-blue-100 hover:bg-gray-50">
+            <SquareButton>
               <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
-            </div>
+            </SquareButton>
           </div>
           <div class="self-center mr-4">
-            <div class="p-2 bg-blue-100 hover:bg-gray-50">
+            <SquareButton>
               <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
-            </div>
+            </SquareButton>
           </div>
           <div class="self-center">
-            <div class="p-2 bg-blue-100 hover:bg-gray-50">
+            <SquareButton>
               <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
-            </div>
+            </SquareButton>
           </div>
         </div>
       </div>
@@ -75,10 +91,11 @@
   import { defineComponent, onMounted, reactive, ref } from 'vue'
   import { boolGetRandom } from 'yiu-js/bool/bool-get'
   import LoadingIcon from '/@/components/LoadingIcon.vue'
+  import SquareButton from '/@/components/SquareButton.vue'
 
   export default defineComponent({
     name: 'WorkspaceList',
-    components: { LoadingIcon },
+    components: { LoadingIcon, SquareButton },
     setup() {
       onMounted(() => {
         getWorkspaceList()
@@ -96,7 +113,7 @@
       const getWorkspaceList = () => {
         workspaceListLoading.value = true
         setTimeout(() => {
-          for (let i = 0; i < 50; i++) {
+          for (let i = 0; i < 0; i++) {
             workspaceList.push({
               name: 'Item' + (i + 1),
               url: 'F:\\CodeLearn\\vue3\\ant-vue1\\' + (i + 1),
@@ -104,7 +121,7 @@
             })
           }
           workspaceListLoading.value = false
-        }, 3000)
+        }, 1000)
       }
       // 搜索栏是否激活状态
       const searchActive = ref(false)

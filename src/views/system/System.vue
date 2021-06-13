@@ -12,9 +12,9 @@
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
         <NTooltip placement="left">
           <template #trigger>
-            <div class="p-2 text-xs rounded-t hover:bg-blue-100">
+            <button class="p-2 text-xs rounded-t hover:bg-blue-100 outline-none focus:outline-none">
               <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
-            </div>
+            </button>
           </template>
           <span>关于</span>
         </NTooltip>
@@ -32,7 +32,13 @@
           <div>editSoft</div>
         </template>
         <template v-else-if="tabKey==='cacheImage'">
-          <div>cacheImage</div>
+          <div>
+            <div class="flex items-center">
+              <span class="iconify text-2xl" data-icon="mdi:inbox" data-inline="false"></span>
+              <span class="self-center">暂无数据1</span>
+              <span class="self-center text-2xl">暂无数据2</span>
+            </div>
+          </div>
         </template>
         <template v-else>
           <WorkspaceList></WorkspaceList>
