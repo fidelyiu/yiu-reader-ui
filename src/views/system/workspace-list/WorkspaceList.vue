@@ -41,8 +41,8 @@
               data-inline="false"></span>
         </template>
         <div class="flex-grow w-0 mr-4">
-          <div class="w-full truncate text-gray-700 font-medium">{{ item.name }}</div>
-          <div class="w-full truncate text-gray-500 font-light">{{ item.url }}</div>
+          <div class="w-full truncate text-gray-700 font-medium" :class="{'!text-red-400': !item.isEffective}">{{ item.name }}</div>
+          <div class="w-full truncate text-gray-500 font-light" :class="{'!text-red-300': !item.isEffective}">{{ item.url }}</div>
         </div>
         <div class="flex-none flex">
           <div class="self-center mr-4">
