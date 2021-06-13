@@ -20,18 +20,18 @@
   <div class="flex-grow flex-shrink-0 w-full max-w-[1200px] p-[16px] mx-auto h-0">
     <div class="h-full overflow-y-auto overflow-x-hidden">
       <transition name="yiu-x">
-        <div v-if="tabKey==='dbManage'">
-          dbManage
-        </div>
-        <div v-else-if="tabKey==='editSoft'">
-          editSoft
-        </div>
-        <div v-else-if="tabKey==='cacheImage'">
-          cacheImage
-        </div>
-        <div v-else>
+        <template v-if="tabKey==='dbManage'">
+          <div>dbManage</div>
+        </template>
+        <template v-else-if="tabKey==='editSoft'">
+          <div>editSoft</div>
+        </template>
+        <template v-else-if="tabKey==='cacheImage'">
+          <div>cacheImage</div>
+        </template>
+        <template v-else>
           <WorkspaceList></WorkspaceList>
-        </div>
+        </template>
       </transition>
     </div>
   </div>

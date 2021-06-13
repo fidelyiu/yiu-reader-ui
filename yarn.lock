@@ -2301,10 +2301,10 @@ yiu-axios@^1.0.53:
     lodash "^4.17.21"
     qs "^6.10.1"
 
-yiu-js@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.12.tgz?cache=0&sync_timestamp=1623388796839&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-js%2Fdownload%2Fyiu-js-1.0.12.tgz#30be85d8780008920aa208eee59a8ad82a30258a"
-  integrity sha1-ML6F2HgACJIKogju5ZqK2CowJYo=
+yiu-js@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.13.tgz#940a107a169f586d24710022033b0e9ec10ba2ed"
+  integrity sha1-lAoQehafWG0kcQAiAzsOnsELou0=
   dependencies:
     moment "^2.29.1"
 

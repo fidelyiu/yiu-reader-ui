@@ -44,5 +44,7 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         // 方法没有返回值
         '@typescript-eslint/explicit-module-boundary-types': 'off',
+        // vue的html缩进
+        'vue/html-indent': 'off',
     },
 }
