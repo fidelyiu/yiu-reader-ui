@@ -8,9 +8,11 @@
         <span class="iconify self-center ml-3 mr-2 text-lg text-gray-500"
               data-icon="mdi:magnify"
               data-inline="false"></span>
-          <input class="w-full h-[30px] outline-none text-sm bg-blue-50 transition-all ease-in-out"
+          <input v-model="workspaceKey"
+                 class="w-full h-[30px] outline-none text-sm bg-blue-50 transition-all ease-in-out"
                  :class="{'!bg-white': searchActive}"
                  type="text"
+                 @input="onWorkspaceKeyChange"
                  @focus="searchActive = true"
                  @blur="searchActive = false">
         </div>
@@ -98,10 +100,12 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, reactive, ref } from 'vue'
-  import { boolGetRandom } from 'yiu-js/bool/bool-get'
   import LoadingIcon from '/@/components/LoadingIcon.vue'
   import SquareButton from '/@/components/SquareButton.vue'
   import { NTooltip } from 'naive-ui'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
+  import { debounce } from 'lodash'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -110,33 +114,40 @@
       onMounted(() => {
         getWorkspaceList()
       })
-
       // 工作空间加载状态
       const workspaceListLoading = ref(false)
+      const workspaceKey = ref('')
       // 工作空间列表
-      const workspaceList = reactive<Array<{
+      let workspaceList = reactive<Array<{
         name: string,
         url: string,
         isEffective: boolean
       }>>([])
       // 获取工作空间的方法
       const getWorkspaceList = () => {
-        workspaceListLoading.value = true
-        setTimeout(() => {
-          for (let i = 0; i < 50; i++) {
-            workspaceList.push({
-              name: 'Item' + (i + 1),
-              url: 'F:\\CodeLearn\\vue3\\ant-vue1\\' + (i + 1),
-              isEffective: boolGetRandom(),
-            })
-          }
-          workspaceListLoading.value = false
-        }, 1000)
+        workspaceList = reactive<Array<{
+          name: string,
+          url: string,
+          isEffective: boolean
+        }>>([])
+        yiuHttp({
+          loading: { flag: workspaceListLoading },
+          api: SERVER_API.workspaceApi.getSortListBySearchDto,
+          params: { key: workspaceKey.value },
+          success: (res) => {
+            console.log(res)
+          },
+        })
       }
+      const onWorkspaceKeyChange = debounce(() => {
+        getWorkspaceList()
+      }, 500)
       // 搜索栏是否激活状态
       const searchActive = ref(false)
       return {
         workspaceListLoading,
+        workspaceKey,
+        onWorkspaceKeyChange,
         workspaceList,
         getWorkspaceList,
         searchActive,
