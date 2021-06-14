@@ -96,7 +96,7 @@
       </div>
     </template>
   </div>
-  <NModal v-model:show="addModal">
+  <NModal v-model:show="addModal" :mask-closable="false">
     <NCard style="width: 600px;"
            content-style="padding: 0;"
            class="p-5 relative"

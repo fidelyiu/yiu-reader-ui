@@ -40,7 +40,7 @@
             </div>
           </div>
         </template>
-        <div class="h-full" v-else>
+        <div v-else class="h-full">
           <WorkspaceList></WorkspaceList>
         </div>
       </transition>
