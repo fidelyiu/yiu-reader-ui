@@ -17,8 +17,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, reactive, ref } from 'vue'
   import { NForm, NFormItem, NInput } from 'naive-ui'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
 
   export default defineComponent({
     name: 'WorkspaceForm',
@@ -28,14 +30,24 @@
       NInput,
     },
     setup() {
+      const model = reactive({
+        name: null,
+        path: null,
+      })
       const formRef = ref(null)
-      const onSend = (e) => {
-        e.preventDefault()
+      const submitAdd = () => {
         formRef.value.validate((errors) => {
           if (!errors) {
-            console.log(errors)
-          } else {
-            console.log(errors)
+            yiuHttp({
+              api: SERVER_API.workspaceApi.add,
+              data: model,
+              success: (res) => {
+                console.log(res)
+              },
+              error: (err) => {
+                console.log(err)
+              },
+            })
           }
         })
       }
@@ -53,11 +65,8 @@
             message: '请输入路径',
           },
         },
-        model: ref({
-          name: null,
-          path: null,
-        }),
-        onSend,
+        model,
+        submitAdd,
       }
     },
   })

@@ -27,9 +27,9 @@
           // 比如主按钮的背景颜色
           primaryColor: '#40a9ff',
           // 比如按钮字体颜色
-          primaryColorHover: '#69c0ff',
+          primaryColorHover: '#1890ff',
           // 比如按钮点击下去的颜色颜色
-          primaryColorPressed: '#1890ff',
+          primaryColorPressed: '#096dd9',
           primaryColorSuppl: 'red',
           errorColor: 'rgba(248, 113, 113, 1)',
           errorColorHover: 'rgba(248, 113, 113, 1)',

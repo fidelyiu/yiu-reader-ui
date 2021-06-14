@@ -107,10 +107,10 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </SquareButton>
       <div class="text-base mt-6">
-        <WorkspaceForm></WorkspaceForm>
+        <WorkspaceForm ref="addFormRef"></WorkspaceForm>
         <div class="flex justify-end">
-          <NButton class="focus:outline-none mr-4">取消</NButton>
-          <NButton class="focus:outline-none" type="primary">验证</NButton>
+          <NButton class="focus:outline-none mr-4" @click="addModal = false">取消</NButton>
+          <NButton class="focus:outline-none" type="primary" @click="onAdd">验证</NButton>
         </div>
       </div>
     </NCard>
@@ -175,7 +175,10 @@
 
       // 添加Modal
       const addModal = ref(false)
-
+      const addFormRef = ref(null)
+      const onAdd = () => {
+        addFormRef.value.submitAdd()
+      }
       return {
         workspaceListLoading,
         workspaceKey,
@@ -184,6 +187,8 @@
         getWorkspaceList,
         searchActive,
         addModal,
+        onAdd,
+        addFormRef,
       }
     },
   })

@@ -26,7 +26,7 @@
     "vue-i18n": "^9.1.6",
     "vue-router": "4",
     "vue-types": "3",
-    "yiu-axios": "^1.0.53",
+    "yiu-axios": "^1.0.54",
     "yiu-js": "^1.0.13",
     "yiu-learn": "^1.0.6"
   },
@@ -50,7 +50,7 @@
     "less": "^4.1.1",
     "postcss": "^8.3.0",
     "typescript": "^4.1.3",
-    "vite": "^2.3.5",
+    "vite": "^2.3.7",
     "vite-plugin-compression": "^0.2.5",
     "vite-plugin-html": "^2.0.7",
     "vite-plugin-purge-icons": "^0.7.0",

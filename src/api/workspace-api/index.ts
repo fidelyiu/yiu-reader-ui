@@ -1,8 +1,14 @@
-import { MethodEnum, YiuAip } from 'yiu-axios/type'
+import { MethodEnum, YiuAipObj } from 'yiu-axios/type'
 
-export default {
-    getSortListBySearchDto: <YiuAip>{
+const workspaceApi: YiuAipObj = {
+    getSortListBySearchDto: {
         url: '/workspace',
         method: MethodEnum.GET,
     },
+    add: {
+        url: '/workspace',
+        method: MethodEnum.POST,
+    },
 }
+
+export default workspaceApi
