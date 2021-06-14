@@ -27,14 +27,13 @@
   import { defineComponent } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import SystemTabItem from '/@/views/system/tab/SystemTabItem.vue'
-  import { systemTabKey } from '/@/views/system/tab/types'
+  import { systemTabKeyList } from '/@/views/system/tab/types'
 
   export default defineComponent({
     name: 'SystemTab',
     components: { SystemTabItem },
     props: {
-      tabKey: propTypes.oneOf(new Array<systemTabKey>('workspace', 'editSoft', 'cacheImage', 'dbManage'))
-                       .def('workspace'),
+      tabKey: propTypes.oneOf(systemTabKeyList).def('workspace'),
     },
     emits: ['change'],
     setup(props, { emit }) {

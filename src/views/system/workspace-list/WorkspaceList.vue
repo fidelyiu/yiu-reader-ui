@@ -19,7 +19,7 @@
       </div>
       <!--添加按钮-->
       <div class="flex-none">
-        <SquareButton>
+        <SquareButton @click="addModal = true">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </SquareButton>
       </div>
@@ -96,27 +96,39 @@
       </div>
     </template>
   </div>
+  <NModal v-model:show="addModal">
+    <NCard style="width: 600px;"
+           content-style="padding: 0;"
+           class="p-5 relative"
+           size="medium"
+           :bordered="false">
+      <SquareButton class="absolute top-4 right-4" transparent @click="addModal = false">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </SquareButton>
+      <div class="text-base">内容</div>
+    </NCard>
+  </NModal>
 </template>
 
 <script lang="ts">
   import { defineComponent, onMounted, reactive, ref } from 'vue'
   import LoadingIcon from '/@/components/LoadingIcon.vue'
   import SquareButton from '/@/components/SquareButton.vue'
-  import { NTooltip } from 'naive-ui'
+  import { NCard, NModal, NTooltip } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
 
   export default defineComponent({
     name: 'WorkspaceList',
-    components: { LoadingIcon, SquareButton, NTooltip },
+    components: { LoadingIcon, SquareButton, NTooltip, NModal, NCard },
     setup() {
       onMounted(() => {
         getWorkspaceList()
       })
       // 工作空间加载状态
-      const workspaceListLoading = ref(false)
-      const workspaceKey = ref('')
+      let workspaceListLoading = ref(false)
+      let workspaceKey = ref('')
       // 工作空间列表
       let workspaceList = reactive<Array<{
         name: string,
@@ -124,7 +136,7 @@
         isEffective: boolean
       }>>([])
       // 获取工作空间的方法
-      const getWorkspaceList = () => {
+      let getWorkspaceList = () => {
         workspaceList = reactive<Array<{
           name: string,
           url: string,
@@ -139,11 +151,15 @@
           },
         })
       }
-      const onWorkspaceKeyChange = debounce(() => {
+      let onWorkspaceKeyChange = debounce(() => {
         getWorkspaceList()
       }, 500)
       // 搜索栏是否激活状态
-      const searchActive = ref(false)
+      let searchActive = ref(false)
+
+      // 添加Modal
+      let addModal = ref(false)
+
       return {
         workspaceListLoading,
         workspaceKey,
@@ -151,6 +167,7 @@
         workspaceList,
         getWorkspaceList,
         searchActive,
+        addModal,
       }
     },
   })
