@@ -108,6 +108,10 @@
       </SquareButton>
       <div class="text-base mt-6">
         <WorkspaceForm></WorkspaceForm>
+        <div class="flex justify-end">
+          <NButton class="focus:outline-none mr-4">取消</NButton>
+          <NButton class="focus:outline-none" type="primary">验证</NButton>
+        </div>
       </div>
     </NCard>
   </NModal>
@@ -117,7 +121,7 @@
   import { defineComponent, onMounted, reactive, ref } from 'vue'
   import LoadingIcon from '/@/components/LoadingIcon.vue'
   import SquareButton from '/@/components/SquareButton.vue'
-  import { NCard, NModal, NTooltip } from 'naive-ui'
+  import { NButton, NCard, NModal, NTooltip } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -131,6 +135,7 @@
       NTooltip,
       NModal,
       NCard,
+      NButton,
       WorkspaceForm,
     },
     setup() {
