@@ -102,10 +102,13 @@
            class="p-5 relative"
            size="medium"
            :bordered="false">
+      <div class="text-base">添加工作空间</div>
       <SquareButton class="absolute top-4 right-4" transparent @click="addModal = false">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </SquareButton>
-      <div class="text-base">内容</div>
+      <div class="text-base mt-6">
+        <WorkspaceForm></WorkspaceForm>
+      </div>
     </NCard>
   </NModal>
 </template>
@@ -118,17 +121,25 @@
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
+  import WorkspaceForm from '/@/views/system/workspace-list/WorkspaceForm.vue'
 
   export default defineComponent({
     name: 'WorkspaceList',
-    components: { LoadingIcon, SquareButton, NTooltip, NModal, NCard },
+    components: {
+      LoadingIcon,
+      SquareButton,
+      NTooltip,
+      NModal,
+      NCard,
+      WorkspaceForm,
+    },
     setup() {
       onMounted(() => {
         getWorkspaceList()
       })
       // 工作空间加载状态
-      let workspaceListLoading = ref(false)
-      let workspaceKey = ref('')
+      const workspaceListLoading = ref(false)
+      const workspaceKey = ref('')
       // 工作空间列表
       let workspaceList = reactive<Array<{
         name: string,
@@ -136,7 +147,7 @@
         isEffective: boolean
       }>>([])
       // 获取工作空间的方法
-      let getWorkspaceList = () => {
+      const getWorkspaceList = () => {
         workspaceList = reactive<Array<{
           name: string,
           url: string,
@@ -151,14 +162,14 @@
           },
         })
       }
-      let onWorkspaceKeyChange = debounce(() => {
+      const onWorkspaceKeyChange = debounce(() => {
         getWorkspaceList()
       }, 500)
       // 搜索栏是否激活状态
-      let searchActive = ref(false)
+      const searchActive = ref(false)
 
       // 添加Modal
-      let addModal = ref(false)
+      const addModal = ref(false)
 
       return {
         workspaceListLoading,
