@@ -10,14 +10,14 @@
       <span>系统设置</span>
       <!--问号-->
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
-        <NTooltip placement="left">
+        <n-tooltip placement="left">
           <template #trigger>
             <button class="p-2 text-xs rounded-t hover:bg-blue-100 outline-none focus:outline-none">
               <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
             </button>
           </template>
           <span>关于</span>
-        </NTooltip>
+        </n-tooltip>
       </div>
     </div>
     <SystemTab :tab-key="tabKey" @change="onTabKeyChange"></SystemTab>

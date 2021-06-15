@@ -19,7 +19,7 @@
       </div>
       <!--添加按钮-->
       <div class="flex-none">
-        <SquareButton @click="addModal = true">
+        <SquareButton @click="onAdd">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </SquareButton>
       </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="flex-none flex">
           <div v-if="!item.isEffective" class="self-center mr-4">
-            <NTooltip :style="{ maxWidth: '300px' }" placement="top">
+            <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
               <template #trigger>
                 <div>
                   <SquareButton disable>
@@ -70,7 +70,7 @@
                 </div>
               </template>
               <span>该工作空间路径已失效，请将丢失的文件夹还原，或者删除该工作空间!</span>
-            </NTooltip>
+            </n-tooltip>
           </div>
           <div class="self-center mr-4">
             <SquareButton :disable="!item.isEffective">
@@ -96,25 +96,28 @@
       </div>
     </template>
   </div>
-  <NModal v-model:show="addModal" :mask-closable="false">
-    <NCard style="width: 600px;"
+  <n-modal v-model:show="addModal" :mask-closable="false">
+    <n-card style="width: 600px;"
            content-style="padding: 0;"
            class="p-5 relative"
            size="medium"
            :bordered="false">
       <div class="text-base">添加工作空间</div>
-      <SquareButton class="absolute top-4 right-4" transparent @click="addModal = false">
+      <SquareButton class="absolute top-4 right-4" transparent @click="onAddCancel">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </SquareButton>
       <div class="text-base mt-6">
-        <WorkspaceForm ref="addFormRef"></WorkspaceForm>
+        <WorkspaceForm ref="addRef"
+                       type="add"
+                       @addSuccess="onAddSuccess"
+                       @addError="onAddError"></WorkspaceForm>
         <div class="flex justify-end">
-          <NButton class="focus:outline-none mr-4" @click="addModal = false">取消</NButton>
-          <NButton class="focus:outline-none" type="primary" @click="onAdd">验证</NButton>
+          <n-button class="focus:outline-none mr-4" @click="onAddCancel">取消</n-button>
+          <n-button class="focus:outline-none" type="primary" @click="onAdd">确定</n-button>
         </div>
       </div>
-    </NCard>
-  </NModal>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -126,6 +129,16 @@
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
   import WorkspaceForm from '/@/views/system/workspace-list/WorkspaceForm.vue'
+  import {
+    useAddLoading,
+    useAddModal,
+    useAddRef,
+    useOnAdd,
+    useOnAddCancel,
+    useOnAddError,
+    useOnAddOk,
+    useOnAddSuccess,
+  } from '/@/hooks/entity/use-add'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -173,12 +186,10 @@
       // 搜索栏是否激活状态
       const searchActive = ref(false)
 
-      // 添加Modal
-      const addModal = ref(false)
-      const addFormRef = ref(null)
-      const onAdd = () => {
-        addFormRef.value.submitAdd()
-      }
+      // 添加功能
+      const addRef = useAddRef()
+      const addModal = useAddModal()
+      const addLoading = useAddLoading()
       return {
         workspaceListLoading,
         workspaceKey,
@@ -186,9 +197,15 @@
         workspaceList,
         getWorkspaceList,
         searchActive,
+        // ↓添加
+        addRef,
         addModal,
-        onAdd,
-        addFormRef,
+        addLoading,
+        onAdd: useOnAdd(addModal),
+        onAddOk: useOnAddOk(addRef, addLoading),
+        onAddCancel: useOnAddCancel(addModal),
+        onAddSuccess: useOnAddSuccess(addModal, addLoading),
+        onAddError: useOnAddError(addLoading),
       }
     },
   })

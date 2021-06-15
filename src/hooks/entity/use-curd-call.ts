@@ -2,12 +2,11 @@
  * 这是 Yiu 之前在项目中封装的 mixins，目前还没想好怎么在 vue3 中使用
  */
 import { propTypes } from '/@/utils/propTypes'
-import { MethodEnum, YiuAip, YiuAipObj } from 'yiu-axios/type'
+import { MethodEnum, YiuAip } from 'yiu-axios/type'
 import { toBoolWithFalseLog } from 'yiu-js/script'
 import { reactive, ref } from 'vue'
 import { initApiByField, yiuHttp } from '/@/utils/http'
 import { isFunction } from 'lodash'
-import { emit } from 'cluster'
 import { Ref, UnwrapNestedRefs } from '@vue/reactivity'
 
 export type FormType = 'add' | 'edit' | 'view'
@@ -17,7 +16,7 @@ export function useCurdCallType() {
     return propTypes.oneOf<Array<FormType>>(FormTypeList).def('add')
 }
 
-export function useCRUDCall<I = any>(entityBaseUrl: YiuAipObj, formItem: UnwrapNestedRefs<any>, loading: Ref<boolean>) {
+export function useCRUDCall<I = any>(entityBaseUrl: any, formItem: UnwrapNestedRefs<any>, loading: Ref<boolean>, emit: any) {
     const formRef = ref<any>(null)
     const showFormItem = ref(false)
     const entityId = ref<I>()

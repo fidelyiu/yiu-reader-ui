@@ -1,7 +1,7 @@
-import { MethodEnum, YiuAipObj } from 'yiu-axios/type'
+import { MethodEnum, YiuAip } from 'yiu-axios/type'
 
-const mainApi: YiuAipObj = {
-    getCurrentWorkspace: {
+const mainApi = {
+    getCurrentWorkspace: <YiuAip>{
         url: '/current/workspace',
         method: MethodEnum.GET,
     },
