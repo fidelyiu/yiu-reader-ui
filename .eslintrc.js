@@ -46,5 +46,11 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         // vue的html缩进
         'vue/html-indent': 'off',
+        // eslint默认的未引用变量检查
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'error',
+            { 'argsIgnorePattern': '^_' },
+        ],
     },
 }

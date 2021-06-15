@@ -27,7 +27,7 @@
     "vue-router": "4",
     "vue-types": "3",
     "yiu-axios": "^1.0.54",
-    "yiu-js": "^1.0.13",
+    "yiu-js": "^1.0.15",
     "yiu-learn": "^1.0.6"
   },
   "devDependencies": {
