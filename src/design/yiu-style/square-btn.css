@@ -1,30 +1,51 @@
 .yiu-square-btn {
+    /*':'的样式不会继承下去，需要再定义*/
     /*公共样式*/
     @apply p-2 outline-none focus:outline-none border-1 border-transparent;
-}
-
-.yiu-blue-square-btn-1 {
-    @apply yiu-square-btn focus:outline-none;
-    @apply bg-blue-100 hover:bg-blue-50 hover:border-blue-200 active:bg-gray-50;
-}
-
-.yiu-blue-square-btn-2 {
-    @apply yiu-square-btn focus:outline-none;
-    @apply hover:bg-blue-100;
 }
 
 .yiu-disable-btn {
     @apply cursor-not-allowed;
 }
 
+/*/////////////////////////////////////////////////*/
+/*                  蓝色按钮                        */
+/*/////////////////////////////////////////////////*/
+.yiu-blue-square-btn-1 {
+    @apply yiu-square-btn focus:outline-none;
+    /*背景颜色*/
+    @apply bg-blue-100 hover:bg-blue-50 active:bg-gray-50;
+    /*边框*/
+    @apply hover:border-blue-200;
+}
+
+.yiu-blue-square-btn-2 {
+    @apply yiu-square-btn focus:outline-none;
+    /*背景颜色*/
+    @apply hover:bg-blue-100;
+}
+
+.yiu-blue-square-btn-3 {
+    @apply yiu-square-btn focus:outline-none;
+    /*背景颜色*/
+    @apply bg-blue-100 hover:bg-blue-50;
+    /*边框*/
+    @apply active:border-blue-100;
+}
+
+/*/////////////////////////////////////////////////*/
+/*                  蓝色禁用按钮                     */
+/*/////////////////////////////////////////////////*/
 .yiu-blue-disable-btn-1 {
     @apply yiu-disable-btn;
     @apply yiu-square-btn focus:outline-none;
     @apply bg-gray-50 '!border-blue-100';
 }
 
+/*/////////////////////////////////////////////////*/
+/*                  Modal关闭按钮                   */
+/*/////////////////////////////////////////////////*/
 .yiu-modal-close-btn {
-    /*点击的样式没继承下来*/
     @apply yiu-square-btn focus:outline-none;
     @apply absolute top-4 right-4;
     @apply hover:bg-blue-50 active:bg-blue-100;

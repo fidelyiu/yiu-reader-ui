@@ -19,7 +19,7 @@
       </div>
       <!--添加按钮-->
       <div class="flex-none">
-        <button class="yiu-square-btn bg-blue-100 hover:bg-blue-50 active:border-blue-100" @click="onAdd">
+        <button class="yiu-blue-square-btn-3" @click="onAdd">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </button>
       </div>
