@@ -39,6 +39,7 @@
   import SERVER_API from '/@/api'
   import { useCurdCallType } from '/@/hooks/entity/use-curd-call'
   import { useNotification } from 'naive-ui'
+  import { WorkspaceEntity } from '/@/vo/workspace'
 
   export default defineComponent({
     name: 'WorkspaceForm',
@@ -49,14 +50,19 @@
       NSpin,
     },
     props: { type: useCurdCallType() },
-    emits: ['addStart', 'addSuccess', 'addError'],
+    emits: [
+      'addStart', 'addSuccess', 'addError',
+      'editLoadingStart', 'editLoadingSuccess', 'editLoadingError',
+      'editStart', 'editSuccess', 'editError',
+    ],
     setup(_props, { emit }) {
+      const entityId = ref()
       const notification = useNotification()
       const formRef = ref()
       // 表单加载
       const spinShow = ref(false)
       // 表单数据
-      const model = reactive({
+      const model = reactive<WorkspaceEntity>({
         name: null,
         path: null,
       })
@@ -88,15 +94,55 @@
                   emit('addSuccess', res)
                 },
                 error: () => {
-                  emit('addError', 'httpError')
+                  emit('addError')
                 },
               })
-            } else {
-              emit('addError', 'formError')
             }
           })
-        } else {
-          emit('addError', 'formError')
+        }
+      }
+
+      // 加载数据
+      const loadData = (id: any) => {
+        entityId.value = id
+        emit('editLoadingStart')
+        yiuHttp({
+          api: SERVER_API.workspaceApi.view,
+          pathData: { id },
+          loading: { flag: spinShow },
+          tips: { anyObj: notification, error: { show: true } },
+          success: (res) => {
+            if (res?.data?.result) {
+              Object.assign(model, res.data.result)
+              emit('editLoadingSuccess')
+            } else {
+              emit('editLoadingError')
+            }
+          },
+          error: () => {
+            emit('editLoadingError')
+          },
+        })
+      }
+      const submitEdit = () => {
+        if (formRef.value!.validate) {
+          formRef.value!.validate((errors) => {
+            if (!errors) {
+              emit('editStart')
+              yiuHttp({
+                api: SERVER_API.workspaceApi.update,
+                data: model,
+                loading: { flag: spinShow },
+                tips: { anyObj: notification, error: { show: true } },
+                success: (res) => {
+                  emit('editSuccess', res)
+                },
+                error: () => {
+                  emit('editError')
+                },
+              })
+            }
+          })
         }
       }
       return {
@@ -104,7 +150,9 @@
         spinShow,
         model,
         rules,
+        loadData,
         submitAdd,
+        submitEdit,
       }
     },
   })

@@ -1,6 +1,6 @@
 import { ObjStatus } from '/@/vo/enum/obj-status'
 
-export type workspaceEntity = {
+export type WorkspaceEntity = {
     id: string,
     name: string,
     path: string,

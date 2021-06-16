@@ -75,7 +75,7 @@
             </n-tooltip>
           </div>
           <div class="self-center mr-4">
-            <button class="yiu-blue-square-btn-1">
+            <button class="yiu-blue-square-btn-1" @click="onEdit(item.id)">
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
             </button>
           </div>
@@ -98,6 +98,7 @@
       </div>
     </template>
   </div>
+  <!--添加Modal-->
   <n-modal v-model:show="addModal" :mask-closable="false">
     <n-card style="width: 600px;"
             content-style="padding: 0;"
@@ -126,6 +127,39 @@
       </div>
     </n-card>
   </n-modal>
+  <!--修改Modal-->
+  <n-modal v-model:show="editModal" :mask-closable="false">
+    <n-card style="width: 600px;"
+            content-style="padding: 0;"
+            class="p-5 relative"
+            size="medium"
+            :bordered="false">
+      <div class="text-base">修改工作空间</div>
+      <button class="yiu-modal-close-btn" transparent @click="onEditCancel">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </button>
+      <div class="text-base mt-6">
+        <WorkspaceForm ref="editRef"
+                       type="edit"
+                       @editLoadingStart="onEditLoadingStart"
+                       @editLoadingSuccess="onEditLoadingSuccess"
+                       @editLoadingError="onEditLoadingError"
+                       @editStart="onEditStart"
+                       @editSuccess="onEditSuccess"
+                       @editError="onEditError"></WorkspaceForm>
+        <div class="flex justify-end">
+          <n-button class="focus:outline-none mr-4" @click="onEditCancel">取消</n-button>
+          <n-button class="focus:outline-none"
+                    type="primary"
+                    :loading="editLoading"
+                    :disabled="editDisable"
+                    @click="onEditOk">
+            确定
+          </n-button>
+        </div>
+      </div>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -146,8 +180,23 @@
     useOnAddStart,
     useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
-  import { workspaceEntity } from '/@/vo/workspace'
+  import { WorkspaceEntity } from '/@/vo/workspace'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
+  import {
+    useEditDisableRef,
+    useEditLoading,
+    useEditModal,
+    useEditRef,
+    useOnEdit,
+    useOnEditCancel,
+    useOnEditError,
+    useOnEditLoadingError,
+    useOnEditLoadingStart,
+    useOnEditLoadingSuccess,
+    useOnEditOk,
+    useOnEditStart,
+    useOnEditSuccess,
+  } from '/@/hooks/entity/use-edit'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -165,7 +214,7 @@
       const searchLoading = ref(false)
       const searchKey = ref('')
       // 工作空间列表
-      const workspaceList = ref<Array<workspaceEntity>>([])
+      const workspaceList = ref<Array<WorkspaceEntity>>([])
       // 获取工作空间的方法
       const onSearch = () => {
         workspaceList.value = []
@@ -192,6 +241,27 @@
       const addRef = useAddRef()
       const addModal = useAddModal()
       const addLoading = useAddLoading()
+      const onAdd = useOnAdd(addModal)
+      const onAddOk = useOnAddOk(addRef, addLoading)
+      const onAddStart = useOnAddStart(addLoading)
+      const onAddCancel = useOnAddCancel(addModal, addLoading)
+      const onAddSuccess = useOnAddSuccess(onAddCancel, onSearch)
+      const onAddError = useOnAddError(addLoading)
+      // 修改功能
+      const editRef = useEditRef()
+      const editModal = useEditModal()
+      const editLoading = useEditLoading()
+      const editDisable = useEditDisableRef()
+      const onEdit = useOnEdit(editModal, editRef)
+      const onEditLoadingStart = useOnEditLoadingStart(editLoading)
+      const onEditLoadingSuccess = useOnEditLoadingSuccess(editLoading)
+      const onEditLoadingError = useOnEditLoadingError(editLoading, editDisable)
+      const onEditOk = useOnEditOk(editRef, editLoading)
+      const onEditCancel = useOnEditCancel(editModal, editLoading, editDisable)
+      const onEditStart = useOnEditStart(editLoading)
+      const onEditSuccess = useOnEditSuccess(onEditCancel, onSearch)
+      const onEditError = useOnEditError(editLoading)
+
       return {
         statusIsInvalid,
         workspaceList,
@@ -204,12 +274,26 @@
         addRef,
         addModal,
         addLoading,
-        onAdd: useOnAdd(addModal),
-        onAddOk: useOnAddOk(addRef, addLoading),
-        onAddStart: useOnAddStart(addLoading),
-        onAddCancel: useOnAddCancel(addModal),
-        onAddSuccess: useOnAddSuccess(addModal, addLoading, onSearch),
-        onAddError: useOnAddError(addLoading),
+        onAdd,
+        onAddOk,
+        onAddStart,
+        onAddCancel,
+        onAddSuccess,
+        onAddError,
+        // ↓修改
+        editRef,
+        editModal,
+        editLoading,
+        editDisable,
+        onEdit,
+        onEditLoadingStart,
+        onEditLoadingSuccess,
+        onEditLoadingError,
+        onEditOk,
+        onEditCancel,
+        onEditStart,
+        onEditSuccess,
+        onEditError,
       }
     },
   })

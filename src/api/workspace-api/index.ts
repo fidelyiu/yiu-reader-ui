@@ -12,7 +12,7 @@ const workspaceApi = {
         method: MethodEnum.POST,
     },
     view: <YiuAip>{
-        url: entityUrl + '/:id',
+        url: entityUrl + '/{id}',
         method: MethodEnum.GET,
     },
     update: <YiuAip>{
@@ -20,15 +20,15 @@ const workspaceApi = {
         method: MethodEnum.PUT,
     },
     del: <YiuAip>{
-        url: entityUrl + '/:id',
+        url: entityUrl + '/{id}',
         method: MethodEnum.DELETE,
     },
     up: <YiuAip>{
-        url: entityUrl + '/up/:id',
+        url: entityUrl + '/up/{id}',
         method: MethodEnum.PUT,
     },
     down: <YiuAip>{
-        url: entityUrl + '/down/:id',
+        url: entityUrl + '/down/{id}',
         method: MethodEnum.PUT,
     },
 }

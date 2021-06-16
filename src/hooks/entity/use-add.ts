@@ -2,7 +2,7 @@ import { Ref, ref } from 'vue'
 import { isFunction } from 'lodash'
 
 export function useAddRef() {
-    return ref<any>(null)
+    return ref<any>()
 }
 
 export function useAddModal() {
@@ -21,10 +21,17 @@ export function useOnAdd(addModal: Ref<boolean>) {
 
 export function useOnAddOk(addFormRef: Ref, addLoading: Ref<boolean>) {
     return () => {
-        if (!addLoading.value && isFunction(addFormRef.value.submitAdd)) {
+        if (!addLoading.value) {
+            // 不在加载中情况下
+            if (!addFormRef.value) {
+                console.error('无有效的\'addFormRef\'')
+                return
+            }
+            if (!isFunction(addFormRef.value.submitAdd)) {
+                console.error('\'addFormRef\'中无有效的\'submitAdd\'方法')
+                return
+            }
             addFormRef.value.submitAdd()
-        } else {
-            console.error('无效的\'addFormRef\'')
         }
     }
 }
@@ -35,16 +42,18 @@ export function useOnAddStart(addLoading: Ref<boolean>) {
     }
 }
 
-export function useOnAddCancel(addModal: Ref<boolean>) {
+export function useOnAddCancel(addModal: Ref<boolean>, addLoading: Ref<boolean>) {
     return () => {
+        addLoading.value = false
         addModal.value = false
     }
 }
 
-export function useOnAddSuccess(addModal: Ref<boolean>, addLoading: Ref<boolean>, searchFunc?: any) {
+export function useOnAddSuccess(onAddCancel: any, searchFunc?: any) {
     return () => {
-        addModal.value = false
-        addLoading.value = false
+        if (isFunction(onAddCancel)) {
+            onAddCancel()
+        }
         if (isFunction(searchFunc)) {
             searchFunc()
         }
@@ -52,7 +61,7 @@ export function useOnAddSuccess(addModal: Ref<boolean>, addLoading: Ref<boolean>
 }
 
 export function useOnAddError(addLoading: Ref<boolean>) {
-    return (_errorType: string) => {
+    return () => {
         addLoading.value = false
     }
 }
