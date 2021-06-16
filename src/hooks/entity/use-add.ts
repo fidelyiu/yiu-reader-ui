@@ -21,12 +21,17 @@ export function useOnAdd(addModal: Ref<boolean>) {
 
 export function useOnAddOk(addFormRef: Ref, addLoading: Ref<boolean>) {
     return () => {
-        if (isFunction(addFormRef.value.submitAdd)) {
+        if (!addLoading.value && isFunction(addFormRef.value.submitAdd)) {
             addFormRef.value.submitAdd()
-            addLoading.value = true
         } else {
             console.error('无效的\'addFormRef\'')
         }
+    }
+}
+
+export function useOnAddStart(addLoading: Ref<boolean>){
+    return () => {
+        addLoading.value = true
     }
 }
 

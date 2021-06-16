@@ -49,7 +49,7 @@
       NSpin,
     },
     props: { type: useCurdCallType() },
-    emits: ['addSuccess', 'addError'],
+    emits: ['addStart', 'addSuccess', 'addError'],
     setup(_props, { emit }) {
       const notification = useNotification()
       const formRef = ref()
@@ -78,6 +78,7 @@
         if (formRef.value!.validate) {
           formRef.value!.validate((errors) => {
             if (!errors) {
+              emit('addStart')
               yiuHttp({
                 api: SERVER_API.workspaceApi.add,
                 data: model,

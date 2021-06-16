@@ -111,11 +111,17 @@
       <div class="text-base mt-6">
         <WorkspaceForm ref="addRef"
                        type="add"
+                       @addStart="onAddStart"
                        @addSuccess="onAddSuccess"
                        @addError="onAddError"></WorkspaceForm>
         <div class="flex justify-end">
           <n-button class="focus:outline-none mr-4" @click="onAddCancel">取消</n-button>
-          <n-button class="focus:outline-none" type="primary" @click="onAddOk">确定</n-button>
+          <n-button class="focus:outline-none"
+                    type="primary"
+                    :loading="addLoading"
+                    @click="onAddOk">
+            确定
+          </n-button>
         </div>
       </div>
     </n-card>
@@ -138,7 +144,7 @@
     useOnAdd,
     useOnAddCancel,
     useOnAddError,
-    useOnAddOk,
+    useOnAddOk, useOnAddStart,
     useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
   import { workspaceEntity } from '/@/vo/workspace'
@@ -202,6 +208,7 @@
         addLoading,
         onAdd: useOnAdd(addModal),
         onAddOk: useOnAddOk(addRef, addLoading),
+        onAddStart: useOnAddStart(addLoading),
         onAddCancel: useOnAddCancel(addModal),
         onAddSuccess: useOnAddSuccess(addModal, addLoading),
         onAddError: useOnAddError(addLoading),

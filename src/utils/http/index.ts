@@ -22,13 +22,13 @@ const defYiuAxios = yiuAxios.create<Result, Ref<boolean>, 'notification'>({
                         content: title || '请求成功',
                         // 内容
                         meta: result?.data?.message || content,
+                        duration: 4500,
                     })
                 }
             },
         },
         error: {
             showFunc: ({ result, content, title, anyObj }) => {
-                console.log(result)
                 if (!result.data) {
                     if (isFunction(anyObj?.error)) {
                         anyObj.error({
@@ -36,6 +36,7 @@ const defYiuAxios = yiuAxios.create<Result, Ref<boolean>, 'notification'>({
                             content: title || '请求失败',
                             // 内容
                             meta: content || '请联系官方检查该功能',
+                            duration: 4500,
                         })
                     }
                 } else {
@@ -56,6 +57,7 @@ const defYiuAxios = yiuAxios.create<Result, Ref<boolean>, 'notification'>({
                             content: title || '请求失败',
                             // 内容
                             meta: outStr || content || '请联系官方检查该功能',
+                            duration: 4500,
                         })
                     }
                 }
