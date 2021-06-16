@@ -34,7 +34,7 @@
     </div>
     <!--加载栏-->
     <div v-if="workspaceListLoading" class="absolute inset-0 mt-[32px] grid justify-center content-center">
-      <LoadingIcon class="text-2xl object-center"></LoadingIcon>
+      <n-spin></n-spin>
     </div>
     <!--列表-->
     <template v-else>
@@ -130,9 +130,14 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
-  import LoadingIcon from '/@/components/LoadingIcon.vue'
   import SquareButton from '/@/components/SquareButton.vue'
-  import { NButton, NCard, NModal, NTooltip } from 'naive-ui'
+  import {
+    NButton,
+    NCard,
+    NModal,
+    NSpin,
+    NTooltip
+  } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -153,12 +158,12 @@
   export default defineComponent({
     name: 'WorkspaceList',
     components: {
-      LoadingIcon,
       SquareButton,
       NTooltip,
       NModal,
       NCard,
       NButton,
+      NSpin,
       WorkspaceForm,
     },
     setup() {
