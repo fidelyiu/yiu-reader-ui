@@ -29,7 +29,7 @@ export function useOnAddOk(addFormRef: Ref, addLoading: Ref<boolean>) {
     }
 }
 
-export function useOnAddStart(addLoading: Ref<boolean>){
+export function useOnAddStart(addLoading: Ref<boolean>) {
     return () => {
         addLoading.value = true
     }
@@ -41,10 +41,13 @@ export function useOnAddCancel(addModal: Ref<boolean>) {
     }
 }
 
-export function useOnAddSuccess(addModal: Ref<boolean>, addLoading: Ref<boolean>) {
+export function useOnAddSuccess(addModal: Ref<boolean>, addLoading: Ref<boolean>, searchFunc?: any) {
     return () => {
         addModal.value = false
         addLoading.value = false
+        if (isFunction(searchFunc)) {
+            searchFunc()
+        }
     }
 }
 

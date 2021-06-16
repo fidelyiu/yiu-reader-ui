@@ -3,7 +3,7 @@
     <div class="px-2 flex h-full hover:bg-gray-700 flex-none">
       <span class="iconify text-base self-center" data-icon="mdi:home" data-inline="false"></span>
     </div>
-    <div class="flex-grow self-center">text-center</div>
+    <div class="flex-grow self-center truncate">text-center</div>
     <div class="flex-none self-center ml-2 flex h-full">
       <div class="px-2 self-center">
         <span class="font-thin text-xs text-gray-300">{{ nowTimeStr }}</span>
@@ -23,7 +23,7 @@
   import { timeGetStr2 } from 'yiu-js/time/time-get'
 
   export default defineComponent({
-    name: '',
+    name: 'BottomBox',
     setup() {
       let nowTimeStr = ref('')
       let updateNowTimeStr = setInterval(() => {

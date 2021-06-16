@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :class="{'h-full': workspaceListLoading||!workspaceList.length}">
+  <div class="relative" :class="{'h-full': searchLoading||!workspaceList.length}">
     <!--搜索框-->
     <div class="w-full flex px-4 pb-4 sticky top-0 bg-white">
       <div class="flex-grow mr-4">
@@ -8,24 +8,24 @@
         <span class="iconify self-center ml-3 mr-2 text-lg text-gray-500"
               data-icon="mdi:magnify"
               data-inline="false"></span>
-          <input v-model="workspaceKey"
+          <input v-model="searchKey"
                  class="w-full h-[30px] outline-none text-sm bg-blue-50 transition-all ease-in-out"
                  :class="{'!bg-white': searchActive}"
                  type="text"
-                 @input="onWorkspaceKeyChange"
+                 @input="onSearchKeyChange"
                  @focus="searchActive = true"
                  @blur="searchActive = false">
         </div>
       </div>
       <!--添加按钮-->
       <div class="flex-none">
-        <SquareButton @click="onAdd">
+        <button class="yiu-square-btn bg-blue-100 hover:bg-blue-50 active:border-blue-100" @click="onAdd">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
-        </SquareButton>
+        </button>
       </div>
     </div>
     <!--空数据栏-->
-    <div v-if="!workspaceListLoading && !workspaceList.length"
+    <div v-if="!searchLoading && !workspaceList.length"
          class="absolute inset-0 mt-[32px] grid place-items-center">
       <div class="flex items-center text-gray-500">
         <span class="iconify text-2xl" data-icon="mdi:inbox" data-inline="false"></span>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <!--加载栏-->
-    <div v-if="workspaceListLoading" class="absolute inset-0 mt-[32px] grid justify-center content-center">
+    <div v-if="searchLoading" class="absolute inset-0 mt-[32px] grid justify-center content-center">
       <n-spin></n-spin>
     </div>
     <!--列表-->
@@ -41,58 +41,58 @@
       <div v-for="item in workspaceList"
            :key="item.id"
            class="py-3 px-4 hover:bg-blue-50 flex">
-        <template v-if="item.status === ObjStatus.Valid">
-          <span class="iconify block flex-none text-4xl self-center mr-4 text-blue-400"
-                data-icon="mdi:book"
-                data-inline="false"></span>
-        </template>
-        <template v-else>
+        <template v-if="statusIsInvalid(item.status)">
           <span class="iconify block flex-none text-4xl self-center mr-4 text-red-400"
                 data-icon="mdi:book-remove"
                 data-inline="false"></span>
         </template>
+        <template v-else>
+          <span class="iconify block flex-none text-4xl self-center mr-4 text-blue-400"
+                data-icon="mdi:book"
+                data-inline="false"></span>
+        </template>
         <div class="flex-grow w-0 mr-4">
           <div class="w-full truncate text-gray-700 font-medium"
-               :class="{'!text-red-400': item.status === ObjStatus.Invalid}">
+               :class="{'!text-red-400': statusIsInvalid(item.status)}">
             {{ item.name }}
           </div>
           <div class="w-full truncate text-gray-500 font-light"
-               :class="{'!text-red-300': item.status === ObjStatus.Invalid}">
+               :class="{'!text-red-300': statusIsInvalid(item.status)}">
             {{ item.path }}
           </div>
         </div>
         <div class="flex-none flex">
-          <div v-if="item.status === ObjStatus.Invalid" class="self-center mr-4">
+          <div v-if="statusIsInvalid(item.status)" class="self-center mr-4">
             <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
               <template #trigger>
                 <div>
-                  <SquareButton disable>
+                  <button class="yiu-blue-disable-btn-1" disable>
                     <span class="iconify block" data-icon="mdi:help-circle" data-inline="false"></span>
-                  </SquareButton>
+                  </button>
                 </div>
               </template>
               <span>该工作空间路径已失效，请将丢失的文件夹还原，或者删除该工作空间!</span>
             </n-tooltip>
           </div>
           <div class="self-center mr-4">
-            <SquareButton :disable="item.status === ObjStatus.Invalid">
+            <button class="yiu-blue-square-btn-1">
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
-            </SquareButton>
+            </button>
           </div>
           <div class="self-center mr-4">
-            <SquareButton>
+            <button class="yiu-blue-square-btn-1">
               <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
-            </SquareButton>
+            </button>
           </div>
           <div class="self-center mr-4">
-            <SquareButton>
+            <button class="yiu-blue-square-btn-1">
               <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
-            </SquareButton>
+            </button>
           </div>
           <div class="self-center">
-            <SquareButton>
+            <button class="yiu-blue-square-btn-1">
               <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
-            </SquareButton>
+            </button>
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@
             size="medium"
             :bordered="false">
       <div class="text-base">添加工作空间</div>
-      <SquareButton class="absolute top-4 right-4" transparent @click="onAddCancel">
+      <button class="yiu-modal-close-btn" transparent @click="onAddCancel">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
-      </SquareButton>
+      </button>
       <div class="text-base mt-6">
         <WorkspaceForm ref="addRef"
                        type="add"
@@ -130,14 +130,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
-  import SquareButton from '/@/components/SquareButton.vue'
-  import {
-    NButton,
-    NCard,
-    NModal,
-    NSpin,
-    NTooltip
-  } from 'naive-ui'
+  import { NButton, NCard, NModal, NSpin, NTooltip } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -149,16 +142,16 @@
     useOnAdd,
     useOnAddCancel,
     useOnAddError,
-    useOnAddOk, useOnAddStart,
+    useOnAddOk,
+    useOnAddStart,
     useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
   import { workspaceEntity } from '/@/vo/workspace'
-  import { ObjStatus } from '/@/vo/enum/obj-status'
+  import { statusIsInvalid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'WorkspaceList',
     components: {
-      SquareButton,
       NTooltip,
       NModal,
       NCard,
@@ -167,32 +160,30 @@
       WorkspaceForm,
     },
     setup() {
-      onMounted(() => {
-        getWorkspaceList()
-      })
+      onMounted(() => onSearch())
       // 工作空间加载状态
-      const workspaceListLoading = ref(false)
-      const workspaceKey = ref('')
+      const searchLoading = ref(false)
+      const searchKey = ref('')
       // 工作空间列表
-      let workspaceList = ref<Array<workspaceEntity>>([])
+      const workspaceList = ref<Array<workspaceEntity>>([])
       // 获取工作空间的方法
-      const getWorkspaceList = () => {
+      const onSearch = () => {
         workspaceList.value = []
         yiuHttp({
-          loading: { flag: workspaceListLoading },
+          loading: { flag: searchLoading },
           api: SERVER_API.workspaceApi.search,
-          params: { key: workspaceKey.value },
+          params: { key: searchKey.value },
           success: (res) => {
             if (res.data.result) {
-              // workspaceList.
               workspaceList.value = res.data.result
             }
           },
         })
       }
-      const onWorkspaceKeyChange = debounce(() => {
-        getWorkspaceList()
+      const onSearchKeyChange = debounce(() => {
+        onSearch()
       }, 500)
+
       // 搜索栏是否激活状态
       const searchActive = ref(false)
 
@@ -201,11 +192,12 @@
       const addModal = useAddModal()
       const addLoading = useAddLoading()
       return {
-        workspaceListLoading,
-        workspaceKey,
-        onWorkspaceKeyChange,
+        searchLoading,
+        searchKey,
+        onSearchKeyChange,
         workspaceList,
-        getWorkspaceList,
+        onSearch,
+        statusIsInvalid,
         searchActive,
         // ↓添加
         addRef,
@@ -215,9 +207,8 @@
         onAddOk: useOnAddOk(addRef, addLoading),
         onAddStart: useOnAddStart(addLoading),
         onAddCancel: useOnAddCancel(addModal),
-        onAddSuccess: useOnAddSuccess(addModal, addLoading),
+        onAddSuccess: useOnAddSuccess(addModal, addLoading, onSearch),
         onAddError: useOnAddError(addLoading),
-        ObjStatus,
       }
     },
   })

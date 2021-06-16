@@ -12,7 +12,7 @@
       <div class="absolute inset-y-0 right-3 h-full flex flex-col justify-center">
         <n-tooltip placement="left">
           <template #trigger>
-            <button class="p-2 text-xs rounded-t hover:bg-blue-100 outline-none focus:outline-none">
+            <button class="yiu-blue-square-btn-2">
               <span class="iconify block text-base" data-icon="mdi:help-circle" data-inline="false"></span>
             </button>
           </template>
