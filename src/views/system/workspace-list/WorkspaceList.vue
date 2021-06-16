@@ -180,6 +180,7 @@
           },
         })
       }
+      // 500ms防抖处理
       const onSearchKeyChange = debounce(() => {
         onSearch()
       }, 500)
@@ -192,13 +193,13 @@
       const addModal = useAddModal()
       const addLoading = useAddLoading()
       return {
-        searchLoading,
-        searchKey,
-        onSearchKeyChange,
-        workspaceList,
-        onSearch,
         statusIsInvalid,
+        workspaceList,
+        searchKey,
         searchActive,
+        searchLoading,
+        onSearch,
+        onSearchKeyChange,
         // ↓添加
         addRef,
         addModal,
