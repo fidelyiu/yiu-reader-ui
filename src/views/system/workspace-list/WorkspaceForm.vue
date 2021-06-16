@@ -38,6 +38,7 @@
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { useCurdCallType } from '/@/hooks/entity/use-curd-call'
+  import { useNotification } from 'naive-ui'
 
   export default defineComponent({
     name: 'WorkspaceForm',
@@ -50,6 +51,7 @@
     props: { type: useCurdCallType() },
     emits: ['addSuccess', 'addError'],
     setup(_props, { emit }) {
+      const notification = useNotification()
       const formRef = ref(null)
       // 表单加载
       const spinShow = ref(false)
@@ -79,13 +81,12 @@
               api: SERVER_API.workspaceApi.add,
               data: model,
               loading: { flag: spinShow },
+              tips: { anyObj: notification, error: { show: true } },
               success: (res) => {
                 emit('addSuccess', res)
-                console.log(res)
               },
-              error: (err) => {
+              error: () => {
                 emit('addError', 'httpError')
-                console.log(err)
               },
             })
           } else {

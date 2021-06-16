@@ -1,24 +1,27 @@
 <template>
   <n-config-provider class="h-full" :theme-overrides="themeOverrides">
-    <div class="h-full flex flex-col overflow-hidden">
-      <div class="flex-grow flex-shrink-0 flex flex-col h-0">
-        <router-view></router-view>
+    <n-notification-provider :scrollable="false">
+      <div class="h-full flex flex-col overflow-hidden">
+        <div class="flex-grow flex-shrink-0 flex flex-col h-0">
+          <router-view></router-view>
+        </div>
+        <BottomBox class="flex-none"></BottomBox>
       </div>
-      <BottomBox class="flex-none"></BottomBox>
-    </div>
+    </n-notification-provider>
   </n-config-provider>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
   import BottomBox from '/@/components/BottomBox.vue'
-  import { NConfigProvider } from 'naive-ui'
+  import { NConfigProvider, NNotificationProvider } from 'naive-ui'
 
   export default defineComponent({
     name: 'App',
     components: {
       BottomBox,
       NConfigProvider,
+      NNotificationProvider,
     },
     setup() {
       const themeOverrides = {
@@ -31,8 +34,12 @@
           // 比如按钮点击下去的颜色颜色
           primaryColorPressed: '#096dd9',
           primaryColorSuppl: 'red',
-          errorColor: 'rgba(248, 113, 113, 1)',
-          errorColorHover: 'rgba(248, 113, 113, 1)',
+          errorColor: '#ff4d4f',
+          errorColorHover: '#f5222d',
+        },
+        Notification: {
+          fontSize: '16px',
+          descriptionTextColor: 'rgba(0,0,0,.85)',
         },
       }
       return {

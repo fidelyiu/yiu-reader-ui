@@ -5,7 +5,7 @@ import { propTypes } from '/@/utils/propTypes'
 import { MethodEnum, YiuAip } from 'yiu-axios/type'
 import { toBoolWithFalseLog } from 'yiu-js/script'
 import { reactive, ref } from 'vue'
-import { initApiByField, yiuHttp } from '/@/utils/http'
+import { yiuHttp } from '/@/utils/http'
 import { isFunction } from 'lodash'
 import { Ref, UnwrapNestedRefs } from '@vue/reactivity'
 
@@ -34,9 +34,9 @@ export function useCRUDCall<I = any>(entityBaseUrl: any, formItem: UnwrapNestedR
         method: MethodEnum.GET,
     })
 
-    initApiByField(addApi, entityBaseUrl, 'add')
-    initApiByField(editApi, entityBaseUrl, 'edit')
-    initApiByField(viewApi, entityBaseUrl, 'view')
+    // initApiByField(addApi, entityBaseUrl, 'add')
+    // initApiByField(editApi, entityBaseUrl, 'edit')
+    // initApiByField(viewApi, entityBaseUrl, 'view')
     const checkFormAndSendAddHttp = (beforeSubmitAdd: any,
                                      addSuccessCallback: any,
                                      addErrorCallback: any,

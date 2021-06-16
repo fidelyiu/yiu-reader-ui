@@ -52,10 +52,12 @@
                 data-inline="false"></span>
         </template>
         <div class="flex-grow w-0 mr-4">
-          <div class="w-full truncate text-gray-700 font-medium" :class="{'!text-red-400': item.status === ObjStatus.Invalid}">
+          <div class="w-full truncate text-gray-700 font-medium"
+               :class="{'!text-red-400': item.status === ObjStatus.Invalid}">
             {{ item.name }}
           </div>
-          <div class="w-full truncate text-gray-500 font-light" :class="{'!text-red-300': item.status === ObjStatus.Invalid}">
+          <div class="w-full truncate text-gray-500 font-light"
+               :class="{'!text-red-300': item.status === ObjStatus.Invalid}">
             {{ item.path }}
           </div>
         </div>

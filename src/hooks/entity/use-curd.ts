@@ -1,16 +1,16 @@
 /**
  * 这是 Yiu 之前在项目中封装的 mixins，目前还没想好怎么在 vue3 中使用
  */
-import { MethodEnum, YiuAip, YiuAipObj } from 'yiu-axios/type'
+import { MethodEnum, YiuAip } from 'yiu-axios/type'
 import { reactive, ref } from 'vue'
 import { toBoolWithFalseLog } from 'yiu-js/script'
 import { isFunction } from 'lodash'
-import { initApiByField, yiuHttp } from '/@/utils/http'
+import { yiuHttp } from '/@/utils/http'
 import { useDialog } from 'naive-ui'
 
 const dialog = useDialog()
 
-export function useCURD<I = any>(entityBaseUrl: YiuAipObj) {
+export function useCURD<I = any>(entityBaseUrl: any) {
     toBoolWithFalseLog(entityBaseUrl, 'useCURD：请定义并传入\'entityBaseUrl\'')
     const viewHooks = useView()
     const saveHooks = useSave()
@@ -144,7 +144,7 @@ export function useEdit<I = any>() {
     }
 }
 
-export function useDelete<I = any>(entityBaseUrl: YiuAipObj, search?: any) {
+export function useDelete<I = any>(entityBaseUrl: any, search?: any) {
     toBoolWithFalseLog(entityBaseUrl, 'useDelete：请定义并传入\'entityBaseUrl\'')
     const deleteApi = reactive<YiuAip>({
         url: '',
@@ -154,8 +154,8 @@ export function useDelete<I = any>(entityBaseUrl: YiuAipObj, search?: any) {
         url: '',
         method: MethodEnum.DELETE,
     })
-    initApiByField(deleteApi, entityBaseUrl, 'delete')
-    initApiByField(deleteMoreApi, entityBaseUrl, 'deleteMore')
+    // initApiByField(deleteApi, entityBaseUrl, 'delete')
+    // initApiByField(deleteMoreApi, entityBaseUrl, 'deleteMore')
 
     // const beforeDelete = () => {}
     // const afterDelete = (_res: any) => {}
