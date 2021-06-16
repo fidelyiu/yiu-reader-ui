@@ -52,7 +52,7 @@
     emits: ['addSuccess', 'addError'],
     setup(_props, { emit }) {
       const notification = useNotification()
-      const formRef = ref(null)
+      const formRef = ref()
       // 表单加载
       const spinShow = ref(false)
       // 表单数据
@@ -75,24 +75,28 @@
       }
       // 发送添加方法
       const submitAdd = () => {
-        formRef.value.validate((errors) => {
-          if (!errors) {
-            yiuHttp({
-              api: SERVER_API.workspaceApi.add,
-              data: model,
-              loading: { flag: spinShow },
-              tips: { anyObj: notification, error: { show: true } },
-              success: (res) => {
-                emit('addSuccess', res)
-              },
-              error: () => {
-                emit('addError', 'httpError')
-              },
-            })
-          } else {
-            emit('addError', 'formError')
-          }
-        })
+        if (formRef.value!.validate) {
+          formRef.value!.validate((errors) => {
+            if (!errors) {
+              yiuHttp({
+                api: SERVER_API.workspaceApi.add,
+                data: model,
+                loading: { flag: spinShow },
+                tips: { anyObj: notification, error: { show: true } },
+                success: (res) => {
+                  emit('addSuccess', res)
+                },
+                error: () => {
+                  emit('addError', 'httpError')
+                },
+              })
+            } else {
+              emit('addError', 'formError')
+            }
+          })
+        } else {
+          emit('addError', 'formError')
+        }
       }
       return {
         formRef,

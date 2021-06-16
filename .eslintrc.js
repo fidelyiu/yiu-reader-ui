@@ -52,5 +52,7 @@ module.exports = {
             'error',
             { 'argsIgnorePattern': '^_' },
         ],
+        // 允许使用!，非零断言
+        '@typescript-eslint/no-non-null-assertion': 'off',
     },
 }
