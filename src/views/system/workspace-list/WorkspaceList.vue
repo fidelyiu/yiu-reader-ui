@@ -19,6 +19,18 @@
       </div>
       <!--添加按钮-->
       <div class="flex-none">
+        <button class="yiu-blue-square-btn-3 mr-4" @click="onSortChange">
+          <div v-show="sortTypeIsAse(searchSort)">
+            <span class="iconify block"
+                  data-icon="mdi:menu-down"
+                  data-inline="false"></span>
+          </div>
+          <div v-show="sortTypeIsDesc(searchSort)">
+            <span class="iconify block"
+                  data-icon="mdi:menu-up"
+                  data-inline="false"></span>
+          </div>
+        </button>
         <button class="yiu-blue-square-btn-3" @click="onAdd">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </button>
@@ -80,12 +92,12 @@
             </button>
           </div>
           <div class="self-center mr-4">
-            <button class="yiu-blue-square-btn-1">
+            <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'up')">
               <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
             </button>
           </div>
           <div class="self-center mr-4">
-            <button class="yiu-blue-square-btn-1">
+            <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'down')">
               <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
             </button>
           </div>
@@ -164,7 +176,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
-  import { NButton, NCard, NModal, NSpin, NTooltip } from 'naive-ui'
+  import { NButton, NCard, NModal, NSpin, NTooltip, useNotification } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -197,6 +209,8 @@
     useOnEditStart,
     useOnEditSuccess,
   } from '/@/hooks/entity/use-edit'
+  import { SortType, sortTypeIsAse, sortTypeIsDesc } from '/@/vo/enum/sort-type'
+  import { YiuAip } from 'yiu-axios/type'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -209,10 +223,21 @@
       WorkspaceForm,
     },
     setup() {
+      const notification = useNotification()
+
       onMounted(() => onSearch())
       // 工作空间加载状态
       const searchLoading = ref(false)
       const searchKey = ref('')
+      const searchSort = ref<SortType>(SortType.ASE)
+      const onSortChange = () => {
+        if (sortTypeIsAse(searchSort.value)) {
+          searchSort.value = SortType.DESC
+        } else {
+          searchSort.value = SortType.ASE
+        }
+        onSearch()
+      }
       // 工作空间列表
       const workspaceList = ref<Array<WorkspaceEntity>>([])
       // 获取工作空间的方法
@@ -221,7 +246,7 @@
         yiuHttp({
           loading: { flag: searchLoading },
           api: SERVER_API.workspaceApi.search,
-          params: { key: searchKey.value },
+          params: { key: searchKey.value, sortType: searchSort.value },
           success: (res) => {
             if (res.data.result) {
               workspaceList.value = res.data.result
@@ -262,9 +287,30 @@
       const onEditSuccess = useOnEditSuccess(onEditCancel, onSearch)
       const onEditError = useOnEditError(editLoading)
 
+      // 移动
+      const onMove = (id: string, type: 'up' | 'down') => {
+        let sendApi: YiuAip
+        if (type === 'up') {
+          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.up : SERVER_API.workspaceApi.down
+        } else {
+          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.down : SERVER_API.workspaceApi.up
+        }
+
+        yiuHttp({
+          api: sendApi,
+          pathData: { id },
+          tips: { anyObj: notification, error: { show: true } },
+          success: (_res) => onSearch(),
+        })
+      }
+
       return {
         statusIsInvalid,
         workspaceList,
+        searchSort,
+        sortTypeIsAse,
+        sortTypeIsDesc,
+        onSortChange,
         searchKey,
         searchActive,
         searchLoading,
@@ -294,6 +340,8 @@
         onEditStart,
         onEditSuccess,
         onEditError,
+        // 移动
+        onMove,
       }
     },
   })

@@ -62,10 +62,7 @@
       // 表单加载
       const spinShow = ref(false)
       // 表单数据
-      const model = reactive<WorkspaceEntity>({
-        name: null,
-        path: null,
-      })
+      const model = reactive<Partial<WorkspaceEntity>>({})
       // 规则
       const rules = {
         name: {
