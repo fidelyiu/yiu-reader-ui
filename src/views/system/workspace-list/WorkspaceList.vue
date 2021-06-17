@@ -17,20 +17,29 @@
                  @blur="searchActive = false">
         </div>
       </div>
-      <!--添加按钮-->
       <div class="flex-none">
-        <button class="yiu-blue-square-btn-3 mr-4" @click="onSortChange">
-          <div v-show="sortTypeIsAse(searchSort)">
-            <span class="iconify block"
-                  data-icon="mdi:menu-down"
-                  data-inline="false"></span>
+        <!--有效按钮-->
+        <button class="yiu-blue-square-btn-3 mr-4" @click="onStatusChange">
+          <div v-show="statusIsNoValue(searchStatus)">
+            <span class="iconify block" data-icon="mdi:text-box-outline" data-inline="false"></span>
           </div>
-          <div v-show="sortTypeIsDesc(searchSort)">
-            <span class="iconify block"
-                  data-icon="mdi:menu-up"
-                  data-inline="false"></span>
+          <div v-show="statusIsValid(searchStatus)">
+            <span class="iconify block" data-icon="mdi:text-box-check-outline" data-inline="false"></span>
+          </div>
+          <div v-show="statusIsInvalid(searchStatus)">
+            <span class="iconify block" data-icon="mdi:text-box-remove-outline" data-inline="false"></span>
           </div>
         </button>
+        <!--排序按钮-->
+        <button class="yiu-blue-square-btn-3 mr-4" @click="onSortChange">
+          <div v-show="sortTypeIsAse(searchSort)">
+            <span class="iconify block" data-icon="mdi:menu-down" data-inline="false"></span>
+          </div>
+          <div v-show="sortTypeIsDesc(searchSort)">
+            <span class="iconify block" data-icon="mdi:menu-up" data-inline="false"></span>
+          </div>
+        </button>
+        <!--添加按钮-->
         <button class="yiu-blue-square-btn-3" @click="onAdd">
           <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
         </button>
@@ -91,12 +100,12 @@
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
             </button>
           </div>
-          <div class="self-center mr-4">
+          <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'up')">
               <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
             </button>
           </div>
-          <div class="self-center mr-4">
+          <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'down')">
               <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
             </button>
@@ -193,7 +202,7 @@
     useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
   import { WorkspaceEntity } from '/@/vo/workspace'
-  import { statusIsInvalid } from '/@/vo/enum/obj-status'
+  import { ObjStatus, statusIsNoValue, statusIsValid, statusIsInvalid } from '/@/vo/enum/obj-status'
   import {
     useEditDisableRef,
     useEditLoading,
@@ -229,6 +238,22 @@
       // 工作空间加载状态
       const searchLoading = ref(false)
       const searchKey = ref('')
+      const searchStatus = ref<ObjStatus>(ObjStatus.NoValue)
+      const onStatusChange = () => {
+        switch (searchStatus.value) {
+          case ObjStatus.NoValue:
+            searchStatus.value = ObjStatus.Valid
+            break
+          case ObjStatus.Valid:
+            searchStatus.value = ObjStatus.Invalid
+            break
+          case ObjStatus.Invalid:
+            searchStatus.value = ObjStatus.NoValue
+            break
+        }
+        onSearch()
+      }
+
       const searchSort = ref<SortType>(SortType.ASE)
       const onSortChange = () => {
         if (sortTypeIsAse(searchSort.value)) {
@@ -246,7 +271,11 @@
         yiuHttp({
           loading: { flag: searchLoading },
           api: SERVER_API.workspaceApi.search,
-          params: { key: searchKey.value, sortType: searchSort.value },
+          params: {
+            key: searchKey.value,
+            sortType: searchSort.value,
+            objStatus: searchStatus.value,
+          },
           success: (res) => {
             if (res.data.result) {
               workspaceList.value = res.data.result
@@ -305,8 +334,12 @@
       }
 
       return {
+        statusIsNoValue,
+        statusIsValid,
         statusIsInvalid,
         workspaceList,
+        searchStatus,
+        onStatusChange,
         searchSort,
         sortTypeIsAse,
         sortTypeIsDesc,

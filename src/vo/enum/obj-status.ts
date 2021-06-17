@@ -4,6 +4,7 @@ export enum ObjStatus {
     Valid = 2,   // 有效状态
 }
 
+export const statusIsNoValue = (i: ObjStatus) => i === ObjStatus.NoValue
 export const statusIsInvalid = (i: ObjStatus) => i === ObjStatus.Invalid
 export const statusIsValid = (i: ObjStatus) => i === ObjStatus.Valid
 export const statusIsNotValid = (i: ObjStatus) => !statusIsValid(i)
