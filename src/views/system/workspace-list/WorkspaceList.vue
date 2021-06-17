@@ -96,6 +96,25 @@
             </n-tooltip>
           </div>
           <div class="self-center mr-4">
+            <template v-if="statusIsValid(item.status)">
+              <button class="yiu-blue-square-btn-1">
+                <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
+              </button>
+            </template>
+            <template v-else>
+              <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
+                <template #trigger>
+                  <div>
+                    <button class="yiu-blue-disable-btn-1" disable>
+                      <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
+                    </button>
+                  </div>
+                </template>
+                <span>无效工作空间不能设置为当前工作空间!</span>
+              </n-tooltip>
+            </template>
+          </div>
+          <div class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onEdit(item.id)">
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
             </button>
