@@ -111,9 +111,20 @@
             </button>
           </div>
           <div class="self-center">
-            <button class="yiu-blue-square-btn-1">
-              <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
-            </button>
+            <n-popconfirm placement="top-end"
+                          negative-text="取消"
+                          positive-text="确认"
+                          @positive-click="onDelete(item.id)">
+              <template #icon>
+                <span class="iconify block" style="color: #ff7875;" data-icon="mdi:alert-circle" data-inline="false"></span>
+              </template>
+              <template #trigger>
+                <button class="yiu-blue-square-btn-1">
+                  <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
+                </button>
+              </template>
+              <span>是否删除该工作空间?</span>
+            </n-popconfirm>
           </div>
         </div>
       </div>
@@ -185,7 +196,15 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
-  import { NButton, NCard, NModal, NSpin, NTooltip, useNotification } from 'naive-ui'
+  import {
+    NButton,
+    NCard,
+    NModal,
+    NSpin,
+    NTooltip,
+    NPopconfirm,
+    useNotification,
+  } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -229,6 +248,7 @@
       NCard,
       NButton,
       NSpin,
+      NPopconfirm,
       WorkspaceForm,
     },
     setup() {
@@ -333,6 +353,16 @@
         })
       }
 
+      // 删除
+      const onDelete = (id: string) => {
+        yiuHttp({
+          api: SERVER_API.workspaceApi.del,
+          pathData: { id },
+          tips: { anyObj: notification, error: { show: true } },
+          success: (_res) => onSearch(),
+        })
+      }
+
       return {
         statusIsNoValue,
         statusIsValid,
@@ -375,6 +405,8 @@
         onEditError,
         // 移动
         onMove,
+        // 删除
+        onDelete,
       }
     },
   })
