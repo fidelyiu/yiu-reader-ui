@@ -89,7 +89,7 @@
             <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
               <template #trigger>
                 <div>
-                  <button class="yiu-blue-disable-btn-1" disable>
+                  <button :key="item.id" class="yiu-blue-disable-btn-1" disable>
                     <span class="iconify block" data-icon="mdi:help-circle" data-inline="false"></span>
                   </button>
                 </div>
@@ -121,7 +121,7 @@
               <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
                 <template #trigger>
                   <div>
-                    <button class="yiu-blue-disable-btn-1" disable>
+                    <button :key="item.id" class="yiu-blue-disable-btn-1" disable>
                       <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
                     </button>
                   </div>

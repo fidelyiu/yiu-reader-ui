@@ -2,10 +2,13 @@
   <div class="flex-none bg-blue-200 text-gray-800 dark:bg-gray-700 dark:text-white shadow-md">
     <div class="text-2xl text-center p-4 relative">
       <!--返回箭头-->
-      <div v-if="false" class="absolute inset-y-0 left-3 h-full flex flex-col justify-center">
-        <div class="p-2 text-xs rounded-t hover:bg-gray-200">
+      <div class="absolute inset-y-0 left-3 h-full flex flex-col justify-center">
+        <button class="yiu-blue-square-btn-2"
+                :class="{'yiu-disable-btn': statusIsNotValid(mainStore.getCurrentWorkspace.status)}"
+                :disabled="statusIsNotValid(mainStore.getCurrentWorkspace.status)"
+                @click="onBack">
           <span class="iconify block text-base" data-icon="mdi:keyboard-backspace" data-inline="false"></span>
-        </div>
+        </button>
       </div>
       <span>系统设置</span>
       <!--问号-->
@@ -54,18 +57,27 @@
   import SystemTab from '/@/views/system/tab/SystemTab.vue'
   import WorkspaceList from '/@/views/system/workspace-list/WorkspaceList.vue'
   import { NTooltip } from 'naive-ui'
+  import { useMainStore } from '/@/store/modules/main'
+  import { statusIsNotValid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'System',
     components: { SystemTab, WorkspaceList, NTooltip },
     setup() {
+      const mainStore = useMainStore()
       const tabKey = ref<systemTabKey>('workspace')
       const onTabKeyChange = (key) => {
         tabKey.value = key
       }
+      const onBack = () => {
+        console.log(1)
+      }
       return {
+        mainStore,
         tabKey,
         onTabKeyChange,
+        statusIsNotValid,
+        onBack,
       }
     },
   })

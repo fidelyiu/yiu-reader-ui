@@ -22,6 +22,7 @@
     @apply yiu-square-btn;
     /*背景颜色*/
     @apply hover:bg-blue-100;
+    @apply active:bg-blue-50;
 }
 
 .yiu-blue-square-btn-3 {
