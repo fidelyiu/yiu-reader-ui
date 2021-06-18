@@ -19,7 +19,7 @@
       </div>
       <div class="flex-none">
         <!--有效按钮-->
-        <button class="yiu-blue-square-btn-3 mr-4" @click="onStatusChange">
+        <button class="yiu-blue-square-btn-3 mr-4" :disabled="searchLoading" @click="onStatusChange">
           <div v-show="statusIsNoValue(searchStatus)">
             <span class="iconify block" data-icon="mdi:text-box-outline" data-inline="false"></span>
           </div>
@@ -31,7 +31,7 @@
           </div>
         </button>
         <!--排序按钮-->
-        <button class="yiu-blue-square-btn-3 mr-4" @click="onSortChange">
+        <button class="yiu-blue-square-btn-3 mr-4" :disabled="searchLoading" @click="onSortChange">
           <div v-show="sortTypeIsAse(searchSort)">
             <span class="iconify block" data-icon="mdi:menu-down" data-inline="false"></span>
           </div>
@@ -108,7 +108,12 @@
             <!--可设置为当前工作空间-->
             <template v-else-if="statusIsValid(item.status)">
               <button class="yiu-blue-square-btn-1" @click="setCurrentWorkspaceById(item.id)">
-                <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
+                <div v-show="setCurrentWorkspaceLoading">
+                  <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+                </div>
+                <div v-show="!setCurrentWorkspaceLoading">
+                  <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
+                </div>
               </button>
             </template>
             <!--不能设置为当前工作空间-->
@@ -134,13 +139,23 @@
           <!--上移按钮-->
           <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'up')">
-              <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
+              <div v-show="moveLoading">
+                <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+              </div>
+              <div v-show="!moveLoading">
+                <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
+              </div>
             </button>
           </div>
           <!--下移按钮-->
           <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'down')">
-              <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
+              <div v-show="moveLoading">
+                <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+              </div>
+              <div v-show="!moveLoading">
+                <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
+              </div>
             </button>
           </div>
           <!--删除按钮-->
@@ -326,9 +341,14 @@
         }
       }
 
+      const setCurrentWorkspaceLoading = ref(false)
       const setCurrentWorkspaceById = (id: string) => {
+        if (setCurrentWorkspaceLoading.value) {
+          return
+        }
         yiuHttp({
           api: SERVER_API.mainApi.setCurrentWorkspace,
+          loading: { flag: setCurrentWorkspaceLoading },
           tips: { anyObj: notification, error: { show: true } },
           pathData: { id },
           success: (res) => {
@@ -388,8 +408,13 @@
       const onEditSuccess = useOnEditSuccess(onEditCancel, onSearch)
       const onEditError = useOnEditError(editLoading)
 
+
+      const moveLoading = ref(false)
       // 移动
       const onMove = (id: string, type: 'up' | 'down') => {
+        if (moveLoading.value) {
+          return
+        }
         let sendApi: YiuAip
         if (type === 'up') {
           sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.up : SERVER_API.workspaceApi.down
@@ -400,6 +425,7 @@
         yiuHttp({
           api: sendApi,
           pathData: { id },
+          loading: { flag: moveLoading },
           tips: { anyObj: notification, error: { show: true } },
           success: (_res) => onSearch(),
         })
@@ -423,6 +449,7 @@
         workspaceList,
         workspaceItemIsCurrentWorkspace,
         setCurrentWorkspaceById,
+        setCurrentWorkspaceLoading,
         searchStatus,
         onStatusChange,
         searchSort,
@@ -458,6 +485,7 @@
         onEditStart,
         onEditSuccess,
         onEditError,
+        moveLoading,
         // 移动
         onMove,
         // 删除
