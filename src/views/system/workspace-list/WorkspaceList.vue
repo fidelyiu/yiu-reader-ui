@@ -160,7 +160,7 @@
                   <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
                 </button>
               </template>
-              <span>是否删除该工作空间?</span>
+              <span class="max-w-55">是否删除该工作空间，此操作将删除该工作空间下所有记录?</span>
             </n-popconfirm>
           </div>
         </div>
