@@ -61,7 +61,8 @@
     <template v-else>
       <div v-for="item in workspaceList"
            :key="item.id"
-           class="py-3 px-4 hover:bg-blue-50 flex">
+           class="py-3 px-4 hover:bg-blue-50 flex"
+           :class="{'bg-blue-50': workspaceItemIsCurrentWorkspace(item)}">
         <template v-if="statusIsInvalid(item.status)">
           <span class="iconify block flex-none text-4xl self-center mr-4 text-red-400"
                 data-icon="mdi:book-remove"
@@ -83,6 +84,7 @@
           </div>
         </div>
         <div class="flex-none flex">
+          <!--问号按钮-->
           <div v-if="statusIsInvalid(item.status)" class="self-center mr-4">
             <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
               <template #trigger>
@@ -95,12 +97,21 @@
               <span>该工作空间路径已失效，请将丢失的文件夹还原，或者删除该工作空间!</span>
             </n-tooltip>
           </div>
-          <div class="self-center mr-4">
-            <template v-if="statusIsValid(item.status)">
+          <!--设置当前工作空间按钮-->
+          <div v-if="statusIsNotInvalid(searchStatus)" class="self-center mr-4">
+            <!--已经是当前工作空间-->
+            <template v-if="workspaceItemIsCurrentWorkspace(item)">
               <button class="yiu-blue-square-btn-1">
+                <span class="iconify block" data-icon="mdi:star" data-inline="false"></span>
+              </button>
+            </template>
+            <!--可设置为当前工作空间-->
+            <template v-else-if="statusIsValid(item.status)">
+              <button class="yiu-blue-square-btn-1" @click="setCurrentWorkspaceById(item.id)">
                 <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
               </button>
             </template>
+            <!--不能设置为当前工作空间-->
             <template v-else>
               <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
                 <template #trigger>
@@ -114,28 +125,35 @@
               </n-tooltip>
             </template>
           </div>
+          <!--修改按钮-->
           <div class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onEdit(item.id)">
               <span class="iconify block" data-icon="mdi:pencil-outline" data-inline="false"></span>
             </button>
           </div>
+          <!--上移按钮-->
           <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'up')">
               <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
             </button>
           </div>
+          <!--下移按钮-->
           <div v-show="statusIsNoValue(searchStatus)" class="self-center mr-4">
             <button class="yiu-blue-square-btn-1" @click="onMove(item.id, 'down')">
               <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
             </button>
           </div>
+          <!--删除按钮-->
           <div class="self-center">
             <n-popconfirm placement="top-end"
                           negative-text="取消"
                           positive-text="确认"
                           @positive-click="onDelete(item.id)">
               <template #icon>
-                <span class="iconify block" style="color: #ff7875;" data-icon="mdi:alert-circle" data-inline="false"></span>
+                <span style="color: #ff7875;"
+                      class="iconify block"
+                      data-icon="mdi:alert-circle"
+                      data-inline="false"></span>
               </template>
               <template #trigger>
                 <button class="yiu-blue-square-btn-1">
@@ -215,15 +233,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
-  import {
-    NButton,
-    NCard,
-    NModal,
-    NSpin,
-    NTooltip,
-    NPopconfirm,
-    useNotification,
-  } from 'naive-ui'
+  import { NButton, NCard, NModal, NPopconfirm, NSpin, NTooltip, useNotification } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { debounce } from 'lodash'
@@ -240,7 +250,7 @@
     useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
   import { WorkspaceEntity } from '/@/vo/workspace'
-  import { ObjStatus, statusIsNoValue, statusIsValid, statusIsInvalid } from '/@/vo/enum/obj-status'
+  import { ObjStatus, statusIsInvalid, statusIsNotInvalid, statusIsNoValue, statusIsValid } from '/@/vo/enum/obj-status'
   import {
     useEditDisableRef,
     useEditLoading,
@@ -258,6 +268,7 @@
   } from '/@/hooks/entity/use-edit'
   import { SortType, sortTypeIsAse, sortTypeIsDesc } from '/@/vo/enum/sort-type'
   import { YiuAip } from 'yiu-axios/type'
+  import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -271,6 +282,8 @@
       WorkspaceForm,
     },
     setup() {
+      const mainStore = useMainStore()
+      mainStore.refreshCurrentWorkspaceWithHttp()
       const notification = useNotification()
 
       onMounted(() => onSearch())
@@ -304,6 +317,26 @@
       }
       // 工作空间列表
       const workspaceList = ref<Array<WorkspaceEntity>>([])
+
+      const workspaceItemIsCurrentWorkspace = (item: WorkspaceEntity) => {
+        if (!mainStore.getCurrentWorkspace.status) {
+          return false
+        } else {
+          return item.id === mainStore.getCurrentWorkspace.id
+        }
+      }
+
+      const setCurrentWorkspaceById = (id: string) => {
+        yiuHttp({
+          api: SERVER_API.mainApi.setCurrentWorkspace,
+          tips: { anyObj: notification, error: { show: true } },
+          pathData: { id },
+          success: (res) => {
+            mainStore.setCurrentWorkspace(res?.data?.result)
+          },
+        })
+      }
+
       // 获取工作空间的方法
       const onSearch = () => {
         workspaceList.value = []
@@ -386,7 +419,10 @@
         statusIsNoValue,
         statusIsValid,
         statusIsInvalid,
+        statusIsNotInvalid,
         workspaceList,
+        workspaceItemIsCurrentWorkspace,
+        setCurrentWorkspaceById,
         searchStatus,
         onStatusChange,
         searchSort,

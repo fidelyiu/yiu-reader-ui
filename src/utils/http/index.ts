@@ -1,7 +1,7 @@
 import { yiuAxios } from 'yiu-axios'
-import axios, { Canceler } from 'axios'
+import axios, { AxiosResponse, Canceler } from 'axios'
 import { Ref } from 'vue'
-import { YiuRequestConfig } from 'yiu-axios/type'
+import { YiuPromiseRequestConfig, YiuRequestConfig } from 'yiu-axios/type'
 import { Result } from '/#/types'
 import { getEnvObj } from '/@/utils/env'
 import { isFunction } from 'lodash'
@@ -81,4 +81,8 @@ const defAxios = axios.create()
 
 export function yiuHttp<D = any, L = any>(c: YiuRequestConfig<Result<D>, L>): Canceler | undefined {
     return defYiuAxios.send(c, defAxios)
+}
+
+export function yiuHttpWithPromise<D = any, L = any>(c: YiuPromiseRequestConfig<Result<D>, L>): Promise<AxiosResponse<Result<D>>> {
+    return defYiuAxios.sendPromise(c, defAxios)
 }

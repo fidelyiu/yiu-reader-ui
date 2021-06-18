@@ -4,6 +4,6 @@ export type WorkspaceEntity = {
     id: string,
     name: string,
     path: string,
-    readonly sortNum: number,
+    sortNum: number,
     status: ObjStatus,
 }

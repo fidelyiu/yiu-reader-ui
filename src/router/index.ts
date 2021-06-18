@@ -1,9 +1,9 @@
 import { App } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from '/@/router/routes'
-import { yiuHttp } from '/@/utils/http'
-import SERVER_API from '/@/api'
 import nProgress from 'nprogress'
+import { useMainStore } from '/@/store/modules/main'
+import { statusIsNotValid } from '/@/vo/enum/obj-status'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -13,20 +13,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _from, next) => {
+    const mainStore = useMainStore()
     nProgress.start()
     if (to.path !== '/system') {
-        yiuHttp({
-            api: SERVER_API.mainApi.getCurrentWorkspace,
-            success: () => {
-                next()
-            },
-            error: () => {
-                next('/system')
-            },
-            finally: () => {
-                nProgress.done()
-            },
-        })
+        if (statusIsNotValid(mainStore.getCurrentWorkspaceWithHttp?.status)) {
+            next('/system')
+        } else {
+            next()
+        }
+        nProgress.done()
     } else {
         next()
         nProgress.done()
@@ -40,3 +35,5 @@ export function setupRouter(app: App<Element>) {
 export function isReady() {
     return router.isReady()
 }
+
+export default router

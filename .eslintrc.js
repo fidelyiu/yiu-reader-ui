@@ -54,5 +54,7 @@ module.exports = {
         ],
         // 允许使用!，非零断言
         '@typescript-eslint/no-non-null-assertion': 'off',
+        // 空花括号
+        'no-empty': 'off',
     },
 }
