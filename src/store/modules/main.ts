@@ -27,30 +27,12 @@ export const useMainStore = defineStore({
                 const result = await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.getCurrentWorkspace,
                 })
+                this.$reset()
                 if (result?.data?.result?.id) {
                     this.currentWorkspace = result.data.result
-                } else {
-                    this.currentWorkspace = {
-                        id: '',
-                        status: ObjStatus.NoValue,
-                    }
                 }
             } catch (e) {
             }
         },
-        // async _setCurrentWorkspaceByIdWithHttp(id:string) {
-        //     try {
-        //         const result = await yiuHttpWithPromise({
-        //             api: SERVER_API.mainApi.getCurrentWorkspace,
-        //         })
-        //         if (result?.data?.result?.id) {
-        //             state.setCurrentWorkspace(result.data.result)
-        //         } else {
-        //             state.currentWorkspace = {}
-        //         }
-        //     } catch (e) {
-        //     }
-        //     return state.currentWorkspace
-        // },
     },
 })

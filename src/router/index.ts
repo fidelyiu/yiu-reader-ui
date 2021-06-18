@@ -16,12 +16,15 @@ router.beforeEach((to, _from, next) => {
     const mainStore = useMainStore()
     nProgress.start()
     if (to.path !== '/system') {
-        mainStore.refreshCurrentWorkspaceWithHttp().then()
-        if (statusIsNotValid(mainStore.getCurrentWorkspace.status)) {
+        mainStore.refreshCurrentWorkspaceWithHttp().then(() => {
+            if (statusIsNotValid(mainStore.getCurrentWorkspace.status)) {
+                next('/system')
+            } else {
+                next()
+            }
+        }).catch(() => {
             next('/system')
-        } else {
-            next()
-        }
+        })
         nProgress.done()
     } else {
         next()
