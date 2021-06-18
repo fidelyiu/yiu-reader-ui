@@ -16,7 +16,8 @@ router.beforeEach((to, _from, next) => {
     const mainStore = useMainStore()
     nProgress.start()
     if (to.path !== '/system') {
-        if (statusIsNotValid(mainStore.getCurrentWorkspaceWithHttp?.status)) {
+        mainStore.refreshCurrentWorkspaceWithHttp().then()
+        if (statusIsNotValid(mainStore.getCurrentWorkspace.status)) {
             next('/system')
         } else {
             next()

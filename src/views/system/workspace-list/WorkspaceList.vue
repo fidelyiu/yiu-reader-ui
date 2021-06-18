@@ -283,7 +283,7 @@
     },
     setup() {
       const mainStore = useMainStore()
-      mainStore.refreshCurrentWorkspaceWithHttp()
+      mainStore.refreshCurrentWorkspaceWithHttp().then()
       const notification = useNotification()
 
       onMounted(() => onSearch())
