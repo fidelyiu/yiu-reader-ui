@@ -33,6 +33,20 @@
     @apply active:border-blue-100;
 }
 
+.yiu-blue-square-btn-4 {
+    @apply yiu-square-btn;
+    @apply rounded text-white text-xl p-1;
+    @apply bg-blue-400;
+}
+
+.yiu-blue-square-btn-4:hover {
+    --tw-bg-opacity: .8;
+}
+
+.yiu-blue-square-btn-4:active {
+    --tw-bg-opacity: .9;
+}
+
 /*/////////////////////////////////////////////////*/
 /*                  蓝色禁用按钮                     */
 /*/////////////////////////////////////////////////*/
