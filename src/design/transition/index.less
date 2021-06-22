@@ -1,1 +1,20 @@
 @import "yiu-x";
+@import "yiu-x-right";
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform .3s ease-out, opacity .3s
+}
+
+.slide-up-enter,
+.slide-up-leave-to {
+  opacity: 0
+}
+
+.slide-up-enter {
+  transform: translateY(100%)
+}
+
+.slide-up-leave-to {
+  transform: translateY(-100%)
+}
