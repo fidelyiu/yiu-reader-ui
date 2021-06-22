@@ -26,3 +26,8 @@
 - [MaterialDesignIcons的iconify](https://iconify.design/icon-sets/mdi/)
 - [Ant Design 色彩](https://ant.design/docs/spec/colors-cn)
 
+
+# 检查更新API
+```bash
+https://api.github.com/repos/fidelyiu/yiu-go/releases
+```

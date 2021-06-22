@@ -1,6 +1,6 @@
 .yiu-square-btn {
     /*公共样式*/
-    @apply p-2 outline-none border-1 border-transparent;
+    @apply p-2 outline-none border border-transparent;
 }
 
 .yiu-disable-btn {

@@ -15,6 +15,11 @@
 
 @layer base {
     button {
-        @apply focus:outline-none
+        @apply focus:outline-none;
     }
+}
+
+
+.fa-center {
+    @apply flex justify-center items-center;
 }
