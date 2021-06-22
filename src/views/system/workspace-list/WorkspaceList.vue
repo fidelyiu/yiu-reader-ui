@@ -3,19 +3,7 @@
     <!--搜索框-->
     <div class="w-full flex px-4 pb-4 sticky top-0 bg-white">
       <div class="flex-grow mr-4">
-        <div class="flex rounded-3xl border border-blue-100 bg-blue-50 overflow-hidden transition-all ease-in-out"
-             :class="{'!bg-white': searchActive}">
-        <span class="iconify self-center ml-3 mr-2 text-lg text-gray-500"
-              data-icon="mdi:magnify"
-              data-inline="false"></span>
-          <input v-model="searchKey"
-                 class="w-full h-[30px] outline-none text-sm bg-blue-50 transition-all ease-in-out"
-                 :class="{'!bg-white': searchActive}"
-                 type="text"
-                 @input="onSearchKeyChange"
-                 @focus="searchActive = true"
-                 @blur="searchActive = false">
-        </div>
+        <SearchInput v-model="searchKey" @change="onSearch"></SearchInput>
       </div>
       <div class="flex-none">
         <!--有效按钮-->
@@ -251,7 +239,6 @@
   import { NButton, NCard, NModal, NPopconfirm, NSpin, NTooltip, useNotification } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
-  import { debounce } from 'lodash'
   import WorkspaceForm from '/@/views/system/workspace-list/WorkspaceForm.vue'
   import {
     useAddLoading,
@@ -284,6 +271,7 @@
   import { SortType, sortTypeIsAse, sortTypeIsDesc } from '/@/vo/enum/sort-type'
   import { YiuAip } from 'yiu-axios/type'
   import { useMainStore } from '/@/store/modules/main'
+  import SearchInput from '/@/components/SearchInput.vue'
 
   export default defineComponent({
     name: 'WorkspaceList',
@@ -295,6 +283,7 @@
       NSpin,
       NPopconfirm,
       WorkspaceForm,
+      SearchInput,
     },
     setup() {
       const mainStore = useMainStore()
@@ -375,13 +364,6 @@
           },
         })
       }
-      // 500ms防抖处理
-      const onSearchKeyChange = debounce(() => {
-        onSearch()
-      }, 500)
-
-      // 搜索栏是否激活状态
-      const searchActive = ref(false)
 
       // 添加功能
       const addRef = useAddRef()
@@ -457,10 +439,8 @@
         sortTypeIsDesc,
         onSortChange,
         searchKey,
-        searchActive,
         searchLoading,
         onSearch,
-        onSearchKeyChange,
         // ↓添加
         addRef,
         addModal,

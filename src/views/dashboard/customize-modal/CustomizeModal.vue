@@ -9,15 +9,29 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
     </div>
+    <!--搜索部分-->
+    <div class="px-4">
+      <SearchInput v-model="searchValue"></SearchInput>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref } from 'vue'
+  import SearchInput from '/@/components/SearchInput.vue'
 
   export default defineComponent({
     name: 'CustomizeModal',
+    components: {
+      SearchInput,
+    },
     emits: ['close'],
+    setup() {
+      const searchValue = ref('')
+      return {
+        searchValue,
+      }
+    },
   })
 </script>
 
