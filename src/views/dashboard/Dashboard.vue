@@ -24,7 +24,10 @@
         </div>
       </div>
       <div class="bg-blue-50 h-full overflow-hidden flex">
-        <div class="relative flex-grow overflow-auto w-full">内容</div>
+        <div class="relative flex-grow overflow-auto w-full transform origin-top-left transition-all"
+             :class="{'scale-75': customizeMode}">
+          内容
+        </div>
         <transition name="yiu-x-right">
           <div v-show="customizeMode" class="flex-none w-[360px] bg-white">自定义内容</div>
         </transition>
