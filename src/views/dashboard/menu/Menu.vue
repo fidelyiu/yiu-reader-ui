@@ -48,7 +48,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { NPopover, NSpin } from 'naive-ui'
-  import MenuItem from '/@/views/dashboard/MenuItem.vue'
+  import MenuItem from '/@/views/dashboard/menu/MenuItem.vue'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { WorkspaceEntity } from '/@/vo/workspace'

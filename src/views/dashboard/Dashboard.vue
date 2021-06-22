@@ -38,7 +38,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
-  import Menu from '/@/views/dashboard/Menu.vue'
+  import Menu from '/@/views/dashboard/menu/Menu.vue'
   import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
