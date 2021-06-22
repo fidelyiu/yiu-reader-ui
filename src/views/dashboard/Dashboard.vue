@@ -29,7 +29,9 @@
           内容
         </div>
         <transition name="yiu-x-right">
-          <div v-show="customizeMode" class="flex-none w-[360px] bg-white">自定义内容</div>
+          <div v-show="customizeMode" class="flex-none w-[360px] bg-white shadow-xl">
+            <CustomizeModal @close="customizeMode=!customizeMode"></CustomizeModal>
+          </div>
         </transition>
       </div>
     </div>
@@ -40,11 +42,13 @@
   import { defineComponent, ref } from 'vue'
   import Menu from '/@/views/dashboard/menu/Menu.vue'
   import { useMainStore } from '/@/store/modules/main'
+  import CustomizeModal from '/@/views/dashboard/customize-modal/CustomizeModal.vue'
 
   export default defineComponent({
     name: 'Dashboard',
     components: {
       Menu,
+      CustomizeModal,
     },
     setup() {
       const mainStore = useMainStore()
