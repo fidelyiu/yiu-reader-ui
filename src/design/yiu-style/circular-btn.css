@@ -1,0 +1,16 @@
+.big-circular-btn {
+    @apply h-[32px] px-[16px] rounded-3xl text-white;
+}
+
+.yiu-blue-big-circular-btn {
+    @apply big-circular-btn;
+    @apply bg-blue-400;
+}
+
+.yiu-blue-big-circular-btn:hover {
+    --tw-bg-opacity: .8;
+}
+
+.yiu-blue-big-circular-btn:active {
+    --tw-bg-opacity: .9;
+}

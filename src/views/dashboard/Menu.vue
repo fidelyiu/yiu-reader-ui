@@ -26,7 +26,7 @@
       </div>
     </div>
     <!--中间菜单-->
-    <div class="flex-grow border-t h-0 overflow-y-auto">
+    <div class="flex-grow h-0 overflow-y-auto">
       <n-spin :show="searchLoading" size="small">
         <template v-for="item in workspaceList" :key="item.id">
           <MenuItem :active="isActiveItem(item)" :show-dot="showMenu" :workspace="item"></MenuItem>
@@ -34,7 +34,7 @@
       </n-spin>
     </div>
     <!--底部的折叠按钮-->
-    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100 border-t" @click="showMenu=!showMenu">
+    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100" @click="showMenu=!showMenu">
       <span class="fa-center transition-all transform ease-in-out"
             :class="{'rotate-180': showMenu}">
         <span class="iconify text-xl"
@@ -54,6 +54,7 @@
   import { WorkspaceEntity } from '/@/vo/workspace'
   import { SortType } from '/@/vo/enum/sort-type'
   import { useMainStore } from '/@/store/modules/main'
+  import { ObjStatus } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'Menu',
@@ -75,6 +76,7 @@
           api: SERVER_API.workspaceApi.search,
           params: {
             sortType: searchSort.value,
+            objStatus: ObjStatus.Valid,
           },
           success: (res) => {
             if (res.data.result) {

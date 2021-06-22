@@ -19,12 +19,12 @@
           <span class="w-full truncate"
                 style="color: #2c3e50"
                 :class="{'!text-blue-400':active}">
-            {{ workspace.name }}
+            {{ workspace.name || '-' }}
           </span>
         </div>
       </div>
     </template>
-    <span>{{ workspace.name }}</span>
+    <span>{{ workspace.name || '-' }}</span>
   </n-popover>
 </template>
 
