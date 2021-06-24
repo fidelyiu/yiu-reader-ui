@@ -26,11 +26,14 @@
       <div class="bg-blue-50 h-full overflow-hidden flex">
         <div class="relative flex-grow overflow-auto w-full transform origin-top-left transition-all"
              :class="{'scale-75': customizeMode}">
-          内容
+          <div v-for="item in layoutList" :key="item.id">
+            {{ item.id || '-' }}
+          </div>
         </div>
         <transition name="yiu-x-right">
           <div v-show="customizeMode" class="flex-none w-[360px] bg-white shadow-xl">
-            <CustomizeModal @close="customizeMode=!customizeMode"></CustomizeModal>
+            <CustomizeModal @close="customizeMode=!customizeMode"
+                            @addSuccess="getLayoutList"></CustomizeModal>
           </div>
         </transition>
       </div>
@@ -43,6 +46,9 @@
   import Menu from '/@/views/dashboard/menu/Menu.vue'
   import { useMainStore } from '/@/store/modules/main'
   import CustomizeModal from '/@/views/dashboard/customize-modal/CustomizeModal.vue'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
+  import { LayoutEntity } from '/@/vo/layout'
 
   export default defineComponent({
     name: 'Dashboard',
@@ -53,9 +59,21 @@
     setup() {
       const mainStore = useMainStore()
       const customizeMode = ref(false)
+      const layoutList = ref<Array<LayoutEntity>>()
+      const getLayoutList = () => {
+        yiuHttp({
+          api: SERVER_API.layoutApi.search,
+          success: (res) => {
+            layoutList.value = res.data.result
+          },
+        })
+      }
+      getLayoutList()
       return {
         mainStore,
         customizeMode,
+        layoutList,
+        getLayoutList,
       }
     },
   })

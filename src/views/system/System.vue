@@ -59,6 +59,7 @@
   import { NTooltip } from 'naive-ui'
   import { useMainStore } from '/@/store/modules/main'
   import { statusIsNotValid } from '/@/vo/enum/obj-status'
+  import router from '/@/router'
 
   export default defineComponent({
     name: 'System',
@@ -70,7 +71,7 @@
         tabKey.value = key
       }
       const onBack = () => {
-        console.log(1)
+        router.replace('/dashboard')
       }
       return {
         mainStore,

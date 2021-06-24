@@ -64,6 +64,11 @@
   import { defineComponent, ref } from 'vue'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal } from 'naive-ui'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
+  import { LayoutType } from '/@/vo/enum/layout-type'
+  import { LayoutEntity } from '/@/vo/layout'
+  import { ObjStatus } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'CustomizeModal',
@@ -73,18 +78,35 @@
       NButton,
       SearchInput,
     },
-    emits: ['close'],
-    setup() {
+    emits: ['close', 'addSuccess'],
+    setup(_prop, { emit }) {
       const searchValue = ref('')
       const linkModal = ref(false)
       const linkLoading = ref(false)
       const onAddLink = () => {
         if (!linkLoading.value) {
-          console.log(1)
-          linkModal.value = false
-          linkLoading.value = true
+          const defaultLinkLayout: LayoutEntity = {
+            type: LayoutType.Link,
+            status: ObjStatus.Valid,
+            width: 250,
+            height: 250,
+            setting: {
+              name: 'YiuReader地址',
+              url: 'https://github.com/fidelyiu/yiu-reader',
+            },
+          }
+          yiuHttp({
+            loading: { flag: linkLoading },
+            api: SERVER_API.layoutApi.add,
+            data: defaultLinkLayout,
+            success: () => {
+              emit('addSuccess')
+            },
+            finally: () => {
+              linkModal.value = false
+            },
+          })
         }
-        linkLoading.value = false
       }
       return {
         searchValue,
