@@ -34,7 +34,7 @@
       </n-spin>
     </div>
     <!--底部的折叠按钮-->
-    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100" @click="showMenu=!showMenu">
+    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100" @click="changeShowMenu">
       <span class="fa-center transition-all transform ease-in-out"
             :class="{'rotate-180': showMenu}">
         <span class="iconify text-xl"
@@ -63,9 +63,14 @@
       NSpin,
       MenuItem,
     },
-    setup() {
+    emits: ['changeShow'],
+    setup(_prop, { emit }) {
       const mainStore = useMainStore()
       const showMenu = ref(true)
+      const changeShowMenu = () => {
+        showMenu.value = !showMenu.value
+        emit('changeShow')
+      }
       const workspaceList = ref<Array<WorkspaceEntity>>([])
       const searchLoading = ref(false)
       const searchSort = ref<SortType>(SortType.ASE)
@@ -94,6 +99,7 @@
         searchLoading,
         searchSort,
         showMenu,
+        changeShowMenu,
         isActiveItem,
       }
     },

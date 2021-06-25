@@ -37,7 +37,7 @@
             size="medium"
             :bordered="false">
       <div class="text-base">超链接布局</div>
-      <button class="yiu-modal-close-btn" transparent @click="linkModal=false">
+      <button class="yiu-modal-close-btn-1" transparent @click="linkModal=false">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="fa-center mt-4">

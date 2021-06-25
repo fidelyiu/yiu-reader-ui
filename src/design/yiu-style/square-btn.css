@@ -59,8 +59,13 @@
 /*/////////////////////////////////////////////////*/
 /*                  Modal关闭按钮                   */
 /*/////////////////////////////////////////////////*/
-.yiu-modal-close-btn {
+.yiu-modal-close-btn-1 {
     @apply yiu-square-btn;
     @apply absolute top-4 right-4;
     @apply hover:bg-blue-50 active:bg-blue-100;
+}
+.yiu-modal-close-btn-2 {
+    @apply yiu-square-btn;
+    @apply absolute top-2 right-2;
+    @apply hover:bg-blue-300 active:bg-blue-400;
 }

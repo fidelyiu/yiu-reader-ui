@@ -11,6 +11,10 @@ const layoutApi = {
         url: entityUrl,
         method: MethodEnum.GET,
     },
+    del: <YiuAip>{
+        url: entityUrl + '/{id}',
+        method: MethodEnum.DELETE,
+    },
 }
 
 export default layoutApi

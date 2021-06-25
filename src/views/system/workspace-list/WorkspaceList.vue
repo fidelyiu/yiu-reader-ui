@@ -178,7 +178,7 @@
             size="medium"
             :bordered="false">
       <div class="text-base">添加工作空间</div>
-      <button class="yiu-modal-close-btn" transparent @click="onAddCancel">
+      <button class="yiu-modal-close-btn-1" transparent @click="onAddCancel">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
@@ -207,7 +207,7 @@
             size="medium"
             :bordered="false">
       <div class="text-base">修改工作空间</div>
-      <button class="yiu-modal-close-btn" transparent @click="onEditCancel">
+      <button class="yiu-modal-close-btn-1" transparent @click="onEditCancel">
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
