@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, inject, ref } from 'vue'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
@@ -83,6 +83,7 @@
       const searchValue = ref('')
       const linkModal = ref(false)
       const linkLoading = ref(false)
+      const widgetWrapperWidth: any = inject('widgetWrapperWidth')
       const onAddLink = () => {
         if (!linkLoading.value) {
           const defaultLinkLayout: LayoutEntity = {
@@ -98,6 +99,9 @@
           yiuHttp({
             loading: { flag: linkLoading },
             api: SERVER_API.layoutApi.add,
+            params: {
+              maxX: widgetWrapperWidth?.value || 0,
+            },
             data: defaultLinkLayout,
             success: () => {
               emit('addSuccess')

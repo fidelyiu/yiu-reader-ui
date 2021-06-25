@@ -25,7 +25,8 @@
       </div>
       <div class="bg-blue-50 h-full overflow-hidden flex">
         <div class="m-2 flex-grow overflow-auto">
-          <div class="relative w-full transform origin-top-left transition-all"
+          <div id="widget-wrapper"
+               class="relative w-full transform origin-top-left transition-all"
                :class="{'scale-75': customizeMode}">
             <Widget v-for="item in layoutList"
                     :key="item.id"
@@ -52,7 +53,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, onMounted, provide, ref } from 'vue'
   import Menu from '/@/views/dashboard/menu/Menu.vue'
   import { useMainStore } from '/@/store/modules/main'
   import CustomizeModal from '/@/views/dashboard/customize-modal/CustomizeModal.vue'
@@ -69,6 +70,7 @@
       Widget,
     },
     setup() {
+      let widgetWrapperWidth = ref(0)
       const mainStore = useMainStore()
       const customizeMode = ref(false)
       const layoutList = ref<Array<LayoutEntity>>()
@@ -80,6 +82,11 @@
           },
         })
       }
+      onMounted(() => {
+        widgetWrapperWidth.value = document.getElementById('widget-wrapper')?.scrollWidth || 0
+      })
+      provide('widgetWrapperWidth', widgetWrapperWidth)
+
       getLayoutList()
       return {
         mainStore,
