@@ -6,9 +6,10 @@
                 'width':(layout.width||0)+'px',
                 'height':(layout.height||0)+'px',
               }">
-    <div class="p-2 bg-white rounded-md shadow w-full h-full relative">
+    <div class="p-2 bg-white rounded shadow w-full h-full relative">
       <!--组件内容-->
       <div class="w-full h-full overflow-auto"
+           :class="{'select-none': customizeMode}"
            :style="{opacity: customizeMode?'.15':'1'}">
         <div>{{ layoutType }}</div>
         <div>{{ layout.id }}</div>
@@ -17,10 +18,17 @@
       </div>
       <!--修改状态-->
       <div v-if="customizeMode"
-           class="absolute top-0 left-0 w-full h-full">
-        <div class="customize-overlay w-full h-full relative grid justify-center content-center">
+           class="absolute top-0 left-0 w-full h-full cursor-move"
+           @click="selectId">
+        <div class="customize-overlay"
+             :class="{'!border-blue-400 customize-overlay-select': isSelectId}">
           <button class="yiu-modal-close-btn-2" @click="delLayout">
-            <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+            <div v-show="delLoading">
+              <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+            </div>
+            <div v-show="!delLoading">
+              <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+            </div>
           </button>
           <!--链接-->
           <div v-show="layoutTypeIsLink(layoutType)"
@@ -39,12 +47,13 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent } from 'vue'
+  import { computed, defineComponent, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { layoutTypeIsLink } from '/@/vo/enum/layout-type'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { useNotification } from 'naive-ui'
+  import { useWidgetStore } from '/@/store/modules/widget'
 
   export default defineComponent({
     name: 'Widget',
@@ -55,11 +64,18 @@
     emits: ['delSuccess'],
     setup(prop, { emit }) {
       const notification = useNotification()
+      const widgetStore = useWidgetStore()
       const layoutType = computed(() => prop.layout.type)
+      const delLoading = ref(false)
+      const isSelectId = computed(() => widgetStore.getSelectWidgetId === prop.layout.id)
+      const selectId = () => {
+        widgetStore.setSelectWidgetId(prop.layout.id)
+      }
       const delLayout = () => {
-        if (prop.layout.id) {
+        if (prop.layout.id && !delLoading.value) {
           yiuHttp({
             api: SERVER_API.layoutApi.del,
+            loading: { flag: delLoading },
             pathData: { id: prop.layout.id },
             tips: { anyObj: notification, error: { show: true } },
             success: (_res) => emit('delSuccess'),
@@ -69,14 +85,27 @@
       return {
         layoutType,
         layoutTypeIsLink,
+        delLoading,
         delLayout,
+        isSelectId,
+        selectId,
       }
     },
   })
 </script>
 
 <style scoped>
+  .customize-overlay {
+    @apply w-full h-full relative grid justify-center content-center rounded border-2 border-transparent;
+    @apply transition-all ease-in-out;
+  }
+
   .customize-overlay:hover {
+    @apply bg-blue-300 ;
+    --tw-bg-opacity: .3;
+  }
+
+  .customize-overlay-select {
     @apply bg-blue-300 ;
     --tw-bg-opacity: .3;
   }

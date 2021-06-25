@@ -65,6 +65,7 @@
   import { LayoutEntity } from '/@/vo/layout'
   import Widget from '/@/views/dashboard/widget/Widget.vue'
   import { NSpin } from 'naive-ui'
+  import { useWidgetStore } from '/@/store/modules/widget'
 
   export default defineComponent({
     name: 'Dashboard',
@@ -77,6 +78,7 @@
     setup() {
       let widgetWrapperWidth = ref(0)
       const mainStore = useMainStore()
+      const widgetStore = useWidgetStore()
       const customizeMode = ref(false)
       const layoutLoading = ref(false)
       const layoutList = ref<Array<LayoutEntity>>()
@@ -100,6 +102,7 @@
         getWidgetWrapperWidth()
       })
       const onChangeCustomizeMode = () => {
+        widgetStore.$reset()
         customizeMode.value = !customizeMode.value
         getWidgetWrapperWidth()
       }

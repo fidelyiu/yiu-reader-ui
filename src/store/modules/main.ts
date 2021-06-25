@@ -21,7 +21,7 @@ export const useMainStore = defineStore({
         getCurrentWorkspace(state) {return state.currentWorkspace},
     },
     actions: {
-        setCurrentWorkspace(workspace: WorkspaceEntity) {this.currentWorkspace = workspace},
+        setCurrentWorkspace(workspace: WorkspaceEntity) {this.currentWorkspace = workspace as any},
         async refreshCurrentWorkspaceWithHttp() {
             try {
                 const result = await yiuHttpWithPromise({
