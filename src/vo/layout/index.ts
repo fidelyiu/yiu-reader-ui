@@ -7,8 +7,8 @@ export type LayoutEntity = {
     status: ObjStatus,
     width: number,
     height: number,
-    left: number,
-    top: number,
+    left?: number,
+    top?: number,
     setting: any,
-    updateTime: any,
+    updateTime?: any,
 }

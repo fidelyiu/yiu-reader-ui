@@ -24,10 +24,20 @@
         </div>
       </div>
       <div class="bg-blue-50 h-full overflow-hidden flex">
-        <div class="relative flex-grow overflow-auto w-full transform origin-top-left transition-all"
-             :class="{'scale-75': customizeMode}">
-          <div v-for="item in layoutList" :key="item.id">
-            {{ item.id || '-' }}
+        <div class="m-2 flex-grow overflow-auto">
+          <div class="relative w-full transform origin-top-left transition-all"
+               :class="{'scale-75': customizeMode}">
+            <Widget v-for="item in layoutList"
+                    :key="item.id"
+                    :layout="item"
+                    class="absolute"
+                    :style="{
+                    'left': (item.left||0)+'px',
+                    'top':(item.top||0)+'px',
+                    'width':(item.width||0)+'px',
+                    'height':(item.height||0)+'px',
+                  }">
+            </Widget>
           </div>
         </div>
         <transition name="yiu-x-right">
@@ -49,12 +59,14 @@
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { LayoutEntity } from '/@/vo/layout'
+  import Widget from '/@/views/dashboard/widget/Widget.vue'
 
   export default defineComponent({
     name: 'Dashboard',
     components: {
       Menu,
       CustomizeModal,
+      Widget,
     },
     setup() {
       const mainStore = useMainStore()

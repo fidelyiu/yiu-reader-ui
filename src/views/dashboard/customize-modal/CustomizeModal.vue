@@ -89,7 +89,7 @@
             type: LayoutType.Link,
             status: ObjStatus.Valid,
             width: 250,
-            height: 250,
+            height: 100,
             setting: {
               name: 'YiuReader地址',
               url: 'https://github.com/fidelyiu/yiu-reader',
