@@ -1,12 +1,16 @@
 <template>
   <div class="p-2 absolute"
+       :class="{
+         moving: moveState,
+         resizing: resizeState,
+       }"
        :style="{
-                'left': (layout.left||0)+'px',
-                'top':(layout.top||0)+'px',
-                'width':(layout.width||0)+'px',
-                'height':(layout.height||0)+'px',
-              }">
-    <div class="p-2 bg-white rounded shadow w-full h-full relative">
+         'left': (layout.left||0)+'px',
+         'top':(layout.top||0)+'px',
+         'width':(layout.width||0)+'px',
+         'height':(layout.height||0)+'px',
+       }">
+    <div class="shell">
       <!--组件内容-->
       <div class="w-full h-full overflow-auto"
            :class="{'select-none': customizeMode}"
@@ -47,10 +51,28 @@
         </div>
       </div>
     </div>
-    <!--移动状态-->
-    <div></div>
-    <!--调整大小状态-->
-    <div></div>
+  </div>
+  <!--移动状态-->
+  <div v-if="moveState"
+       class="move-ghost"
+       :style="{
+         'left': (layout.left||0)+'px',
+         'top':(layout.top||0)+'px',
+         'width':(layout.width||0)+'px',
+         'height':(layout.height||0)+'px',
+       }">
+    <div class="h-full w-full bg-indigo-400"/>
+  </div>
+  <!--调整大小状态-->
+  <div v-if="resizeState"
+       class="resize-ghost"
+       :style="{
+         'left': (layout.left||0)+'px',
+         'top':(layout.top||0)+'px',
+         'width':(layout.width||0)+'px',
+         'height':(layout.height||0)+'px',
+       }">
+    <div class="h-full w-full bg-indigo-400"/>
   </div>
 </template>
 
@@ -94,6 +116,8 @@
         // 选择状态 && 非移动状态 && 可以修改大小的组件
         return isSelectId.value
       })
+      const moveState = ref(false)
+      const resizeState = ref(false)
       const resizeHandles = [
         'top-left',
         'top',
@@ -113,6 +137,8 @@
         selectId,
         showResizeHandle,
         resizeHandles,
+        moveState,
+        resizeState,
       }
     },
   })
@@ -132,5 +158,21 @@
   .customize-overlay-select {
     @apply bg-blue-300 ;
     --tw-bg-opacity: .3;
+  }
+
+  .shell {
+    @apply p-2 bg-white rounded shadow w-full h-full relative;
+  }
+
+  .move-ghost,
+  .resize-ghost {
+    @apply absolute p-2;
+    z-index: 10000;
+  }
+
+  .moving .shell,
+  .resize .shell {
+    z-index: 10001;
+    opacity: .7;
   }
 </style>
