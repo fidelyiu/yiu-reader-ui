@@ -34,8 +34,16 @@
           <div v-show="layoutTypeIsLink(layoutType)"
                class="big-circular-btn bg-blue-400 select-none fa-center transform scale-125">
             <span class="iconify block mr-1" data-icon="mdi:link-variant" data-inline="false"></span>
-            <span>链接</span>
+            <span>链接{{ showResizeHandle }}</span>
           </div>
+          <!--外层的8个点-->
+          <template v-if="showResizeHandle">
+            <div v-for="handle of resizeHandles"
+                 :key="handle"
+                 class="resize-handle"
+                 :class="[handle]"
+            ></div>
+          </template>
         </div>
       </div>
     </div>
@@ -82,6 +90,20 @@
           })
         }
       }
+      const showResizeHandle = computed(() => {
+        // 选择状态 && 非移动状态 && 可以修改大小的组件
+        return isSelectId.value
+      })
+      const resizeHandles = [
+        'top-left',
+        'top',
+        'top-right',
+        'right',
+        'bottom-right',
+        'bottom',
+        'bottom-left',
+        'left',
+      ]
       return {
         layoutType,
         layoutTypeIsLink,
@@ -89,6 +111,8 @@
         delLayout,
         isSelectId,
         selectId,
+        showResizeHandle,
+        resizeHandles,
       }
     },
   })

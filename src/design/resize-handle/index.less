@@ -1,0 +1,57 @@
+@dot-width: 12px;
+@dot-color: dodgerblue;
+@half-width: @dot-width / 2;
+
+.resize-handle {
+  position: absolute;
+  width: @dot-width;
+  height: @dot-width;
+  border-radius: 50%;
+  background: @dot-color;
+
+  &.top,
+  &.top-left,
+  &.top-right {
+    top: calc(-@half-width);
+  }
+
+  &.bottom,
+  &.bottom-left,
+  &.bottom-right {
+    bottom: calc(-@half-width);
+  }
+
+  &.left,
+  &.top-left,
+  &.bottom-left {
+    left: calc(-@half-width);
+  }
+
+  &.right,
+  &.top-right,
+  &.bottom-right {
+    right: calc(-@half-width);
+  }
+
+  &.top,
+  &.bottom {
+    left: calc(50% - @half-width);
+    cursor: ns-resize;
+  }
+
+  &.left,
+  &.right {
+    top: calc(50% - @half-width);
+    cursor: ew-resize;
+  }
+
+  &.top-left,
+  &.bottom-right {
+    cursor: nwse-resize;
+  }
+
+  &.top-right,
+  &.bottom-left {
+    cursor: nesw-resize;
+  }
+}
