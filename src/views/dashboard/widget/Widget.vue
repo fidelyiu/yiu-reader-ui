@@ -6,7 +6,8 @@
          resizing: resizeState,
        }"
        :style="mainStyle()">
-    <div class="shell">
+    <div class="shell"
+         :class="{'shell-top': moveState||resizeState}">
       <!--组件内容-->
       <div class="w-full h-full overflow-auto"
            :class="{'select-none': customizeMode}"
@@ -44,6 +45,7 @@
                  :key="handle"
                  class="resize-handle"
                  :class="[handle]"
+                 @mousedown.stop="onResizeStart($event, handle)"
             ></div>
           </template>
         </div>
@@ -59,12 +61,7 @@
   <!--调整大小状态-->
   <div v-if="resizeState"
        class="resize-ghost"
-       :style="{
-         'left': (layout.left||0)+'px',
-         'top':(layout.top||0)+'px',
-         'width':(layout.width||0)+'px',
-         'height':(layout.height||0)+'px',
-       }">
+       :style="resizeGhostStyle()">
     <div class="h-full w-full bg-indigo-400 opacity-60"/>
   </div>
 </template>
@@ -87,6 +84,8 @@
     },
     emits: ['delete', 'update'],
     setup(prop, { emit }) {
+      const gridSize = 50
+      const zoom = 0.75
       const widgetWrapperWidth: any = inject('widgetWrapperWidth')
       const notification = useNotification()
       const widgetStore = useWidgetStore()
@@ -127,6 +126,7 @@
         x: 0,
         y: 0,
       }
+      let resizeHandle = ''
       const onMoveStart = (e) => {
         // 初始化鼠标位置
         initMousePosition.x = e.clientX
@@ -137,8 +137,6 @@
         window.addEventListener('mouseup', onMoveEnd)
       }
       const updateMoveState = (e) => {
-        const gridSize = 50
-        const zoom = 0.75
         // 获取此时鼠标相对于初始状态下的距离
         const mouseDeltaX = e.clientX - initMousePosition.x
         const mouseDeltaY = e.clientY - initMousePosition.y
@@ -190,7 +188,12 @@
           }
         }
         if (resizeState.value) {
-          return {}
+          return {
+            left: `${resizeState.value.pxX || 0}px`,
+            top: `${resizeState.value.pxY || 0}px`,
+            width: `${resizeState.value.pxWidth || 0}px`,
+            height: `${resizeState.value.pxHeight || 0}px`,
+          }
         }
         return {
           left: `${prop.layout.left || 0}px`,
@@ -215,6 +218,129 @@
           height: `${prop.layout.height || 0}px`,
         }
       }
+      const onResizeStart = (e, handle) => {
+        // 初始化鼠标位置
+        initMousePosition.x = e.clientX
+        initMousePosition.y = e.clientY
+        resizeHandle = handle
+        updateResizeState(e)
+        window.addEventListener('mousemove', onResizeMove)
+        window.addEventListener('mouseup', onResizeEnd)
+      }
+      const updateResizeState = (e) => {
+        // 获取此时鼠标相对于初始状态下的实际距离
+        const mouseDeltaX = (e.clientX - initMousePosition.x) / zoom
+        const mouseDeltaY = (e.clientY - initMousePosition.y) / zoom
+
+        // 获取四个应该修改的数据
+        let dX = 0
+        let dY = 0
+        let dWidth = 0
+        let dHeight = 0
+        // Handles
+        if (resizeHandle.includes('left')) {
+          dX = mouseDeltaX
+          dWidth = -mouseDeltaX
+        } else if (resizeHandle.includes('right')) {
+          dWidth = mouseDeltaX
+        }
+        if (resizeHandle.includes('top')) {
+          dY = mouseDeltaY
+          dHeight = -mouseDeltaY
+        } else if (resizeHandle.includes('bottom')) {
+          dHeight = mouseDeltaY
+        }
+
+        // 倍数处理
+        let gridDX = gridSize * Math.round(dX / gridSize)
+        let gridDY = gridSize * Math.round(dY / gridSize)
+        let gridDWidth = gridSize * Math.round(dWidth / gridSize)
+        let gridDHeight = gridSize * Math.round(dHeight / gridSize)
+
+        // 阴影的样式
+        let x = (prop.layout.left || 0) + gridDX
+        let y = (prop.layout.top || 0) + gridDY
+        let width = (prop.layout.width || 0) + gridDWidth
+        let height = (prop.layout.height || 0) + gridDHeight
+        // 此时组件的样式
+        let pxX = (prop.layout.left || 0) + dX
+        let pxY = (prop.layout.top || 0) + dY
+        let pxWidth = (prop.layout.width || 0) + dWidth
+        let pxHeight = (prop.layout.height || 0) + dHeight
+
+        // 异常位置处理
+        if (x < 0) x = 0
+        if (y < 0) y = 0
+        if (width > 1000) width = 1000
+        if (height > 750) height = 750
+        if (width < 250) width = 250
+        if (height < 100) height = 100
+        if (pxX < 0) {
+          pxX = 0
+          pxWidth = (prop.layout.left || 0) + (prop.layout.width || 0)
+          if (width > pxWidth) width = pxWidth
+        }
+        if (pxY < 0) {
+          pxY = 0
+          pxHeight = (prop.layout.top || 0) + (prop.layout.height || 0)
+          if (height > pxHeight) height = pxHeight
+        }
+
+        resizeState.value = { x, y, width, height, pxX, pxY, pxWidth, pxHeight }
+      }
+      const onResizeMove = (e) => updateResizeState(e)
+      const onResizeEnd = (e) => {
+        updateResizeState(e)
+        removeResizeListeners()
+        const resizeLayout = {
+          ...prop.layout,
+          left: resizeState.value?.x || prop.layout.left || 0,
+          top: resizeState.value?.y || prop.layout.top || 0,
+          width: resizeState.value?.width || prop.layout.width || 0,
+          height: resizeState.value?.height || prop.layout.height || 0,
+        }
+        if (resizeLayout.left !== prop.layout.left
+            || resizeLayout.top !== prop.layout.top
+            || resizeLayout.width !== prop.layout.width
+            || resizeLayout.height !== prop.layout.height) {
+          yiuHttp({
+            api: SERVER_API.layoutApi.resizePosition,
+            data: resizeLayout,
+            params: { maxX: widgetWrapperWidth?.value },
+            success: (_res) => emit('update'),
+          })
+        }
+        resizeState.value = undefined
+      }
+      const removeResizeListeners = () => {
+        window.removeEventListener('mousemove', onResizeMove)
+        window.removeEventListener('mouseup', onResizeEnd)
+      }
+
+      const resizeGhostStyle = () => {
+        let x = resizeState.value.x
+        let y = resizeState.value.y
+        let width = resizeState.value.width
+        let height = resizeState.value.height
+        if (!isNumber(x)) {
+          x = prop.layout.left || 0
+        }
+        if (!isNumber(y)) {
+          y = prop.layout.top || 0
+        }
+        if (!isNumber(width)) {
+          width = prop.layout.width || 0
+        }
+        if (!isNumber(height)) {
+          height = prop.layout.height || 0
+        }
+        return {
+          left: `${x}px`,
+          top: `${y}px`,
+          width: `${width}px`,
+          height: `${height}px`,
+        }
+      }
       return {
         layoutType,
         layoutTypeIsLink,
@@ -229,6 +355,8 @@
         onMoveStart,
         mainStyle,
         moveGhostStyle,
+        onResizeStart,
+        resizeGhostStyle,
       }
     },
   })
@@ -260,8 +388,7 @@
     z-index: 10000;
   }
 
-  .moving .shell,
-  .resize .shell {
+  .shell-top {
     z-index: 10001;
     opacity: .7;
   }
