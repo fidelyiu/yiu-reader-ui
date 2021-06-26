@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue'
+  import { computed, defineComponent, inject, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { layoutTypeIsLink } from '/@/vo/enum/layout-type'
   import { yiuHttp } from '/@/utils/http'
@@ -85,8 +85,9 @@
       customizeMode: propTypes.bool.def(false),
       layout: propTypes.object.isRequired,
     },
-    emits: ['delSuccess'],
+    emits: ['delete', 'update'],
     setup(prop, { emit }) {
+      const widgetWrapperWidth: any = inject('widgetWrapperWidth')
       const notification = useNotification()
       const widgetStore = useWidgetStore()
       const layoutType = computed(() => prop.layout.type)
@@ -102,7 +103,7 @@
             loading: { flag: delLoading },
             pathData: { id: prop.layout.id },
             tips: { anyObj: notification, error: { show: true } },
-            success: (_res) => emit('delSuccess'),
+            success: (_res) => emit('delete'),
           })
         }
       }
@@ -159,6 +160,17 @@
       const onMoveEnd = (e) => {
         updateMoveState(e)
         removeMoveListeners()
+        const resizeLayout = {
+          ...prop.layout,
+          left: moveState.value?.x || prop.layout.left || 0,
+          top: moveState.value?.y || prop.layout.top || 0,
+        }
+        yiuHttp({
+          api: SERVER_API.layoutApi.resizePosition,
+          data: resizeLayout,
+          params: { maxX: widgetWrapperWidth?.value },
+          success: (_res) => emit('update'),
+        })
         moveState.value = undefined
       }
       const removeMoveListeners = () => {

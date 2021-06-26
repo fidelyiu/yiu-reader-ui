@@ -39,7 +39,8 @@
                       :key="item.id"
                       :layout="item"
                       :customize-mode="customizeMode"
-                      @delSuccess="onWidgetDel">
+                      @delete="getLayoutList"
+                      @update="getLayoutList">
               </Widget>
             </div>
           </div>
@@ -95,9 +96,6 @@
           },
         })
       }
-      const onWidgetDel = () => {
-        getLayoutList()
-      }
       onMounted(() => {
         getWidgetWrapperWidth()
       })
@@ -138,7 +136,6 @@
         getLayoutList,
         getWidgetWrapperWidth,
         onChangeCustomizeMode,
-        onWidgetDel,
       }
     },
   })
