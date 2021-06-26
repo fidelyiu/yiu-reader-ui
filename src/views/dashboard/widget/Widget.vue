@@ -54,7 +54,7 @@
   <div v-if="moveState"
        class="move-ghost"
        :style="moveGhostStyle()">
-    <div class="h-full w-full bg-indigo-400 opacity-60"/>
+    <div class="h-full w-full bg-indigo-400 opacity-60 rounded"/>
   </div>
   <!--调整大小状态-->
   <div v-if="resizeState"
@@ -165,12 +165,15 @@
           left: moveState.value?.x || prop.layout.left || 0,
           top: moveState.value?.y || prop.layout.top || 0,
         }
-        yiuHttp({
-          api: SERVER_API.layoutApi.resizePosition,
-          data: resizeLayout,
-          params: { maxX: widgetWrapperWidth?.value },
-          success: (_res) => emit('update'),
-        })
+        if (resizeLayout.left !== prop.layout.left
+            || resizeLayout.top !== prop.layout.top) {
+          yiuHttp({
+            api: SERVER_API.layoutApi.resizePosition,
+            data: resizeLayout,
+            params: { maxX: widgetWrapperWidth?.value },
+            success: (_res) => emit('update'),
+          })
+        }
         moveState.value = undefined
       }
       const removeMoveListeners = () => {
