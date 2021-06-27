@@ -12,10 +12,9 @@
       <div class="w-full h-full overflow-auto"
            :class="{'select-none': customizeMode}"
            :style="{opacity: customizeMode?'.15':'1'}">
-        <div>{{ layoutType }}</div>
-        <div>{{ layout.id }}</div>
-        <div>{{ layout.top }}</div>
-        <div>{{ layout.left }}</div>
+        <template v-if="layoutTypeIsLink(layoutType)">
+          <LinkWidget :layout="layout" @update="$emit('update')"></LinkWidget>
+        </template>
       </div>
       <!--修改状态-->
       <div v-if="customizeMode"
@@ -76,9 +75,13 @@
   import { useNotification } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
   import { isNumber } from 'lodash'
+  import LinkWidget from '/@/views/dashboard/widget/LinkWidget.vue'
 
   export default defineComponent({
     name: 'Widget',
+    components: {
+      LinkWidget,
+    },
     props: {
       customizeMode: propTypes.bool.def(false),
       layout: propTypes.object.isRequired,
@@ -161,8 +164,8 @@
         removeMoveListeners()
         const resizeLayout = {
           ...prop.layout,
-          left: moveState.value?.x || prop.layout.left || 0,
-          top: moveState.value?.y || prop.layout.top || 0,
+          left: isNumber(moveState.value?.x) ? moveState.value?.x : (prop.layout.left || 0),
+          top: isNumber(moveState.value?.y) ? moveState.value?.y : (prop.layout.top || 0),
         }
         if (resizeLayout.left !== prop.layout.left
             || resizeLayout.top !== prop.layout.top) {
@@ -381,7 +384,7 @@
   }
 
   .shell {
-    @apply p-2 bg-white rounded shadow w-full h-full relative;
+    @apply bg-white rounded shadow w-full h-full relative;
   }
 
   .move-ghost,

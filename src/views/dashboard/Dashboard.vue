@@ -10,6 +10,18 @@
             <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
             <span>全局搜索</span>
           </button>
+          <button v-show="!showSetting"
+                  class="yiu-blue-big-circular-btn fa-center mr-2"
+                  @click="showSetting=!showSetting">
+            <span class="iconify block mr-1" data-icon="mdi:cog" data-inline="false"></span>
+            <span>开启设置</span>
+          </button>
+          <button v-show="showSetting"
+                  class="yiu-blue-big-circular-btn fa-center mr-2"
+                  @click="showSetting=!showSetting">
+            <span class="iconify block mr-1" data-icon="mdi:cog-off" data-inline="false"></span>
+            <span>关闭设置</span>
+          </button>
           <button v-show="!customizeMode"
                   class="yiu-blue-big-circular-btn fa-center"
                   @click="onChangeCustomizeMode">
@@ -82,6 +94,8 @@
       provide('widgetWrapperWidth', widgetWrapperWidth)
       const linkCount = ref(0)
       provide('linkCount', linkCount)
+      const showSetting = ref(false)
+      provide('showSetting', showSetting)
       const mainStore = useMainStore()
       const widgetStore = useWidgetStore()
       const customizeMode = ref(false)
@@ -95,6 +109,7 @@
           api: SERVER_API.layoutApi.search,
           loading: { flag: layoutLoading },
           success: (res) => {
+            linkCount.value = 0
             res.data.result.forEach((item: LayoutEntity) => {
               if (item.type === LayoutType.Link) {
                 linkCount.value++
@@ -137,6 +152,7 @@
 
       getLayoutList()
       return {
+        showSetting,
         mainStore,
         customizeMode,
         layoutList,

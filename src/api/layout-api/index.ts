@@ -11,12 +11,20 @@ const layoutApi = {
         url: entityUrl,
         method: MethodEnum.GET,
     },
+    view: <YiuAip>{
+        url: entityUrl + '/{id}',
+        method: MethodEnum.GET,
+    },
     del: <YiuAip>{
         url: entityUrl + '/{id}',
         method: MethodEnum.DELETE,
     },
     resizePosition: <YiuAip>{
         url: entityUrl + '/resize',
+        method: MethodEnum.PUT,
+    },
+    update: <YiuAip>{
+        url: entityUrl,
         method: MethodEnum.PUT,
     },
 }

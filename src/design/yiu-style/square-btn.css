@@ -47,6 +47,22 @@
     --tw-bg-opacity: .9;
 }
 
+.yiu-blue-square-btn-5 {
+    @apply p-1 rounded;
+}
+
+.yiu-blue-square-btn-5 svg {
+    @apply text-blue-400;
+}
+
+.yiu-blue-square-btn-5:hover {
+    @apply bg-blue-400;
+}
+
+.yiu-blue-square-btn-5:hover svg {
+    @apply text-white;
+}
+
 /*/////////////////////////////////////////////////*/
 /*                  蓝色禁用按钮                     */
 /*/////////////////////////////////////////////////*/
@@ -64,6 +80,7 @@
     @apply absolute top-4 right-4;
     @apply hover:bg-blue-50 active:bg-blue-100;
 }
+
 .yiu-modal-close-btn-2 {
     @apply yiu-square-btn;
     @apply absolute top-2 right-2;
