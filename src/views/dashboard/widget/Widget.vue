@@ -69,7 +69,7 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { layoutTypeIsLink } from '/@/vo/enum/layout-type'
+  import { LayoutType, layoutTypeIsLink } from '/@/vo/enum/layout-type'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { useNotification } from 'naive-ui'
@@ -88,6 +88,23 @@
     },
     emits: ['delete', 'update'],
     setup(prop, { emit }) {
+      const layoutRule = {}
+      // 链接规则
+      layoutRule[LayoutType.Link] = {
+        resize: false,
+        minWidth: 250,
+        maxWidth: 250,
+        minHeight: 100,
+        maxHeight: 100,
+      }
+      // 主盒子规则
+      layoutRule[LayoutType.MainBox] = {
+        resize: true,
+        minWidth: 750,
+        maxWidth: 1000,
+        minHeight: 500,
+        maxHeight: 750,
+      }
       const gridSize = 50
       const zoom = 0.75
       const widgetWrapperWidth: any = inject('widgetWrapperWidth')
@@ -112,7 +129,7 @@
       }
       const showResizeHandle = computed(() => {
         // 选择状态 && 非移动状态 && 可以修改大小的组件
-        return isSelectId.value && !moveState.value
+        return isSelectId.value && !moveState.value && layoutRule[prop.layout.type]?.resize
       })
       const moveState = ref<any>()
       const resizeState = ref<any>()
@@ -273,12 +290,16 @@
         let pxHeight = (prop.layout.height || 0) + dHeight
 
         // 异常位置处理
+        const minWidth = layoutRule[prop.layout.type]?.minWidth || 0
+        const minHeight = layoutRule[prop.layout.type]?.minHeight || 0
+        const maxWidth = layoutRule[prop.layout.type]?.maxWidth || 0
+        const maxHeight = layoutRule[prop.layout.type]?.maxHeight || 0
         if (x < 0) x = 0
         if (y < 0) y = 0
-        if (width > 1000) width = 1000
-        if (height > 750) height = 750
-        if (width < 250) width = 250
-        if (height < 100) height = 100
+        if (width > maxWidth) width = maxWidth
+        if (height > maxHeight) height = maxHeight
+        if (width < minWidth) width = minWidth
+        if (height < minHeight) height = minHeight
         if (pxX < 0) {
           pxX = 0
           pxWidth = (prop.layout.left || 0) + (prop.layout.width || 0)
