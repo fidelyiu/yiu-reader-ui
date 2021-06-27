@@ -29,7 +29,7 @@
             <a :href="layoutUrl" target="_blank">{{ layout?.setting?.name || '-' }}</a>
           </div>
           <!--链接部分-->
-          <div class="layout-link underline">
+          <div class="layout-link underline text-gray-500">
             <a :href="layoutUrl" target="_blank">{{ layoutUrl }}</a>
           </div>
         </div>
@@ -151,7 +151,7 @@
   }
 
   .layout-link {
-    @apply truncate text-gray-500 hover:text-blue-700;
+    @apply truncate hover:text-blue-700;
   }
 
   .layout-link:hover {

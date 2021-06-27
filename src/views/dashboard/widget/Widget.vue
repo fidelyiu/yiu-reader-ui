@@ -15,6 +15,9 @@
         <template v-if="layoutTypeIsLink(layoutType)">
           <LinkWidget :layout="layout" @update="$emit('update')"></LinkWidget>
         </template>
+        <template v-if="layoutTypeIsMainBox(layoutType)">
+          <MainBoxWidget :layout="layout"></MainBoxWidget>
+        </template>
       </div>
       <!--修改状态-->
       <div v-if="customizeMode"
@@ -69,18 +72,20 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { LayoutType, layoutTypeIsLink } from '/@/vo/enum/layout-type'
+  import { LayoutType, layoutTypeIsLink, layoutTypeIsMainBox } from '/@/vo/enum/layout-type'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { useNotification } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
   import { isNumber } from 'lodash'
   import LinkWidget from '/@/views/dashboard/widget/LinkWidget.vue'
+  import MainBoxWidget from '/@/views/dashboard/widget/MainBoxWidget.vue'
 
   export default defineComponent({
     name: 'Widget',
     components: {
       LinkWidget,
+      MainBoxWidget,
     },
     props: {
       customizeMode: propTypes.bool.def(false),
@@ -369,6 +374,7 @@
       return {
         layoutType,
         layoutTypeIsLink,
+        layoutTypeIsMainBox,
         delLoading,
         delLayout,
         isSelectId,
