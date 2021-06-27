@@ -24,6 +24,7 @@
            @click="selectId">
         <div class="customize-overlay"
              :class="{'!border-blue-400 customize-overlay-select': isSelectId}">
+          <div class="absolute top-2 left-2 w-full h-full overflow-hidden">{{ layout.setting.name || layout.id }}</div>
           <button class="yiu-modal-close-btn-2"
                   @click.stop="delLayout">
             <div v-show="delLoading">
@@ -364,7 +365,8 @@
 
 <style scoped>
   .customize-overlay {
-    @apply w-full h-full relative grid justify-center content-center rounded border-2 border-transparent;
+    @apply w-full h-full relative grid justify-center content-center;
+    @apply rounded border-2 border-transparent;
     @apply transition-all ease-in-out;
   }
 

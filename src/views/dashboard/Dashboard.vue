@@ -67,6 +67,7 @@
   import Widget from '/@/views/dashboard/widget/Widget.vue'
   import { NSpin } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
+  import { LayoutType } from '/@/vo/enum/layout-type'
 
   export default defineComponent({
     name: 'Dashboard',
@@ -77,7 +78,10 @@
       NSpin,
     },
     setup() {
-      let widgetWrapperWidth = ref(0)
+      const widgetWrapperWidth = ref(0)
+      provide('widgetWrapperWidth', widgetWrapperWidth)
+      const linkCount = ref(0)
+      provide('linkCount', linkCount)
       const mainStore = useMainStore()
       const widgetStore = useWidgetStore()
       const customizeMode = ref(false)
@@ -91,6 +95,11 @@
           api: SERVER_API.layoutApi.search,
           loading: { flag: layoutLoading },
           success: (res) => {
+            res.data.result.forEach((item: LayoutEntity) => {
+              if (item.type === LayoutType.Link) {
+                linkCount.value++
+              }
+            })
             layoutList.value = res.data.result
             getWidgetWrapperWidth()
           },
@@ -125,7 +134,6 @@
           }
         }, 160)
       }
-      provide('widgetWrapperWidth', widgetWrapperWidth)
 
       getLayoutList()
       return {

@@ -49,7 +49,7 @@
           <div class="text-md text-gray-500">可添加任意超链接，都会在新的标签页中打开。</div>
         </div>
       </div>
-      <div class="mt-4">最大实例数量：0/1</div>
+      <div class="mt-4">最大实例数量：{{ linkCount }} / 不限</div>
       <div class="text-center mt-4">
         <n-button type="primary" class="text-white" @click="onAddLink">
           <span class="iconify block text-base mr-2" data-icon="mdi:plus" data-inline="false"></span>
@@ -84,6 +84,7 @@
       const linkModal = ref(false)
       const linkLoading = ref(false)
       const widgetWrapperWidth: any = inject('widgetWrapperWidth')
+      const linkCount: any = inject('linkCount')
       const onAddLink = () => {
         if (!linkLoading.value) {
           const defaultLinkLayout: LayoutEntity = {
@@ -113,6 +114,7 @@
         }
       }
       return {
+        linkCount,
         searchValue,
         linkModal,
         onAddLink,
