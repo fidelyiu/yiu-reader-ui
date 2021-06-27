@@ -79,7 +79,7 @@
   import Widget from '/@/views/dashboard/widget/Widget.vue'
   import { NSpin } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
-  import { LayoutType } from '/@/vo/enum/layout-type'
+  import { layoutTypeIsLink, layoutTypeIsMainBox } from '/@/vo/enum/layout-type'
 
   export default defineComponent({
     name: 'Dashboard',
@@ -94,6 +94,8 @@
       provide('widgetWrapperWidth', widgetWrapperWidth)
       const linkCount = ref(0)
       provide('linkCount', linkCount)
+      const mainBoxCount = ref(0)
+      provide('mainBoxCount', mainBoxCount)
       const showSetting = ref(false)
       provide('showSetting', showSetting)
       const mainStore = useMainStore()
@@ -110,9 +112,13 @@
           loading: { flag: layoutLoading },
           success: (res) => {
             linkCount.value = 0
+            mainBoxCount.value = 0
             res.data.result.forEach((item: LayoutEntity) => {
-              if (item.type === LayoutType.Link) {
+              if (layoutTypeIsLink(item.type)) {
                 linkCount.value++
+              }
+              if (layoutTypeIsMainBox(item.type)) {
+                mainBoxCount.value++
               }
             })
             layoutList.value = res.data.result

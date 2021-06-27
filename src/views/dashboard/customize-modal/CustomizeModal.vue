@@ -14,110 +14,107 @@
       <SearchInput v-model="searchValue"></SearchInput>
     </div>
     <!--可添加内容-->
-    <div class="flex-grow h-0 overflow-y-auto mb-4 select-none" @click="linkModal=true">
+    <div class="flex-grow h-0 overflow-y-auto mb-4 select-none">
       <!--超链接-->
-      <div class="fa-center hover:bg-blue-50 cursor-pointer p-4">
-        <div class="flex-none w-[42px] h-[42px] bg-gray-200 rounded-3xl fa-center mr-[16px]">
-          <span class="iconify text-3xl text-blue-500" data-icon="mdi:link-variant" data-inline="false"></span>
-        </div>
-        <div class="flex-grow w-0 mr-[16px]">
-          <div class="truncate text-base">超链接</div>
-          <div class="truncate text-md text-gray-500">可添加任意超链接，都会在新的标签页中打开。</div>
-        </div>
-        <button class="flex-none yiu-blue-square-btn-4" @click.stop="onAddLink">
-          <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
-        </button>
-      </div>
+      <CustomizeItem name="超链接"
+                     desc-text="可添加任意超链接，都会在新的标签页中打开。"
+                     :loading="linkLoading"
+                     :count="linkCount"
+                     max-count="不限"
+                     @addLayout="onAddLink">
+        <span class="iconify" data-icon="mdi:link-variant" data-inline="false"></span>
+      </CustomizeItem>
+      <!--主盒子-->
+      <CustomizeItem name="主盒子"
+                     desc-text="用于展示当前工作空间的内容。"
+                     :loading="mainBoxLoading"
+                     :count="mainBoxCount"
+                     :max-count="1"
+                     @addLayout="onAddMainBox">
+        <span class="iconify" data-icon="mdi:inbox-full-outline" data-inline="false"></span>
+      </CustomizeItem>
     </div>
   </div>
-  <n-modal v-model:show="linkModal">
-    <n-card style="width: 600px;"
-            content-style="padding: 0;"
-            class="p-5 relative"
-            size="medium"
-            :bordered="false">
-      <div class="text-base">超链接布局</div>
-      <button class="yiu-modal-close-btn-1" transparent @click="linkModal=false">
-        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
-      </button>
-      <div class="fa-center mt-4">
-        <div class="flex-none w-[42px] h-[42px] bg-gray-200 rounded-3xl fa-center mr-[16px]">
-          <span class="iconify text-3xl text-blue-500" data-icon="mdi:link-variant" data-inline="false"></span>
-        </div>
-        <div class="flex-grow w-0 mr-[16px]">
-          <div class="text-base">超链接</div>
-          <div class="text-md text-gray-500">可添加任意超链接，都会在新的标签页中打开。</div>
-        </div>
-      </div>
-      <div class="mt-4">最大实例数量：{{ linkCount }} / 不限</div>
-      <div class="text-center mt-4">
-        <n-button type="primary" class="text-white" @click="onAddLink">
-          <span class="iconify block text-base mr-2" data-icon="mdi:plus" data-inline="false"></span>
-          <span>添加布局</span>
-        </n-button>
-      </div>
-    </n-card>
-  </n-modal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, inject, ref } from 'vue'
+  import { defineComponent, inject, Ref, ref } from 'vue'
   import SearchInput from '/@/components/SearchInput.vue'
-  import { NButton, NCard, NModal } from 'naive-ui'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { LayoutType } from '/@/vo/enum/layout-type'
   import { LayoutEntity } from '/@/vo/layout'
   import { ObjStatus } from '/@/vo/enum/obj-status'
+  import CustomizeItem from '/@/views/dashboard/customize-modal/CustomizeItem.vue'
 
   export default defineComponent({
     name: 'CustomizeModal',
     components: {
-      NCard,
-      NModal,
-      NButton,
       SearchInput,
+      CustomizeItem,
     },
     emits: ['close', 'addSuccess'],
     setup(_prop, { emit }) {
-      const searchValue = ref('')
-      const linkModal = ref(false)
-      const linkLoading = ref(false)
       const widgetWrapperWidth: any = inject('widgetWrapperWidth')
       const linkCount: any = inject('linkCount')
-      const onAddLink = () => {
-        if (!linkLoading.value) {
-          const defaultLinkLayout: LayoutEntity = {
-            type: LayoutType.Link,
-            status: ObjStatus.Valid,
-            width: 250,
-            height: 100,
-            setting: {
-              name: 'YiuReader地址',
-              url: 'https://github.com/fidelyiu/yiu-reader',
-            },
-          }
+      const mainBoxCount: any = inject('mainBoxCount')
+      const searchValue = ref('')
+      const linkLoading = ref(false)
+      const mainBoxLoading = ref(false)
+
+      // 统一的添加布局方法
+      const addLayout = (data, loading: Ref<boolean>) => {
+        if (!loading.value) {
           yiuHttp({
-            loading: { flag: linkLoading },
+            loading: { flag: loading },
             api: SERVER_API.layoutApi.add,
             params: {
               maxX: widgetWrapperWidth?.value || 0,
             },
-            data: defaultLinkLayout,
+            data: data,
             success: () => {
               emit('addSuccess')
-            },
-            finally: () => {
-              linkModal.value = false
             },
           })
         }
       }
+
+      // 添加链接布局
+      const onAddLink = () => {
+        const defaultLayout: LayoutEntity = {
+          type: LayoutType.Link,
+          status: ObjStatus.Valid,
+          width: 250,
+          height: 100,
+          setting: {
+            name: 'YiuReader地址',
+            url: 'https://github.com/fidelyiu/yiu-reader',
+          },
+        }
+        addLayout(defaultLayout, linkLoading)
+      }
+
+      // 添加主盒子布局
+      const onAddMainBox = () => {
+        const defaultLayout: LayoutEntity = {
+          type: LayoutType.MainBox,
+          status: ObjStatus.Valid,
+          width: 750,
+          height: 500,
+          setting: {
+            name: '主盒子',
+          },
+        }
+        addLayout(defaultLayout, mainBoxLoading)
+      }
       return {
-        linkCount,
         searchValue,
-        linkModal,
+        linkCount,
+        linkLoading,
         onAddLink,
+        mainBoxCount,
+        mainBoxLoading,
+        onAddMainBox,
       }
     },
   })
