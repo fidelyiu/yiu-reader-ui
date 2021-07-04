@@ -40,7 +40,7 @@
     </div>
     <div class="box-item flex-none fa-center cursor-default">
       <span class="iconify" data-icon="mdi:folder" data-inline="false"></span>
-      <span class="ml-1 text-xs fa-center">当前目录</span>
+      <span class="ml-1 text-xs fa-center">{{ mainStore.getCurrentPath }}</span>
     </div>
     <div class="box-item flex-grow flex items-center cursor-pointer select-none" @click="showLog=!showLog">
       <span class="iconify mr-1 flex-none" data-icon="ic:baseline-dvr" data-inline="false"></span>
@@ -64,6 +64,7 @@
   import router from '/@/router'
   import LogItem from '/@/components/LogItem.vue'
   import { useLogStore } from '/@/store/modules/log'
+  import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
     name: 'BottomBox',
@@ -71,6 +72,7 @@
       LogItem,
     },
     setup() {
+      const mainStore = useMainStore()
       const showLog = ref(false)
       const logBox = ref()
       const logStore = useLogStore()
@@ -84,6 +86,7 @@
       }
       return {
         showLog,
+        mainStore,
         logStore,
         onToSystem,
         logBox,

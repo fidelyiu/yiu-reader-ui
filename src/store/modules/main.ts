@@ -14,11 +14,20 @@ export const useMainStore = defineStore({
             currentWorkspace: {
                 id: '',
                 status: ObjStatus.NoValue,
+                path: '',
             },
+            currentPath: '',
         }
     },
     getters: {
         getCurrentWorkspace(state) {return state.currentWorkspace},
+        getCurrentPath(state) {
+            if (state.currentPath) {
+                return state.currentPath
+            } else {
+                return state.currentWorkspace.path || '-'
+            }
+        },
     },
     actions: {
         setCurrentWorkspace(workspace: WorkspaceEntity) {this.currentWorkspace = workspace as any},
@@ -34,5 +43,6 @@ export const useMainStore = defineStore({
             } catch (e) {
             }
         },
+        setCurrentPath(path: string) { this.currentPath = path },
     },
 })
