@@ -36,7 +36,7 @@ export const useLogStore = defineStore({
             })
         },
         changeById(id: string, level: 'info' | 'warning' | 'success' | 'error', message: string) {
-            let changeIndex = this.logList.findIndex(i => i.id === id)
+            const changeIndex = this.logList.findIndex(i => i.id === id)
             if (changeIndex != -1) {
                 this.logList[changeIndex] = {
                     id,

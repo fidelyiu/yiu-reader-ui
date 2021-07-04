@@ -30,7 +30,7 @@
       const onRefresh = () => {
         const refreshList: any = {}
         // Prismjs.assets/c
-        const ws = new WebSocket('ws://localhost:8081/workspace/refresh?path=')
+        const ws = new WebSocket('ws://localhost:8081/note/refresh?path=')
         //接收到消息时触发
         ws.onmessage = (evt) => {
           let data

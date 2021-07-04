@@ -28,7 +28,7 @@
         </button>
       </div>
     </div>
-    <div class="flex-grow h-0 px-[16px] overflow-y-auto" ref="logBox">
+    <div ref="logBox" class="flex-grow h-0 px-[16px] overflow-y-auto">
       <template v-for="item in logStore.logList" :key="item.id">
         <LogItem class="px-[4px] py-[5px] hover:bg-blue-50 text-xs" :log="item"></LogItem>
       </template>
