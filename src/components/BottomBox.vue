@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="flex-none mr-1">
-        <button class="fa-center h-full yiu-blue-square-btn-6">
+        <button class="fa-center h-full yiu-blue-square-btn-6" @click="scrollToBottom">
           <span class="iconify text-base" data-icon="mdi:subdirectory-arrow-left" data-inline="false"></span>
         </button>
       </div>
@@ -28,8 +28,8 @@
         </button>
       </div>
     </div>
-    <div class="flex-grow h-0 px-[16px] overflow-y-auto">
-      <template v-for="item in logStore.logList" :key="item.id" >
+    <div class="flex-grow h-0 px-[16px] overflow-y-auto" ref="logBox">
+      <template v-for="item in logStore.logList" :key="item.id">
         <LogItem class="px-[4px] py-[5px] hover:bg-blue-50 text-xs" :log="item"></LogItem>
       </template>
     </div>
@@ -72,14 +72,22 @@
     },
     setup() {
       const showLog = ref(false)
+      const logBox = ref()
       const logStore = useLogStore()
       const onToSystem = () => {
         router.push('/system')
+      }
+      const scrollToBottom = () => {
+        if (logBox.value) {
+          logBox.value.scrollTop = logBox.value.scrollHeight
+        }
       }
       return {
         showLog,
         logStore,
         onToSystem,
+        logBox,
+        scrollToBottom,
       }
     },
   })
