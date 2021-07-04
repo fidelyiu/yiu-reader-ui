@@ -19,6 +19,8 @@
   import { NoteReadResult } from '/@/vo/enum/note-read-result'
   import { useLogStore } from '/@/store/modules/log'
   import { nanoid } from 'nanoid'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -27,10 +29,19 @@
     },
     setup() {
       const logStore = useLogStore()
+      const loadNote = () => {
+        yiuHttp({
+          api: SERVER_API.noteApi.searchTree,
+          success: (res) => {
+            console.log(res.data.result)
+          },
+        })
+      }
+      loadNote()
       const onRefresh = () => {
         const refreshList: any = {}
         // Prismjs.assets/c
-        const ws = new WebSocket('ws://localhost:8081/note/refresh?path=')
+        const ws = new WebSocket(`ws://localhost:8081${SERVER_API.noteApi.refresh.url}?path=`)
         //接收到消息时触发
         ws.onmessage = (evt) => {
           let data

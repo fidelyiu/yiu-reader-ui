@@ -11,6 +11,14 @@ const noteApi = {
         url: entityUrl + '/tree',
         method: MethodEnum.POST,
     },
+    search: <YiuAip>{
+        url: entityUrl,
+        method: MethodEnum.GET,
+    },
+    del: <YiuAip>{
+        url: entityUrl + '/{id}',
+        method: MethodEnum.DELETE,
+    },
 }
 
 export default noteApi
