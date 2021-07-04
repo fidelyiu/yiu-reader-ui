@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-auto">
+  <div class="w-full h-full overflow-auto pr-2">
     <YiuTreeItem v-for="(item, index) in data" :key="index" :data="item"></YiuTreeItem>
   </div>
 </template>

@@ -7,7 +7,7 @@
       </button>
     </div>
     <!--内容部分-->
-    <div class="w-full h-full overflow-auto pl-3 pr-2">
+    <div class="w-full h-full overflow-auto pl-3">
       <YiuNoteTree :data="treeData"></YiuNoteTree>
     </div>
   </div>
