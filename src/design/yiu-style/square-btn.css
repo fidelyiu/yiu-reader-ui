@@ -63,6 +63,13 @@
     @apply text-white;
 }
 
+.yiu-blue-square-btn-6 {
+    @apply yiu-square-btn rounded-sm;
+    /*背景颜色*/
+    @apply hover:bg-blue-50;
+    @apply active:bg-blue-100;
+}
+
 /*/////////////////////////////////////////////////*/
 /*                  蓝色禁用按钮                     */
 /*/////////////////////////////////////////////////*/

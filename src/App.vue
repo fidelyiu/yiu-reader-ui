@@ -5,7 +5,7 @@
         <div class="flex-grow flex-shrink-0 flex flex-col h-0">
           <router-view></router-view>
         </div>
-        <BottomBox class="flex-none"></BottomBox>
+        <BottomBox></BottomBox>
       </div>
     </n-notification-provider>
   </n-config-provider>
