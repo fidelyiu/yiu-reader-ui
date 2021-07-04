@@ -8,32 +8,37 @@
     </div>
     <!--内容部分-->
     <div class="w-full h-full overflow-auto pl-3 pr-2">
-      <div>Hello</div>
+      <YiuNoteTree :data="treeData"></YiuNoteTree>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { NoteReadResult } from '/@/vo/enum/note-read-result'
   import { useLogStore } from '/@/store/modules/log'
   import { nanoid } from 'nanoid'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
+  import YiuNoteTree from '/@/components/yiu-note-tree'
 
   export default defineComponent({
     name: 'MainBoxWidget',
+    components: {
+      YiuNoteTree,
+    },
     props: {
       layout: propTypes.object.isRequired,
     },
     setup() {
       const logStore = useLogStore()
+      const treeData = ref()
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           success: (res) => {
-            console.log(res.data.result)
+            treeData.value = res.data.result
           },
         })
       }
@@ -65,9 +70,14 @@
               break
           }
         }
+        //连接关闭时触发
+        ws.onclose = () => {
+          loadNote()
+        }
       }
       return {
         logStore,
+        treeData,
         onRefresh,
       }
     },
