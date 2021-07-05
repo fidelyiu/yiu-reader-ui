@@ -1,9 +1,9 @@
 <template>
   <div class="w-full">
     <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click="onClick">
-      <div class="flex-none mr-2 fa-center text-gray-500">
-        <span v-show="showNumber" class="italic font-normal">{{ numberTitle }}&nbsp;</span>
-        <span v-show="showIcon">
+      <div class="flex-none fa-center text-gray-500">
+        <span v-show="showNumber" class="italic font-normal mr-1">{{ numberTitle }}</span>
+        <span v-show="showIcon" class="mr-1">
           <div v-if="!node?.data?.isDir">
             <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
           </div>
