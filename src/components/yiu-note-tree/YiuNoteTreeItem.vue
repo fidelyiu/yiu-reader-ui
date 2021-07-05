@@ -3,33 +3,35 @@
     <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click="onClick">
       <div class="flex-none mr-2 fa-center text-gray-500">
         <span v-show="showNumber" class="italic font-normal">{{ numberTitle }}&nbsp;</span>
-        <div v-if="!data?.data?.isDir">
-          <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
-        </div>
-        <div v-else>
-          <transition name="yiu-fade-in">
-            <div v-if="isOpen">
-              <span class="iconify block text-xl" data-icon="mdi:folder-open-outline" data-inline="false"></span>
-            </div>
-            <div v-else>
-              <span class="iconify block text-xl" data-icon="mdi:folder-outline" data-inline="false"></span>
-            </div>
-          </transition>
-        </div>
+        <span v-show="showIcon">
+          <div v-if="!node?.data?.isDir">
+            <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
+          </div>
+          <div v-else>
+            <transition name="yiu-fade-in">
+              <div v-if="isOpen">
+                <span class="iconify block text-xl" data-icon="mdi:folder-open-outline" data-inline="false"></span>
+              </div>
+              <div v-else>
+                <span class="iconify block text-xl" data-icon="mdi:folder-outline" data-inline="false"></span>
+              </div>
+            </transition>
+          </div>
+        </span>
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
-        <span class="mr-2 font-semibold">{{ data.data.name }}</span>
-        <span v-if="!data.data.defStatus" class="text-gray-400">[未排序]</span>
+        <span class="mr-2 font-semibold">{{ node.data.name }}</span>
+        <span v-if="!node.data.defStatus" class="text-gray-400">[未排序]</span>
       </div>
       <div class="flex-none flex">
         <!--增加按钮-->
-        <div v-if="data.data.isDir" class="mr-2">
+        <div v-if="node.data.isDir" class="mr-2">
           <button class="yiu-blue-square-btn-1">
             <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
           </button>
         </div>
         <!--在编辑器中打开-->
-        <div v-if="!data.data.isDir" class="mr-2">
+        <div v-if="!node.data.isDir" class="mr-2">
           <button class="yiu-blue-square-btn-1">
             <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
           </button>
@@ -81,10 +83,10 @@
         <!--</div>-->
       </div>
     </div>
-    <div v-show="isOpen && data?.child && data?.child?.length" class="ml-[16px]">
-      <YiuTreeItem v-for="(item, index) in data.child"
+    <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[16px]">
+      <YiuTreeItem v-for="(item, index) in node.child"
                    :key="index"
-                   :data="item"
+                   :node="item"
                    :number-title="numberTitle+(index+1)+'.'"
                    class="border-l border-blue-200"
                    @click="onClick"></YiuTreeItem>
@@ -100,21 +102,22 @@
   export default defineComponent({
     name: 'YiuTreeItem',
     props: {
-      data: propTypes.object,
+      node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
     emits: ['click'],
     setup(prop, { emit }) {
       const showNumber: any = inject('showNumber')
+      const showIcon: any = inject('showIcon')
       const isOpen = ref(false)
       const onClick = (id: any) => {
         if (isString(id)) {
           emit('click', id)
         } else {
-          if (prop?.data?.data?.isDir) {
+          if (prop?.node?.data?.isDir) {
             isOpen.value = !isOpen.value
           } else {
-            emit('click', prop?.data?.id)
+            emit('click', prop?.node?.id)
           }
         }
       }
@@ -122,6 +125,7 @@
         isOpen,
         onClick,
         showNumber,
+        showIcon,
       }
     },
   })

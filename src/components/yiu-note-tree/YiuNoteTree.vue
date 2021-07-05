@@ -2,7 +2,7 @@
   <div class="w-full h-full overflow-auto">
     <YiuTreeItem v-for="(item, index) in data"
                  :key="index"
-                 :data="item"
+                 :node="item"
                  :number-title="index+1+'.'"></YiuTreeItem>
   </div>
 </template>
@@ -18,9 +18,11 @@
     props: {
       data: propTypes.object,
       showNumber: propTypes.bool.def(false),
+      showIcon: propTypes.bool.def(false),
     },
     setup(prop) {
       provide('showNumber', computed(() => prop.showNumber))
+      provide('showIcon', computed(() => prop.showIcon))
       return {}
     },
   })

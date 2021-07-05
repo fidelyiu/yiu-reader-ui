@@ -8,8 +8,21 @@
             <button class="yiu-blue-square-btn-3 mr-2">
               <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
             </button>
+            <button class="yiu-blue-square-btn-3 mr-2" @click="showIcon=!showIcon">
+              <div v-show="showIcon">
+                <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
+              </div>
+              <div v-show="!showIcon">
+                <span class="iconify block" data-icon="mdi:lightbulb-outline" data-inline="false"></span>
+              </div>
+            </button>
             <button class="yiu-blue-square-btn-3 mr-2" @click="showNumber=!showNumber">
-              <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
+              <div v-show="showNumber">
+                <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+              </div>
+              <div v-show="!showNumber">
+                <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
+              </div>
             </button>
             <button class="yiu-blue-square-btn-3">
               <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
@@ -18,7 +31,9 @@
         </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
-          <YiuNoteTree :data="treeData" :show-number="showNumber"></YiuNoteTree>
+          <YiuNoteTree :data="treeData"
+                       :show-number="showNumber"
+                       :show-icon="showIcon"></YiuNoteTree>
         </div>
       </div>
     </div>
@@ -49,6 +64,7 @@
       const logStore = useLogStore()
       const treeData = ref()
       const showNumber = ref(false)
+      const showIcon = ref(false)
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
@@ -98,6 +114,7 @@
         treeData,
         onRefresh,
         showNumber,
+        showIcon,
       }
     },
   })
