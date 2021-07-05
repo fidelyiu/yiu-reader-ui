@@ -19,6 +19,10 @@ const noteApi = {
         url: entityUrl + '/{id}',
         method: MethodEnum.DELETE,
     },
+    delFile: <YiuAip>{
+        url: entityUrl + '/file/{id}',
+        method: MethodEnum.DELETE,
+    },
 }
 
 export default noteApi

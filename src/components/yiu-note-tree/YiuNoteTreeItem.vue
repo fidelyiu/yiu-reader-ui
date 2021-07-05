@@ -98,57 +98,72 @@
                      :number-title="numberTitle+(index+1)+'.'"
                      class="border-l border-blue-200"
                      @click="onClick"
-                     @searchSuccess="onSearchSuccess"></YiuTreeItem>
+                     @searchSuccess="onSearchSuccess"
+                     @delSuccess="onDelSuccess"></YiuTreeItem>
       </div>
     </transition>
+    <n-modal v-model:show="deleteModal">
+      <n-card style="width: 600px;"
+              content-style="padding: 0;"
+              class="p-5 relative"
+              size="medium"
+              :bordered="false">
+        <div class="text-base">删除提示</div>
+        <button class="yiu-modal-close-btn-1" transparent @click="onDeleteCancel">
+          <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+        </button>
+        <div class="text-base mt-6">
+          <div class="mb-6">
+            <div class="mb-3">
+              <span>将删除</span>
+              <span class="font-semibold mr-1">{{ node.data.name }}</span>
+              <span v-if="node.data.isDir" class="font-semibold">目录</span>
+              <span v-else class="font-semibold">文件</span>
+              <span>，请确定你的删除方式。</span>
+            </div>
+            <div class="border-1 border-yellow-500 bg-yellow-50 px-4 py-2 mb-3">
+              删除YR数据可在编排目录中刷新再次得到。
+            </div>
+            <div class="border-1 border-red-500 bg-red-50 px-4 py-2 mb-5">
+              <div class="mb-2">删除本地文件将无法恢复。</div>
+              <div class="mb-2">为防止意外，确认继续操作请输入以下内容：</div>
+              <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500">{{ node.data.name }}</span>
+            </div>
+            <input
+                v-model="delStr"
+                class="w-full border-1 border-gray-300 rounded px-4 py-1 focus:outline-none focus:border-yellow-400"
+                type="text">
+          </div>
+          <div class="flex justify-end">
+            <n-button class="focus:outline-none"
+                      type="error"
+                      :disabled="delStr!==node.data.name"
+                      :loading="deleteLoading"
+                      @click="onDeleteFileOk">
+              删除 YR数据 & 本地文件
+            </n-button>
+            <div class="flex-grow"></div>
+            <n-button class="focus:outline-none mr-4"
+                      type="primary"
+                      :loading="deleteLoading"
+                      @click="onDeleteOk">
+              删除 YR数据
+            </n-button>
+            <n-button class="focus:outline-none" @click="onDeleteCancel">取消</n-button>
+          </div>
+        </div>
+      </n-card>
+    </n-modal>
   </div>
-  <n-modal v-model:show="deleteModal">
-    <n-card style="width: 600px;"
-            content-style="padding: 0;"
-            class="p-5 relative"
-            size="medium"
-            :bordered="false">
-      <div class="text-base">删除提示</div>
-      <button class="yiu-modal-close-btn-1" transparent @click="onDeleteCancel">
-        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
-      </button>
-      <div class="text-base mt-6">
-        <div class="mb-6">
-          <p>
-            <span>将删除</span>
-            <span class="font-semibold mr-1">{{ node.data.name }}</span>
-            <span v-if="node.data.isDir" class="font-semibold">目录</span>
-            <span v-else class="font-semibold">文件</span>
-            <span>，请确定你的删除方式。</span>
-          </p>
-          <p>
-            删除的YR数据可在编排目录中刷新再次得到，而本地数据一旦删除将无法恢复。
-          </p>
-        </div>
-        <div class="flex justify-end">
-          <n-button class="focus:outline-none"
-                    type="error"
-                    @click="onDeleteCancel">
-            删除 YR数据 & 本地文件
-          </n-button>
-          <div class="flex-grow"></div>
-          <n-button class="focus:outline-none mr-4"
-                    type="primary"
-                    @click="onDeleteCancel">
-            删除 YR数据
-          </n-button>
-          <n-button class="focus:outline-none" @click="onDeleteCancel">取消</n-button>
-        </div>
-      </div>
-    </n-card>
-  </n-modal>
 </template>
 
 <script lang="ts">
   import { defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { isString } from 'lodash'
-  import { NButton, NCard, NModal } from 'naive-ui'
+  import { NButton, NCard, NModal, useNotification } from 'naive-ui'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
 
   export default defineComponent({
     name: 'YiuTreeItem',
@@ -161,11 +176,13 @@
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
-    emits: ['click', 'searchSuccess'],
+    emits: ['click', 'searchSuccess', 'delSuccess'],
     setup(prop, { emit }) {
       const showNumber: any = inject('showNumber')
       const showIcon: any = inject('showIcon')
       const searchStr: any = inject('searchStr')
+      const notification = useNotification()
+      const delStr = ref('')
       watch(() => searchStr.value, (v) => {
         if (!v) {
           return
@@ -182,6 +199,7 @@
         emit('searchSuccess')
         isOpen.value = true
       }
+      const onDelSuccess = () => emit('delSuccess')
       const isOpen = ref(false)
       const onClick = (id: any) => {
         if (isString(id)) {
@@ -200,6 +218,32 @@
       }
       const onDeleteCancel = () => {
         deleteModal.value = false
+        delStr.value = ''
+      }
+      const deleteLoading = ref(false)
+      const onDeleteOk = () => {
+        yiuHttp({
+          api: SERVER_API.noteApi.del,
+          loading: { flag: deleteLoading },
+          tips: { anyObj: notification, error: { show: true } },
+          pathData: { id: prop?.node?.data?.id || '-' },
+          success: () => {
+            deleteModal.value = false
+            emit('delSuccess')
+          },
+        })
+      }
+      const onDeleteFileOk = () => {
+        yiuHttp({
+          api: SERVER_API.noteApi.delFile,
+          loading: { flag: deleteLoading },
+          tips: { anyObj: notification, error: { show: true } },
+          pathData: { id: prop?.node?.data?.id || '-' },
+          success: () => {
+            deleteModal.value = false
+            emit('delSuccess')
+          },
+        })
       }
       return {
         isOpen,
@@ -208,9 +252,14 @@
         showNumber,
         showIcon,
         onSearchSuccess,
+        delStr,
+        onDelSuccess,
         deleteModal,
         onDelete,
         onDeleteCancel,
+        onDeleteOk,
+        deleteLoading,
+        onDeleteFileOk,
       }
     },
   })

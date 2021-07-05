@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full overflow-hidden pr-1 pb-3 pt-3">
     <div class="w-full h-full overflow-auto">
-      <div class="relative w-full">
+      <div class="relative w-full" :class="{'h-full': treeLoading||!treeData?.length}">
         <div class="sticky top-0 pb-2 px-4 bg-white flex-none flex">
           <SearchInput v-model="searchKey" class="flex-grow mr-2"></SearchInput>
           <div class="flex-none">
@@ -33,12 +33,25 @@
             </button>
           </div>
         </div>
+        <!--空数据栏-->
+        <div v-if="!treeLoading && !treeData?.length"
+             class="absolute inset-0 mt-[32px] grid place-items-center">
+          <div class="flex items-center text-gray-500">
+            <span class="iconify text-2xl" data-icon="mdi:inbox" data-inline="false"></span>
+            <span class="leading-10 text-base">暂无数据</span>
+          </div>
+        </div>
+        <!--加载栏-->
+        <div v-if="treeLoading" class="absolute inset-0 mt-[32px] grid justify-center content-center">
+          <n-spin></n-spin>
+        </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
           <YiuNoteTree :data="treeData"
                        :show-number="showNumber"
                        :show-icon="showIcon"
-                       :search-str="searchKey"></YiuNoteTree>
+                       :search-str="searchKey"
+                       @change="loadNote"></YiuNoteTree>
         </div>
       </div>
     </div>
@@ -70,14 +83,11 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { NoteReadResult } from '/@/vo/enum/note-read-result'
-  import { useLogStore } from '/@/store/modules/log'
-  import { nanoid } from 'nanoid'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
-  import { NButton, NCard, NModal } from 'naive-ui'
+  import { NButton, NCard, NModal, NSpin } from 'naive-ui'
   import NoteCatalogueForm from '/@/views/dashboard/widget/main-box/NoteCatalogueForm.vue'
 
   export default defineComponent({
@@ -88,18 +98,19 @@
       NModal,
       NCard,
       NButton,
+      NSpin,
       NoteCatalogueForm,
     },
     props: {
       layout: propTypes.object.isRequired,
     },
     setup() {
-      const logStore = useLogStore()
-      const treeData = ref()
+      const treeData = ref([])
       const searchKey = ref('')
       const showNumber = ref(false)
       const showIcon = ref(false)
       const editModal = ref(false)
+      const treeLoading = ref(false)
       const onEdit = () => {
         editModal.value = true
       }
@@ -109,6 +120,7 @@
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
+          loading: { flag: treeLoading },
           data: {
             show: true,
           },
@@ -118,43 +130,11 @@
         })
       }
       loadNote()
-      const onRefresh = () => {
-        const refreshList: any = {}
-        // Prismjs.assets/c
-        const ws = new WebSocket(`ws://localhost:8081${SERVER_API.noteApi.refresh.url}?path=`)
-        //接收到消息时触发
-        ws.onmessage = (evt) => {
-          let data
-          try {
-            data = JSON.parse(evt.data)
-          } catch (e) {
-          }
-          switch (data.result) {
-            case NoteReadResult.Start:
-              refreshList[data.path] = nanoid()
-              logStore.pushLog(refreshList[data.path], 'warning', '正在检查：' + data.path || '-')
-              break
-            case NoteReadResult.Import:
-              logStore.changeById(refreshList[data.path], 'info', '检查完成：' + data.path || '-')
-              break
-            case NoteReadResult.NotImport:
-              logStore.changeById(refreshList[data.path], 'success', '导入完成：' + data.path || '-')
-              break
-            case NoteReadResult.Fail:
-              logStore.changeById(refreshList[data.path], 'error', '导入失败：' + data.path || '-')
-              break
-          }
-        }
-        //连接关闭时触发
-        ws.onclose = () => {
-          loadNote()
-        }
-      }
       return {
         searchKey,
-        logStore,
         treeData,
-        onRefresh,
+        treeLoading,
+        loadNote,
         showNumber,
         showIcon,
         editModal,
