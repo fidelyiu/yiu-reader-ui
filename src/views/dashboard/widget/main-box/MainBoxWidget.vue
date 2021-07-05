@@ -5,9 +5,11 @@
         <div class="sticky top-0 pb-2 px-4 bg-white flex-none flex">
           <SearchInput class="flex-grow mr-2"></SearchInput>
           <div class="flex-none">
+            <!--根目录添加按钮-->
             <button class="yiu-blue-square-btn-3 mr-2">
               <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
             </button>
+            <!--图标控制按钮-->
             <button class="yiu-blue-square-btn-3 mr-2" @click="showIcon=!showIcon">
               <div v-show="showIcon">
                 <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
@@ -16,6 +18,7 @@
                 <span class="iconify block" data-icon="mdi:lightbulb-outline" data-inline="false"></span>
               </div>
             </button>
+            <!--数字控制按钮-->
             <button class="yiu-blue-square-btn-3 mr-2" @click="showNumber=!showNumber">
               <div v-show="showNumber">
                 <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
@@ -24,7 +27,8 @@
                 <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
               </div>
             </button>
-            <button class="yiu-blue-square-btn-3">
+            <!--编辑目录按钮-->
+            <button class="yiu-blue-square-btn-3" @click="onEdit">
               <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
             </button>
           </div>
@@ -38,6 +42,28 @@
       </div>
     </div>
   </div>
+  <n-modal v-model:show="editModal" :mask-closable="false">
+    <n-card style="width: 600px;"
+            content-style="padding: 0;"
+            class="p-5 relative"
+            size="medium"
+            :bordered="false">
+      <div class="text-base">编排目录</div>
+      <button class="yiu-modal-close-btn-1" transparent @click="onEditCancel">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </button>
+      <div class="text-base mt-6">
+        <div>Hello</div>
+        <div class="flex justify-end">
+          <n-button class="focus:outline-none"
+                    type="primary"
+                    @click="onEditCancel">
+            完成
+          </n-button>
+        </div>
+      </div>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -50,12 +76,16 @@
   import SERVER_API from '/@/api'
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
+  import { NButton, NCard, NModal } from 'naive-ui'
 
   export default defineComponent({
     name: 'MainBoxWidget',
     components: {
       SearchInput,
       YiuNoteTree,
+      NModal,
+      NCard,
+      NButton,
     },
     props: {
       layout: propTypes.object.isRequired,
@@ -65,6 +95,13 @@
       const treeData = ref()
       const showNumber = ref(false)
       const showIcon = ref(false)
+      const editModal = ref(false)
+      const onEdit = () => {
+        editModal.value = true
+      }
+      const onEditCancel = () => {
+        editModal.value = false
+      }
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
@@ -115,6 +152,9 @@
         onRefresh,
         showNumber,
         showIcon,
+        editModal,
+        onEdit,
+        onEditCancel,
       }
     },
   })

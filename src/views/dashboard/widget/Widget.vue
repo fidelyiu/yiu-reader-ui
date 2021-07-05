@@ -83,8 +83,8 @@
   import { useNotification } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
   import { isNumber } from 'lodash'
-  import LinkWidget from '/@/views/dashboard/widget/LinkWidget.vue'
-  import MainBoxWidget from '/@/views/dashboard/widget/MainBoxWidget.vue'
+  import LinkWidget from '/@/views/dashboard/widget/link/LinkWidget.vue'
+  import MainBoxWidget from '/@/views/dashboard/widget/main-box/MainBoxWidget.vue'
 
   export default defineComponent({
     name: 'Widget',

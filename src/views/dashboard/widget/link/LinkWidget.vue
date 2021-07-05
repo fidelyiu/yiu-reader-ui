@@ -75,7 +75,7 @@
   import { computed, defineComponent, inject } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { NButton, NCard, NModal } from 'naive-ui'
-  import LinkForm from '/@/views/dashboard/widget/LinkForm.vue'
+  import LinkForm from '/@/views/dashboard/widget/link/LinkForm.vue'
   import {
     useEditDisableRef,
     useEditLoading,
