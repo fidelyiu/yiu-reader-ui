@@ -95,7 +95,7 @@
             </template>
             <!--可设置为当前工作空间-->
             <template v-else-if="statusIsValid(item.status)">
-              <button class="yiu-blue-square-btn-1" @click="setCurrentWorkspaceById(item.id)">
+              <button class="yiu-blue-square-btn-1" @click="setCurrentWorkspaceById(item?.id)">
                 <div v-show="setCurrentWorkspaceLoading">
                   <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
                 </div>
@@ -151,7 +151,7 @@
             <n-popconfirm placement="top-end"
                           negative-text="取消"
                           positive-text="确认"
-                          @positive-click="onDelete(item.id)">
+                          @positive-click="onDelete(item?.id)">
               <template #icon>
                 <span style="color: #ff7875;"
                       class="iconify block"
@@ -331,10 +331,9 @@
       }
 
       const setCurrentWorkspaceLoading = ref(false)
-      const setCurrentWorkspaceById = (id: string) => {
-        if (setCurrentWorkspaceLoading.value) {
-          return
-        }
+      const setCurrentWorkspaceById = (id) => {
+        if (!id) return
+        if (setCurrentWorkspaceLoading.value) return
         yiuHttp({
           api: SERVER_API.mainApi.setCurrentWorkspace,
           loading: { flag: setCurrentWorkspaceLoading },
@@ -393,10 +392,9 @@
 
       const moveLoading = ref(false)
       // 移动
-      const onMove = (id: string, type: 'up' | 'down') => {
-        if (moveLoading.value) {
-          return
-        }
+      const onMove = (id, type: 'up' | 'down') => {
+        if (!id) return
+        if (moveLoading.value) return
         let sendApi: YiuAip
         if (type === 'up') {
           sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.up : SERVER_API.workspaceApi.down
@@ -414,7 +412,8 @@
       }
 
       // 删除
-      const onDelete = (id: string) => {
+      const onDelete = (id) => {
+        if (!id) return
         yiuHttp({
           api: SERVER_API.workspaceApi.del,
           pathData: { id },

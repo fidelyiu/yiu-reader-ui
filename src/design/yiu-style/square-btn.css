@@ -1,17 +1,17 @@
 .yiu-square-btn {
     /*公共样式*/
-    @apply p-2 outline-none border border-transparent;
+    @apply p-2 outline-none border border-transparent focus:outline-none;
 }
 
 .yiu-disable-btn {
-    @apply cursor-not-allowed;
+    @apply cursor-not-allowed focus:outline-none;
 }
 
 /*/////////////////////////////////////////////////*/
 /*                  蓝色按钮                        */
 /*/////////////////////////////////////////////////*/
 .yiu-blue-square-btn-1 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     /*背景颜色*/
     @apply bg-blue-100 hover:bg-blue-50 active:bg-gray-50;
     /*边框*/
@@ -19,14 +19,14 @@
 }
 
 .yiu-blue-square-btn-2 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     /*背景颜色*/
     @apply hover:bg-blue-100;
     @apply active:bg-blue-50;
 }
 
 .yiu-blue-square-btn-3 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     /*背景颜色*/
     @apply bg-blue-100 hover:bg-blue-50;
     /*边框*/
@@ -34,7 +34,7 @@
 }
 
 .yiu-blue-square-btn-4 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     @apply rounded text-white text-xl p-1;
     @apply bg-blue-400;
 }
@@ -48,7 +48,7 @@
 }
 
 .yiu-blue-square-btn-5 {
-    @apply p-1 rounded;
+    @apply p-1 rounded focus:outline-none;
 }
 
 .yiu-blue-square-btn-5 svg {
@@ -64,7 +64,7 @@
 }
 
 .yiu-blue-square-btn-6 {
-    @apply yiu-square-btn rounded-sm;
+    @apply yiu-square-btn rounded-sm focus:outline-none;
     /*背景颜色*/
     @apply hover:bg-blue-50;
     @apply active:bg-blue-100;
@@ -74,7 +74,7 @@
 /*                  蓝色禁用按钮                     */
 /*/////////////////////////////////////////////////*/
 .yiu-blue-disable-btn-1 {
-    @apply yiu-disable-btn;
+    @apply yiu-disable-btn focus:outline-none;
     @apply yiu-square-btn;
     @apply bg-gray-50 '!border-blue-100';
 }
@@ -83,13 +83,13 @@
 /*                  Modal关闭按钮                   */
 /*/////////////////////////////////////////////////*/
 .yiu-modal-close-btn-1 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     @apply absolute top-4 right-4;
     @apply hover:bg-blue-50 active:bg-blue-100;
 }
 
 .yiu-modal-close-btn-2 {
-    @apply yiu-square-btn;
+    @apply yiu-square-btn focus:outline-none;
     @apply absolute top-2 right-2;
     @apply hover:bg-blue-300 active:bg-blue-400;
 }

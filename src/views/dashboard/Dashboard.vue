@@ -6,30 +6,30 @@
       <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px]">
         <div class="fa-center text-2xl">{{ mainStore.currentWorkspace.name || '-' }}</div>
         <div class="fa-center">
-          <button class="yiu-blue-big-circular-btn fa-center mr-2">
+          <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
             <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
             <span>全局搜索</span>
           </button>
           <button v-show="!showSetting"
-                  class="yiu-blue-big-circular-btn fa-center mr-2"
+                  class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                   @click="showSetting=!showSetting">
             <span class="iconify block mr-1" data-icon="mdi:cog" data-inline="false"></span>
             <span>开启设置</span>
           </button>
           <button v-show="showSetting"
-                  class="yiu-blue-big-circular-btn fa-center mr-2"
+                  class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                   @click="showSetting=!showSetting">
             <span class="iconify block mr-1" data-icon="mdi:cog-off" data-inline="false"></span>
             <span>关闭设置</span>
           </button>
           <button v-show="!customizeMode"
-                  class="yiu-blue-big-circular-btn fa-center"
+                  class="yiu-blue-big-circular-btn fa-center focus:outline-none"
                   @click="onChangeCustomizeMode">
             <span class="iconify block mr-1" data-icon="mdi:pencil-outline" data-inline="false"></span>
             <span>自定义</span>
           </button>
           <button v-show="customizeMode"
-                  class="yiu-blue-big-circular-btn fa-center"
+                  class="yiu-blue-big-circular-btn fa-center focus:outline-none"
                   @click="onChangeCustomizeMode">
             <span class="iconify block mr-1" data-icon="mdi:check" data-inline="false"></span>
             <span>完成</span>

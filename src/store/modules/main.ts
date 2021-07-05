@@ -13,6 +13,7 @@ export const useMainStore = defineStore({
              */
             currentWorkspace: {
                 id: '',
+                name: '',
                 status: ObjStatus.NoValue,
                 path: '',
             },

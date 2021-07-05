@@ -34,7 +34,7 @@
       </n-spin>
     </div>
     <!--底部的折叠按钮-->
-    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100" @click="changeShowMenu">
+    <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100 focus:outline-none" @click="changeShowMenu">
       <span class="fa-center transition-all transform ease-in-out"
             :class="{'rotate-180': showMenu}">
         <span class="iconify text-xl"
@@ -108,7 +108,7 @@
 
 <style scoped>
   .header-btn {
-    @apply bg-blue-100;
+    @apply bg-blue-100 focus:outline-none;
     @apply h-[32px] w-full min-w-[32px] rounded-2xl fa-center;
   }
 

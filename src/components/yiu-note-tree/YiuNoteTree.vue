@@ -3,7 +3,7 @@
     <YiuTreeItem v-for="(item, index) in data"
                  :key="index"
                  :node="item"
-                 :number-title="index+1+'.'">
+                 :number-title="getNumberTitle(index)">
       <template #default="slotProps">
         <slot :node="slotProps.node"></slot>
       </template>
@@ -29,7 +29,12 @@
       provide('showNumber', computed(() => prop.showNumber))
       provide('showIcon', computed(() => prop.showIcon))
       provide('searchStr', computed(() => prop.searchStr))
+      const getNumberTitle = (index: any) => {
+        index = index as number
+        return (index + 1) + '.'
+      }
       return {
+        getNumberTitle,
       }
     },
   })

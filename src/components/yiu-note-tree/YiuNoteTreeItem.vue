@@ -39,7 +39,7 @@
         <YiuTreeItem v-for="(item, index) in node.child"
                      :key="index"
                      :node="item"
-                     :number-title="numberTitle+(index+1)+'.'"
+                     :number-title="numberTitle+getNumberTitle(index)"
                      class="border-l border-blue-200"
                      @click="onClick"
                      @searchSuccess="onSearchSuccess">
@@ -97,6 +97,10 @@
           }
         }
       }
+      const getNumberTitle = (index: any) => {
+        index = index as number
+        return (index + 1) + '.'
+      }
 
       return {
         isOpen,
@@ -105,6 +109,7 @@
         showNumber,
         showIcon,
         onSearchSuccess,
+        getNumberTitle,
       }
     },
   })

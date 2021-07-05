@@ -13,12 +13,6 @@
     @apply h-full w-full overflow-hidden;
 }
 
-@layer base {
-    button {
-        @apply focus:outline-none;
-    }
-}
-
 
 .fa-center {
     @apply flex justify-center items-center;
