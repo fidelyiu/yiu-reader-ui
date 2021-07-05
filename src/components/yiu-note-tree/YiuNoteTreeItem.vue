@@ -57,7 +57,7 @@
         </div>
         <!--删除按钮-->
         <div>
-          <button class="yiu-blue-square-btn-1">
+          <button class="yiu-blue-square-btn-1" @click.stop="onDelete">
             <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
           </button>
         </div>
@@ -102,15 +102,61 @@
       </div>
     </transition>
   </div>
+  <n-modal v-model:show="deleteModal">
+    <n-card style="width: 600px;"
+            content-style="padding: 0;"
+            class="p-5 relative"
+            size="medium"
+            :bordered="false">
+      <div class="text-base">删除提示</div>
+      <button class="yiu-modal-close-btn-1" transparent @click="onDeleteCancel">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </button>
+      <div class="text-base mt-6">
+        <div class="mb-6">
+          <p>
+            <span>将删除</span>
+            <span class="font-semibold mr-1">{{ node.data.name }}</span>
+            <span v-if="node.data.isDir" class="font-semibold">目录</span>
+            <span v-else class="font-semibold">文件</span>
+            <span>，请确定你的删除方式。</span>
+          </p>
+          <p>
+            删除的YR数据可在编排目录中刷新再次得到，而本地数据一旦删除将无法恢复。
+          </p>
+        </div>
+        <div class="flex justify-end">
+          <n-button class="focus:outline-none"
+                    type="error"
+                    @click="onDeleteCancel">
+            删除 YR数据 & 本地文件
+          </n-button>
+          <div class="flex-grow"></div>
+          <n-button class="focus:outline-none mr-4"
+                    type="primary"
+                    @click="onDeleteCancel">
+            删除 YR数据
+          </n-button>
+          <n-button class="focus:outline-none" @click="onDeleteCancel">取消</n-button>
+        </div>
+      </div>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
   import { defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { isString } from 'lodash'
+  import { NButton, NCard, NModal } from 'naive-ui'
 
   export default defineComponent({
     name: 'YiuTreeItem',
+    components: {
+      NModal,
+      NCard,
+      NButton,
+    },
     props: {
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
@@ -148,6 +194,13 @@
           }
         }
       }
+      const deleteModal = ref(false)
+      const onDelete = () => {
+        deleteModal.value = true
+      }
+      const onDeleteCancel = () => {
+        deleteModal.value = false
+      }
       return {
         isOpen,
         searchStr,
@@ -155,6 +208,9 @@
         showNumber,
         showIcon,
         onSearchSuccess,
+        deleteModal,
+        onDelete,
+        onDeleteCancel,
       }
     },
   })
