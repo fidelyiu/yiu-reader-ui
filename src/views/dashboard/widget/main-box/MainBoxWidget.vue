@@ -235,9 +235,7 @@
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: {
-            // show: true,
-          },
+          data: { show: true },
           success: (res) => {
             treeData.value = res.data.result
           },
