@@ -39,8 +39,13 @@
           <!--链接-->
           <div v-show="layoutTypeIsLink(layoutType)"
                class="big-circular-btn bg-blue-400 select-none fa-center transform scale-125">
-            <span class="iconify block mr-1" data-icon="mdi:link-variant" data-inline="false"></span>
+            <span class="iconify block mr-1 text-lg" data-icon="mdi:link-variant" data-inline="false"></span>
             <span>链接</span>
+          </div>
+          <div v-show="layoutTypeIsMainBox(layoutType)"
+               class="big-circular-btn bg-blue-400 select-none fa-center transform scale-125">
+            <span class="iconify block mr-1 text-lg" data-icon="mdi:book-outline" data-inline="false"></span>
+            <span>主盒子</span>
           </div>
           <!--外层的8个点-->
           <template v-if="showResizeHandle">

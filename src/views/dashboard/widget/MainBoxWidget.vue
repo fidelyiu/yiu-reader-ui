@@ -1,14 +1,26 @@
 <template>
-  <div class="relative w-full h-full overflow-hidden py-3 pr-1">
-    <!--右上角按钮组-->
-    <div class="absolute top-2 right-2">
-      <button class="yiu-blue-square-btn-5" @click="onRefresh">
-        <span class="iconify block" data-icon="mdi:cog" data-inline="false"></span>
-      </button>
-    </div>
-    <!--内容部分-->
-    <div class="w-full h-full overflow-auto pl-3">
-      <YiuNoteTree :data="treeData"></YiuNoteTree>
+  <div class="w-full h-full overflow-hidden pr-1 pb-3 pt-3">
+    <div class="w-full h-full overflow-auto">
+      <div class="relative w-full">
+        <div class="sticky top-0 pb-2 px-4 bg-white flex-none flex">
+          <SearchInput class="flex-grow mr-2"></SearchInput>
+          <div class="flex-none">
+            <button class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
+            </button>
+            <button class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
+            </button>
+            <button class="yiu-blue-square-btn-3">
+              <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
+            </button>
+          </div>
+        </div>
+        <!--内容部分-->
+        <div class="w-full overflow-auto px-2">
+          <YiuNoteTree :data="treeData"></YiuNoteTree>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,10 +34,12 @@
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import YiuNoteTree from '/@/components/yiu-note-tree'
+  import SearchInput from '/@/components/SearchInput.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
     components: {
+      SearchInput,
       YiuNoteTree,
     },
     props: {
@@ -37,6 +51,9 @@
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
+          data: {
+            show: true,
+          },
           success: (res) => {
             treeData.value = res.data.result
           },
