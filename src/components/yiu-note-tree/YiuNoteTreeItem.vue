@@ -63,7 +63,7 @@
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
-    emits: ['click', 'searchSuccess', 'delSuccess'],
+    emits: ['click', 'searchSuccess'],
     setup(prop, { emit }) {
       const showNumber: any = inject('showNumber')
       const showIcon: any = inject('showIcon')

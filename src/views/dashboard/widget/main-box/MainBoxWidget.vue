@@ -230,6 +230,7 @@
       }
       const onEditCancel = () => {
         editModal.value = false
+        loadNote()
       }
       const loadNote = () => {
         yiuHttp({
