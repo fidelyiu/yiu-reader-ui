@@ -3,7 +3,7 @@
     <div class="w-full h-full overflow-auto">
       <div class="relative w-full">
         <div class="sticky top-0 pb-2 px-4 bg-white flex-none flex">
-          <SearchInput class="flex-grow mr-2"></SearchInput>
+          <SearchInput v-model="searchKey" class="flex-grow mr-2"></SearchInput>
           <div class="flex-none">
             <!--根目录添加按钮-->
             <button class="yiu-blue-square-btn-3 mr-2">
@@ -37,7 +37,8 @@
         <div class="w-full overflow-auto px-2">
           <YiuNoteTree :data="treeData"
                        :show-number="showNumber"
-                       :show-icon="showIcon"></YiuNoteTree>
+                       :show-icon="showIcon"
+                       :search-str="searchKey"></YiuNoteTree>
         </div>
       </div>
     </div>
@@ -53,7 +54,7 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
-        <div>Hello</div>
+        <NoteCatalogueForm></NoteCatalogueForm>
         <div class="flex justify-end">
           <n-button class="focus:outline-none"
                     type="primary"
@@ -77,6 +78,7 @@
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal } from 'naive-ui'
+  import NoteCatalogueForm from '/@/views/dashboard/widget/main-box/NoteCatalogueForm.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -86,6 +88,7 @@
       NModal,
       NCard,
       NButton,
+      NoteCatalogueForm,
     },
     props: {
       layout: propTypes.object.isRequired,
@@ -93,6 +96,7 @@
     setup() {
       const logStore = useLogStore()
       const treeData = ref()
+      const searchKey = ref('')
       const showNumber = ref(false)
       const showIcon = ref(false)
       const editModal = ref(false)
@@ -147,6 +151,7 @@
         }
       }
       return {
+        searchKey,
         logStore,
         treeData,
         onRefresh,

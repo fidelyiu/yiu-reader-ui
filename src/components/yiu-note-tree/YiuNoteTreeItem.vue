@@ -20,7 +20,14 @@
         </span>
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
-        <span class="mr-2 font-semibold">{{ node.data.name }}</span>
+        <span class="mr-2 font-semibold">
+          <span v-if="node.data.name.indexOf(searchStr) > -1">{{
+              node.data.name.substr(0, node.data.name.indexOf(searchStr))
+            }}<span class="bg-yellow-200">{{
+                searchStr
+              }}</span>{{ node.data.name.substr(node.data.name.indexOf(searchStr) + searchStr.length) }}</span>
+        <span v-else>{{ node.data.name }}</span>
+        </span>
         <span v-if="!node.data.defStatus" class="text-gray-400">[未排序]</span>
       </div>
       <div class="flex-none flex">
@@ -83,19 +90,22 @@
         <!--</div>-->
       </div>
     </div>
-    <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[16px]">
-      <YiuTreeItem v-for="(item, index) in node.child"
-                   :key="index"
-                   :node="item"
-                   :number-title="numberTitle+(index+1)+'.'"
-                   class="border-l border-blue-200"
-                   @click="onClick"></YiuTreeItem>
-    </div>
+    <transition name="yiu-fade-in">
+      <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[16px]">
+        <YiuTreeItem v-for="(item, index) in node.child"
+                     :key="index"
+                     :node="item"
+                     :number-title="numberTitle+(index+1)+'.'"
+                     class="border-l border-blue-200"
+                     @click="onClick"
+                     @searchSuccess="onSearchSuccess"></YiuTreeItem>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, inject, ref } from 'vue'
+  import { defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { isString } from 'lodash'
 
@@ -105,10 +115,27 @@
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
-    emits: ['click'],
+    emits: ['click', 'searchSuccess'],
     setup(prop, { emit }) {
       const showNumber: any = inject('showNumber')
       const showIcon: any = inject('showIcon')
+      const searchStr: any = inject('searchStr')
+      watch(() => searchStr.value, (v) => {
+        if (!v) {
+          return
+        }
+        if (prop?.node?.data?.name) {
+          if (prop.node.data.name.indexOf(v) != -1) {
+            emit('searchSuccess')
+          }
+        } else {
+          isOpen.value = false
+        }
+      })
+      const onSearchSuccess = () => {
+        emit('searchSuccess')
+        isOpen.value = true
+      }
       const isOpen = ref(false)
       const onClick = (id: any) => {
         if (isString(id)) {
@@ -123,9 +150,11 @@
       }
       return {
         isOpen,
+        searchStr,
         onClick,
         showNumber,
         showIcon,
+        onSearchSuccess,
       }
     },
   })

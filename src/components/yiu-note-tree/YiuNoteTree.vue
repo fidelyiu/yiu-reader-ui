@@ -19,10 +19,12 @@
       data: propTypes.object,
       showNumber: propTypes.bool.def(false),
       showIcon: propTypes.bool.def(false),
+      searchStr: propTypes.string.def(''),
     },
     setup(prop) {
       provide('showNumber', computed(() => prop.showNumber))
       provide('showIcon', computed(() => prop.showIcon))
+      provide('searchStr', computed(() => prop.searchStr))
       return {}
     },
   })
