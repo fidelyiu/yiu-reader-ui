@@ -3,8 +3,11 @@
     <YiuTreeItem v-for="(item, index) in data"
                  :key="index"
                  :node="item"
-                 :number-title="index+1+'.'"
-                 @delSuccess="onDelSuccess"></YiuTreeItem>
+                 :number-title="index+1+'.'">
+      <template #default="slotProps">
+        <slot :node="slotProps.node"></slot>
+      </template>
+    </YiuTreeItem>
   </div>
 </template>
 
@@ -22,14 +25,11 @@
       showIcon: propTypes.bool.def(false),
       searchStr: propTypes.string.def(''),
     },
-    emits: ['change'],
-    setup(prop, { emit }) {
+    setup(prop) {
       provide('showNumber', computed(() => prop.showNumber))
       provide('showIcon', computed(() => prop.showIcon))
       provide('searchStr', computed(() => prop.searchStr))
-      const onDelSuccess = () => emit('change')
       return {
-        onDelSuccess,
       }
     },
   })
