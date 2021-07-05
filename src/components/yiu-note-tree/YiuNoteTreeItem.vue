@@ -1,7 +1,8 @@
 <template>
   <div class="w-full">
     <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click="onClick">
-      <div class="flex-none mr-2 fa-center">
+      <div class="flex-none mr-2 fa-center text-gray-500">
+        <span v-show="showNumber" class="italic font-normal">{{ numberTitle }}&nbsp;</span>
         <div v-if="!data?.data?.isDir">
           <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
         </div>
@@ -17,7 +18,7 @@
         </div>
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
-        <span class="mr-2">{{ data.data.name }}</span>
+        <span class="mr-2 font-semibold">{{ data.data.name }}</span>
         <span v-if="!data.data.defStatus" class="text-gray-400">[未排序]</span>
       </div>
       <div class="flex-none flex">
@@ -84,6 +85,7 @@
       <YiuTreeItem v-for="(item, index) in data.child"
                    :key="index"
                    :data="item"
+                   :number-title="numberTitle+(index+1)+'.'"
                    class="border-l border-blue-200"
                    @click="onClick"></YiuTreeItem>
     </div>
@@ -99,10 +101,11 @@
     name: 'YiuTreeItem',
     props: {
       data: propTypes.object,
+      numberTitle: propTypes.string.isRequired,
     },
     emits: ['click'],
     setup(prop, { emit }) {
-      const moveLoading: any = inject('moveLoading')
+      const showNumber: any = inject('showNumber')
       const isOpen = ref(false)
       const onClick = (id: any) => {
         if (isString(id)) {
@@ -118,7 +121,7 @@
       return {
         isOpen,
         onClick,
-        moveLoading,
+        showNumber,
       }
     },
   })

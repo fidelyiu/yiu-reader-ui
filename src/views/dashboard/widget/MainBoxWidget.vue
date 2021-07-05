@@ -8,7 +8,7 @@
             <button class="yiu-blue-square-btn-3 mr-2">
               <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
             </button>
-            <button class="yiu-blue-square-btn-3 mr-2">
+            <button class="yiu-blue-square-btn-3 mr-2" @click="showNumber=!showNumber">
               <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
             </button>
             <button class="yiu-blue-square-btn-3">
@@ -18,7 +18,7 @@
         </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
-          <YiuNoteTree :data="treeData"></YiuNoteTree>
+          <YiuNoteTree :data="treeData" :show-number="showNumber"></YiuNoteTree>
         </div>
       </div>
     </div>
@@ -48,6 +48,7 @@
     setup() {
       const logStore = useLogStore()
       const treeData = ref()
+      const showNumber = ref(false)
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
@@ -96,6 +97,7 @@
         logStore,
         treeData,
         onRefresh,
+        showNumber,
       }
     },
   })
