@@ -6,8 +6,24 @@
           <SearchInput v-model="searchKey" class="flex-grow mr-2"></SearchInput>
           <div class="flex-none">
             <!--根目录添加按钮-->
-            <button class="yiu-blue-square-btn-3 mr-2">
+            <button v-show="!layoutDir" class="yiu-blue-square-btn-3 mr-2">
               <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
+            </button>
+            <!--刷新目录按钮-->
+            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+            </button>
+            <!--查看隐藏文件-->
+            <button v-show="layoutDir && !showHideFile"
+                    class="yiu-blue-square-btn-3 mr-2"
+                    @click="onShowHideFile">
+              <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
+            </button>
+            <!--不查看隐藏文件-->
+            <button v-show="layoutDir && showHideFile"
+                    class="yiu-blue-square-btn-3 mr-2"
+                    @click="onNotShowHideFile">
+              <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
             </button>
             <!--图标控制按钮-->
             <button class="yiu-blue-square-btn-3 mr-2" @click="showIcon=!showIcon">
@@ -28,8 +44,16 @@
               </div>
             </button>
             <!--编辑目录按钮-->
-            <button class="yiu-blue-square-btn-3" @click="onEdit">
+            <button v-show="!layoutDir"
+                    class="yiu-blue-square-btn-3"
+                    @click="onLayOutDir">
               <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
+            </button>
+            <!--取消编辑目录按钮-->
+            <button v-show="layoutDir"
+                    class="yiu-blue-square-btn-3"
+                    @click="onLayOutDirCancel">
+              <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
             </button>
           </div>
         </div>
@@ -83,33 +107,6 @@
                     <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
                   </button>
                 </div>
-                <!--<div class="mr-2">-->
-                <!--  <button class="yiu-blue-square-btn-1">-->
-                <!--    <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>-->
-                <!--  </button>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;上移按钮&ndash;&gt;-->
-                <!--<div class="mr-2">-->
-                <!--  <button class="yiu-blue-square-btn-1">-->
-                <!--    <div v-show="moveLoading">-->
-                <!--      <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>-->
-                <!--    </div>-->
-                <!--    <div v-show="!moveLoading">-->
-                <!--      <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>-->
-                <!--    </div>-->
-                <!--  </button>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;下移按钮&ndash;&gt;-->
-                <!--<div>-->
-                <!--  <button class="yiu-blue-square-btn-1">-->
-                <!--    <div v-show="moveLoading">-->
-                <!--      <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>-->
-                <!--    </div>-->
-                <!--    <div v-show="!moveLoading">-->
-                <!--      <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>-->
-                <!--    </div>-->
-                <!--  </button>-->
-                <!--</div>-->
               </div>
             </template>
           </YiuNoteTree>
@@ -117,28 +114,6 @@
       </div>
     </div>
   </div>
-  <n-modal v-model:show="editModal" :mask-closable="false">
-    <n-card style="width: 600px;"
-            content-style="padding: 0;"
-            class="p-5 relative"
-            size="medium"
-            :bordered="false">
-      <div class="text-base">编排目录</div>
-      <button class="yiu-modal-close-btn-1" transparent @click="onEditCancel">
-        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
-      </button>
-      <div class="text-base mt-6">
-        <NoteCatalogueForm></NoteCatalogueForm>
-        <div class="flex justify-end">
-          <n-button class="focus:outline-none"
-                    type="primary"
-                    @click="onEditCancel">
-            完成
-          </n-button>
-        </div>
-      </div>
-    </n-card>
-  </n-modal>
   <n-modal v-model:show="deleteModal">
     <n-card style="width: 600px;"
             content-style="padding: 0;"
@@ -201,7 +176,6 @@
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal, NSpin, useNotification } from 'naive-ui'
-  import NoteCatalogueForm from '/@/views/dashboard/widget/main-box/NoteCatalogueForm.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -212,7 +186,6 @@
       NCard,
       NButton,
       NSpin,
-      NoteCatalogueForm,
     },
     props: {
       layout: propTypes.object.isRequired,
@@ -223,26 +196,17 @@
       const searchKey = ref('')
       const showNumber = ref(false)
       const showIcon = ref(false)
-      const editModal = ref(false)
       const treeLoading = ref(false)
-      const onEdit = () => {
-        editModal.value = true
-      }
-      const onEditCancel = () => {
-        editModal.value = false
-        loadNote()
-      }
       const loadNote = () => {
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: { show: true },
+          data: { show: !showHideFile.value },
           success: (res) => {
             treeData.value = res.data.result
           },
         })
       }
-      loadNote()
 
       const tempNodeData = ref<any>()
       const delStr = ref('')
@@ -269,6 +233,29 @@
         })
       }
 
+      // 是否正在编排目录
+      const layoutDir = ref(false)
+      const showHideFile = ref(false)
+      const onShowHideFile = () => {
+        if (showHideFile.value) return
+        showHideFile.value = true
+        loadNote()
+      }
+      const onNotShowHideFile = () => {
+        if (!showHideFile.value) return
+        showHideFile.value = false
+        loadNote()
+      }
+      // 开始编排目录
+      const onLayOutDir = () => {
+        layoutDir.value = true
+      }
+      // 取消编排目录
+      const onLayOutDirCancel = () => {
+        layoutDir.value = false
+      }
+
+      loadNote()
       return {
         searchKey,
         treeData,
@@ -276,9 +263,6 @@
         loadNote,
         showNumber,
         showIcon,
-        editModal,
-        onEdit,
-        onEditCancel,
         tempNodeData,
         delStr,
         deleteModal,
@@ -286,6 +270,12 @@
         onDelete,
         onDeleteCancel,
         onDeleteOk,
+        showHideFile,
+        onShowHideFile,
+        onNotShowHideFile,
+        layoutDir,
+        onLayOutDir,
+        onLayOutDirCancel,
       }
     },
   })
