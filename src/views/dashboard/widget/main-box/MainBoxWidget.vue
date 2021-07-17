@@ -18,43 +18,46 @@
               <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
             </button>
             <!--刷新目录按钮-->
-            <n-popover trigger="hover" :style="{ width: '160px' }">
-              <template #trigger>
-                <button v-show="layoutDir"
-                        class="yiu-blue-square-btn-3 mr-2"
-                        @click="onRefresh">
-                  <div v-show="refreshLoading">
-                    <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
-                  </div>
-                  <div v-show="!refreshLoading">
-                    <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
-                  </div>
-                </button>
-              </template>
-              <span v-show="layoutDir">从本地刷新目录，可在日志中查看刷新。</span>
-            </n-popover>
+            <span v-show="layoutDir">
+              <n-popover trigger="hover" :style="{ width: '160px' }">
+                <template #trigger>
+                  <button class="yiu-blue-square-btn-3 mr-2"
+                          @click="onRefresh">
+                    <div v-show="refreshLoading">
+                      <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+                    </div>
+                    <div v-show="!refreshLoading">
+                      <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+                    </div>
+                  </button>
+                </template>
+                <span>从本地刷新目录，可在日志中查看刷新。</span>
+              </n-popover>
+            </span>
             <!--查看隐藏文件-->
-            <n-popover trigger="hover">
-              <template #trigger>
-                <button v-show="layoutDir && !showHideFile"
-                        class="yiu-blue-square-btn-3 mr-2"
-                        @click="onShowHideFile">
-                  <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
-                </button>
-              </template>
-              <span v-show="layoutDir && !showHideFile">查看隐藏文件</span>
-            </n-popover>
+            <span v-show="layoutDir && !showHideFile">
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <button class="yiu-blue-square-btn-3 mr-2"
+                          @click="onShowHideFile">
+                    <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
+                  </button>
+                </template>
+                <span>查看隐藏文件</span>
+              </n-popover>
+            </span>
             <!--不查看隐藏文件-->
-            <n-popover trigger="hover">
-              <template #trigger>
-                <button v-show="layoutDir && showHideFile"
-                        class="yiu-blue-square-btn-3 mr-2"
-                        @click="onNotShowHideFile">
-                  <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
-                </button>
-              </template>
-              <span v-show="layoutDir && showHideFile">不查看隐藏文件</span>
-            </n-popover>
+            <span v-show="layoutDir && showHideFile">
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <button class="yiu-blue-square-btn-3 mr-2"
+                          @click="onNotShowHideFile">
+                    <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
+                  </button>
+                </template>
+                <span>不查看隐藏文件</span>
+              </n-popover>
+            </span>
             <!--图标控制按钮-->
             <n-popover trigger="hover">
               <template #trigger>
@@ -86,27 +89,29 @@
               <span v-show="!showNumber">展示序号</span>
             </n-popover>
             <!--编辑目录按钮-->
-            <n-popover trigger="hover">
-              <template #trigger>
-                <button v-show="!layoutDir"
-                        class="yiu-blue-square-btn-3"
-                        @click="onLayOutDir">
-                  <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
-                </button>
-              </template>
-              <span v-show="!layoutDir">编辑目录</span>
-            </n-popover>
+            <span v-show="!layoutDir">
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <button class="yiu-blue-square-btn-3"
+                          @click="onLayOutDir">
+                    <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
+                  </button>
+                </template>
+                <span>编辑目录</span>
+              </n-popover>
+            </span>
             <!--取消编辑目录按钮-->
-            <n-popover trigger="hover">
-              <template #trigger>
-                <button v-show="layoutDir"
-                        class="yiu-blue-square-btn-3"
-                        @click="onLayOutDirCancel">
-                  <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
-                </button>
-              </template>
-              <span v-show="layoutDir">编辑完成</span>
-            </n-popover>
+            <span v-show="layoutDir">
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <button class="yiu-blue-square-btn-3"
+                          @click="onLayOutDirCancel">
+                    <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
+                  </button>
+                </template>
+                <span>编辑完成</span>
+              </n-popover>
+            </span>
           </div>
         </div>
         <!--空数据栏-->
@@ -129,6 +134,26 @@
                        :search-str="searchKey">
             <template #default="slotProps">
               <div class="flex">
+                <!--隐藏按钮-->
+                <div v-if="layoutDir" class="mr-2">
+                  <n-popover trigger="hover">
+                    <template #trigger>
+                      <button class="yiu-blue-square-btn-1" @click.stop="changeFileShow(slotProps.node.data.id)">
+                        <div v-show="changeFileShowLoading">
+                          <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+                        </div>
+                        <div v-show="!changeFileShowLoading && slotProps.node.data.show">
+                          <span class="iconify block" data-icon="mdi:eye-off-outline" data-inline="false"></span>
+                        </div>
+                        <div v-show="!changeFileShowLoading && !slotProps.node.data.show">
+                          <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
+                        </div>
+                      </button>
+                    </template>
+                    <span v-show="slotProps.node.data.show">隐藏文件</span>
+                    <span v-show="!slotProps.node.data.show">展示文件</span>
+                  </n-popover>
+                </div>
                 <!--增加按钮-->
                 <div v-if="slotProps.node.data.isDir" class="mr-2">
                   <button class="yiu-blue-square-btn-1">
@@ -325,6 +350,8 @@
       // 取消编排目录
       const onLayOutDirCancel = () => {
         layoutDir.value = false
+        showHideFile.value = false
+        loadNote()
       }
 
       const onPosition = (id) => {
@@ -370,6 +397,45 @@
         }
       }
 
+      const changeFileShowLoading = ref(false)
+      const changeFileShow = (id) => {
+        if (changeFileShowLoading.value) return
+        console.log(id)
+        // 先修改远程数据
+        yiuHttp({
+          api: SERVER_API.noteApi.changeShow,
+          loading: { flag: changeFileShowLoading },
+          pathData: { id },
+          tips: { anyObj: notification, error: { show: true } },
+          success: () => {
+            treeData.value = changeTreeItemShow(id, treeData.value)
+          },
+        })
+      }
+      const changeTreeItemShow = (id, noteTree) => {
+        let hasFind = false
+        const _changeTreeItemShow = (_noteTree) => {
+          if (!_noteTree.length) {
+            return []
+          }
+          for (let i = 0; i < _noteTree.length; i++) {
+            if (hasFind) {
+              break
+            }
+            if (_noteTree[i].data.id === id) {
+              hasFind = true
+              _noteTree[i].data.show = !_noteTree[i].data.show
+              break
+            }
+            if (_noteTree[i].child && _noteTree[i].child.length) {
+              _noteTree[i].child = _changeTreeItemShow(_noteTree[i].child)
+            }
+          }
+          return _noteTree
+        }
+        return _changeTreeItemShow(noteTree)
+      }
+
       loadNote()
       return {
         searchKey,
@@ -394,6 +460,8 @@
         refreshLoading,
         onRefresh,
         onPosition,
+        changeFileShow,
+        changeFileShowLoading,
       }
     },
   })
