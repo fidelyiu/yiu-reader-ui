@@ -18,58 +18,95 @@
               <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
             </button>
             <!--刷新目录按钮-->
-            <button v-show="layoutDir"
-                    class="yiu-blue-square-btn-3 mr-2"
-                    @click="onRefresh">
-              <div v-show="refreshLoading">
-                <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
-              </div>
-              <div v-show="!refreshLoading">
-                <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
-              </div>
-            </button>
+            <n-popover trigger="hover" :style="{ width: '160px' }">
+              <template #trigger>
+                <button v-show="layoutDir"
+                        class="yiu-blue-square-btn-3 mr-2"
+                        @click="onRefresh">
+                  <div v-show="refreshLoading">
+                    <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+                  </div>
+                  <div v-show="!refreshLoading">
+                    <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+                  </div>
+                </button>
+              </template>
+              <span v-show="layoutDir">从本地刷新目录，可在日志中查看刷新。</span>
+            </n-popover>
             <!--查看隐藏文件-->
-            <button v-show="layoutDir && !showHideFile"
-                    class="yiu-blue-square-btn-3 mr-2"
-                    @click="onShowHideFile">
-              <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button v-show="layoutDir && !showHideFile"
+                        class="yiu-blue-square-btn-3 mr-2"
+                        @click="onShowHideFile">
+                  <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
+                </button>
+              </template>
+              <span v-show="layoutDir && !showHideFile">查看隐藏文件</span>
+            </n-popover>
             <!--不查看隐藏文件-->
-            <button v-show="layoutDir && showHideFile"
-                    class="yiu-blue-square-btn-3 mr-2"
-                    @click="onNotShowHideFile">
-              <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button v-show="layoutDir && showHideFile"
+                        class="yiu-blue-square-btn-3 mr-2"
+                        @click="onNotShowHideFile">
+                  <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
+                </button>
+              </template>
+              <span v-show="layoutDir && showHideFile">不查看隐藏文件</span>
+            </n-popover>
             <!--图标控制按钮-->
-            <button class="yiu-blue-square-btn-3 mr-2" @click="showIcon=!showIcon">
-              <div v-show="showIcon">
-                <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
-              </div>
-              <div v-show="!showIcon">
-                <span class="iconify block" data-icon="mdi:lightbulb-outline" data-inline="false"></span>
-              </div>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button class="yiu-blue-square-btn-3 mr-2" @click="showIcon=!showIcon">
+                  <div v-show="showIcon">
+                    <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
+                  </div>
+                  <div v-show="!showIcon">
+                    <span class="iconify block" data-icon="mdi:lightbulb-outline" data-inline="false"></span>
+                  </div>
+                </button>
+              </template>
+              <span v-show="showIcon">隐藏图标</span>
+              <span v-show="!showIcon">展示图标</span>
+            </n-popover>
             <!--数字控制按钮-->
-            <button class="yiu-blue-square-btn-3 mr-2" @click="showNumber=!showNumber">
-              <div v-show="showNumber">
-                <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
-              </div>
-              <div v-show="!showNumber">
-                <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
-              </div>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button class="yiu-blue-square-btn-3 mr-2" @click="showNumber=!showNumber">
+                  <div v-show="showNumber">
+                    <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+                  </div>
+                  <div v-show="!showNumber">
+                    <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
+                  </div>
+                </button>
+              </template>
+              <span v-show="showNumber">隐藏序号</span>
+              <span v-show="!showNumber">展示序号</span>
+            </n-popover>
             <!--编辑目录按钮-->
-            <button v-show="!layoutDir"
-                    class="yiu-blue-square-btn-3"
-                    @click="onLayOutDir">
-              <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button v-show="!layoutDir"
+                        class="yiu-blue-square-btn-3"
+                        @click="onLayOutDir">
+                  <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
+                </button>
+              </template>
+              <span v-show="!layoutDir">编辑目录</span>
+            </n-popover>
             <!--取消编辑目录按钮-->
-            <button v-show="layoutDir"
-                    class="yiu-blue-square-btn-3"
-                    @click="onLayOutDirCancel">
-              <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
-            </button>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <button v-show="layoutDir"
+                        class="yiu-blue-square-btn-3"
+                        @click="onLayOutDirCancel">
+                  <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
+                </button>
+              </template>
+              <span v-show="layoutDir">编辑完成</span>
+            </n-popover>
           </div>
         </div>
         <!--空数据栏-->
@@ -112,15 +149,25 @@
                 </div>
                 <!--定位按钮-->
                 <div class="mr-2">
-                  <button class="yiu-blue-square-btn-1" @click.stop="onPosition(slotProps.node.data.id)">
-                    <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
-                  </button>
+                  <n-popover trigger="hover">
+                    <template #trigger>
+                      <button class="yiu-blue-square-btn-1" @click.stop="onPosition(slotProps.node.data.id)">
+                        <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
+                      </button>
+                    </template>
+                    <span>在文件管理器中打开</span>
+                  </n-popover>
                 </div>
                 <!--删除按钮-->
                 <div>
-                  <button class="yiu-blue-square-btn-1" @click.stop="onDelete(slotProps.node.data)">
-                    <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
-                  </button>
+                  <n-popover trigger="hover">
+                    <template #trigger>
+                      <button class="yiu-blue-square-btn-1" @click.stop="onDelete(slotProps.node.data)">
+                        <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
+                      </button>
+                    </template>
+                    <span>删除</span>
+                  </n-popover>
                 </div>
               </div>
             </template>
@@ -190,7 +237,7 @@
   import SERVER_API from '/@/api'
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
-  import { NButton, NCard, NModal, NSpin, useNotification } from 'naive-ui'
+  import { NButton, NCard, NModal, NPopover, NSpin, useNotification } from 'naive-ui'
   import { useLogStore } from '/@/store/modules/log'
   import { NoteReadResult } from '/@/vo/enum/note-read-result'
   import { nanoid } from 'nanoid'
@@ -204,6 +251,7 @@
       NCard,
       NButton,
       NSpin,
+      NPopover,
     },
     props: {
       layout: propTypes.object.isRequired,
