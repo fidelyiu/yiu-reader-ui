@@ -28,7 +28,7 @@
               }}</span>{{ node.data.name.substr(node.data.name.indexOf(searchStr) + searchStr.length) }}</span>
         <span v-else>{{ node.data.name }}</span>
         </span>
-        <span v-if="!node.data.defStatus" class="text-gray-400">[未排序]</span>
+        <span v-if="!node.data.sortNum" class="text-gray-400">[未排序]</span>
       </div>
       <div class="flex-none">
         <slot :node="node"></slot>

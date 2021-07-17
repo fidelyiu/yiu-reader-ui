@@ -9,9 +9,24 @@
             <button v-show="!layoutDir" class="yiu-blue-square-btn-3 mr-2">
               <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
             </button>
-            <!--刷新目录按钮-->
+            <!--定位所有无效note-->
             <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+              <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
+            </button>
+            <!--清除所有无效note-->
+            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
+            </button>
+            <!--刷新目录按钮-->
+            <button v-show="layoutDir"
+                    class="yiu-blue-square-btn-3 mr-2"
+                    @click="onRefresh">
+              <div v-show="refreshLoading">
+                <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
+              </div>
+              <div v-show="!refreshLoading">
+                <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+              </div>
             </button>
             <!--查看隐藏文件-->
             <button v-show="layoutDir && !showHideFile"
@@ -97,7 +112,7 @@
                 </div>
                 <!--定位按钮-->
                 <div class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
+                  <button class="yiu-blue-square-btn-1" @click.stop="onPosition(slotProps.node.data.id)">
                     <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
                   </button>
                 </div>
@@ -176,6 +191,9 @@
   import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal, NSpin, useNotification } from 'naive-ui'
+  import { useLogStore } from '/@/store/modules/log'
+  import { NoteReadResult } from '/@/vo/enum/note-read-result'
+  import { nanoid } from 'nanoid'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -191,6 +209,7 @@
       layout: propTypes.object.isRequired,
     },
     setup() {
+      const logStore = useLogStore()
       const notification = useNotification()
       const treeData = ref([])
       const searchKey = ref('')
@@ -198,12 +217,17 @@
       const showIcon = ref(false)
       const treeLoading = ref(false)
       const loadNote = () => {
+        if (treeLoading.value) return
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: { show: !showHideFile.value },
+          data: {
+            show: !showHideFile.value,
+            badFileEnd: true,
+          },
           success: (res) => {
             treeData.value = res.data.result
+            refreshLoading.value = false
           },
         })
       }
@@ -255,6 +279,49 @@
         layoutDir.value = false
       }
 
+      const onPosition = (id) => {
+        yiuHttp({
+          api: SERVER_API.noteApi.positionFile,
+          pathData: { id },
+          tips: { anyObj: notification, error: { show: true } },
+        })
+      }
+
+      const refreshLoading = ref(false)
+      const onRefresh = () => {
+        const refreshList: any = {}
+        const ws = new WebSocket(`ws://localhost:8080${SERVER_API.noteApi.refresh.url}?path=`)
+        if (!ws) return
+        refreshLoading.value = true
+        //接收到消息时触发
+        ws.onmessage = (evt) => {
+          let data
+          try {
+            data = JSON.parse(evt.data)
+          } catch (e) {
+          }
+          switch (data.result) {
+            case NoteReadResult.Start:
+              refreshList[data.path] = nanoid()
+              logStore.pushLog(refreshList[data.path], 'warning', '正在检查：' + data.path || '-')
+              break
+            case NoteReadResult.Import:
+              logStore.changeById(refreshList[data.path], 'info', '检查完成：' + data.path || '-')
+              break
+            case NoteReadResult.NotImport:
+              logStore.changeById(refreshList[data.path], 'success', '导入完成：' + data.path || '-')
+              break
+            case NoteReadResult.Fail:
+              logStore.changeById(refreshList[data.path], 'error', '导入失败：' + data.path || '-')
+              break
+          }
+        }
+        //连接关闭时触发
+        ws.onclose = () => {
+          loadNote()
+        }
+      }
+
       loadNote()
       return {
         searchKey,
@@ -276,6 +343,9 @@
         layoutDir,
         onLayOutDir,
         onLayOutDirCancel,
+        refreshLoading,
+        onRefresh,
+        onPosition,
       }
     },
   })
