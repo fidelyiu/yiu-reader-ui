@@ -321,6 +321,7 @@
       const treeLoading = ref(false)
       const loadNote = () => {
         if (treeLoading.value) return
+        treeData.value = []
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
