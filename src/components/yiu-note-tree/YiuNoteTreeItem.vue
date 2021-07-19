@@ -37,7 +37,7 @@
     <transition name="yiu-fade-in">
       <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[16px]">
         <YiuTreeItem v-for="(item, index) in node.child"
-                     :key="index"
+                     :key="item.id"
                      :node="item"
                      :number-title="numberTitle+getNumberTitle(index)"
                      class="border-l border-blue-200"

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full overflow-auto">
     <YiuTreeItem v-for="(item, index) in data"
-                 :key="index"
+                 :key="item.id"
                  :node="item"
                  :number-title="getNumberTitle(index)">
       <template #default="slotProps">

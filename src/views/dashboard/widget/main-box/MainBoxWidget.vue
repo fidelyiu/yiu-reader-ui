@@ -49,30 +49,32 @@
                 <span>从本地刷新目录，可在日志中查看刷新。</span>
               </template>
             </main-box-btn>
-            <!--查看隐藏文件-->
-            <main-box-btn v-show="layoutDir && !showHideFile"
+            <!--设置隐藏文件-->
+            <main-box-btn v-show="layoutDir && !settingHideFile"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
                           :show-text="showBtnText"
-                          @btnClick="onShowHideFile">
+                          @btnClick="onSettingHideFile">
               <template #icon>
-                <span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>
+                <span class="iconify block" data-icon="mdi:eye-settings-outline" data-inline="false"></span>
+                <!--<span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>-->
               </template>
               <template #text>
-                <span>查看隐藏文件</span>
+                <span>设置文件隐藏属性</span>
               </template>
             </main-box-btn>
-            <!--不查看隐藏文件-->
-            <main-box-btn v-show="layoutDir && showHideFile"
+            <!--设置隐藏文件完成-->
+            <main-box-btn v-show="layoutDir && settingHideFile"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
                           :show-text="showBtnText"
-                          @btnClick="onNotShowHideFile">
+                          @btnClick="onSettingHideFileOk">
               <template #icon>
-                <span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>
+                <span class="iconify block" data-icon="mdi:eye-check-outline" data-inline="false"></span>
+                <!--<span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>-->
               </template>
               <template #text>
-                <span>不查看隐藏文件</span>
+                <span>设置文件隐藏完成</span>
               </template>
             </main-box-btn>
             <!--图标控制按钮-->
@@ -162,7 +164,7 @@
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏按钮-->
-                <main-box-btn v-if="layoutDir"
+                <main-box-btn v-if="layoutDir && settingHideFile"
                               class="mr-2"
                               :show-text="showBtnText"
                               :loading="changeFileShowLoading"
@@ -178,6 +180,36 @@
                   <template #text>
                     <span v-show="slotProps.node.data.show">隐藏文件</span>
                     <span v-show="!slotProps.node.data.show">展示文件</span>
+                  </template>
+                </main-box-btn>
+                <!--上移按钮-->
+                <main-box-btn v-if="layoutDir && !settingHideFile"
+                              class="mr-2"
+                              :show-text="showBtnText"
+                              :loading="changeSortLoading"
+                              @btnClick="changeSort(slotProps.node.data, 'up')">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>上移</span>
+                  </template>
+                </main-box-btn>
+                <!--下移按钮-->
+                <main-box-btn v-if="layoutDir && !settingHideFile"
+                              class="mr-2"
+                              :show-text="showBtnText"
+                              :loading="changeSortLoading"
+                              @btnClick="changeSort(slotProps.node.data, 'down')">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>下移</span>
                   </template>
                 </main-box-btn>
                 <!--增加按钮-->
@@ -317,7 +349,7 @@
       const treeData = ref([])
       const searchKey = ref('')
       const showNumber = ref(false)
-      const showIcon = ref(false)
+      const showIcon = ref(true)
       const treeLoading = ref(false)
       const loadNote = () => {
         if (treeLoading.value) return
@@ -326,7 +358,7 @@
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
           data: {
-            show: !showHideFile.value,
+            show: !settingHideFile.value,
             badFileEnd: true,
           },
           success: (res) => {
@@ -363,15 +395,15 @@
 
       // 是否正在编排目录
       const layoutDir = ref(false)
-      const showHideFile = ref(false)
-      const onShowHideFile = () => {
-        if (showHideFile.value) return
-        showHideFile.value = true
+      const settingHideFile = ref(false)
+      const onSettingHideFile = () => {
+        if (settingHideFile.value) return
+        settingHideFile.value = true
         loadNote()
       }
-      const onNotShowHideFile = () => {
-        if (!showHideFile.value) return
-        showHideFile.value = false
+      const onSettingHideFileOk = () => {
+        if (!settingHideFile.value) return
+        settingHideFile.value = false
         loadNote()
       }
       // 开始编排目录
@@ -381,7 +413,7 @@
       // 取消编排目录
       const onLayOutDirCancel = () => {
         layoutDir.value = false
-        showHideFile.value = false
+        settingHideFile.value = false
         loadNote()
       }
 
@@ -431,7 +463,6 @@
       const changeFileShowLoading = ref(false)
       const changeFileShow = (id) => {
         if (changeFileShowLoading.value) return
-        console.log(id)
         // 先修改远程数据
         yiuHttp({
           api: SERVER_API.noteApi.changeShow,
@@ -456,6 +487,7 @@
             if (_noteTree[i].data.id === id) {
               hasFind = true
               _noteTree[i].data.show = !_noteTree[i].data.show
+              _noteTree[i].data.sortNum = 0
               break
             }
             if (_noteTree[i].child && _noteTree[i].child.length) {
@@ -468,6 +500,55 @@
       }
 
       const showBtnText = ref(true)
+      const changeSortLoading = ref(false)
+
+      const changeSort = (data, changeType) => {
+        yiuHttp({
+          api: changeType === 'up' ? SERVER_API.noteApi.up : SERVER_API.noteApi.down,
+          loading: { flag: changeSortLoading },
+          pathData: { id: data.id },
+          tips: { anyObj: notification, error: { show: true } },
+          success: () => {
+            if (!data.parentId) {
+              loadNote()
+            } else {
+              loadNoteByParent(data.parentId, {
+                show: !settingHideFile.value,
+                badFileEnd: true,
+              })
+            }
+          },
+        })
+      }
+
+      const loadNoteByParent = (id, searchDto) => {
+        if (!searchDto) searchDto = {}
+        searchDto.parentId = id
+        if (treeLoading.value) return
+        yiuHttp({
+          api: SERVER_API.noteApi.searchTree,
+          loading: { flag: treeLoading },
+          data: searchDto,
+          success: (res) => {
+            treeData.value = _loadNoteByParent(treeData.value, id, res.data.result)
+          },
+        })
+      }
+
+      const _loadNoteByParent = (data, id, child) => {
+        if (data && data.length) {
+          data.forEach(item => {
+            if (item.data && item.data.id === id) {
+              item.child = child
+            } else {
+              if (item.child && item.child.length) {
+                item.child = _loadNoteByParent(item.child, id, child)
+              }
+            }
+          })
+        }
+        return data
+      }
 
       loadNote()
       return {
@@ -484,9 +565,9 @@
         onDelete,
         onDeleteCancel,
         onDeleteOk,
-        showHideFile,
-        onShowHideFile,
-        onNotShowHideFile,
+        settingHideFile,
+        onSettingHideFile,
+        onSettingHideFileOk,
         layoutDir,
         onLayOutDir,
         onLayOutDirCancel,
@@ -496,6 +577,8 @@
         changeFileShow,
         changeFileShowLoading,
         showBtnText,
+        changeSortLoading,
+        changeSort,
       }
     },
   })

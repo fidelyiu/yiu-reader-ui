@@ -31,6 +31,14 @@ const noteApi = {
         url: entityUrl + '/change/show/{id}',
         method: MethodEnum.GET,
     },
+    up: <YiuAip>{
+        url: entityUrl + '/up/{id}',
+        method: MethodEnum.PUT,
+    },
+    down: <YiuAip>{
+        url: entityUrl + '/down/{id}',
+        method: MethodEnum.PUT,
+    },
 }
 
 export default noteApi
