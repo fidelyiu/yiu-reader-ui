@@ -18,6 +18,12 @@ export const useMainStore = defineStore({
                 path: '',
             },
             currentPath: '',
+            // 是否初始化以下值
+            initBool: false,
+            mainBoxShowText: false,
+            mainBoxShowIcon: false,
+            mainBoxShowNum: false,
+            sidebarStatus: false,
         }
     },
     getters: {
@@ -29,6 +35,10 @@ export const useMainStore = defineStore({
                 return state.currentWorkspace.path || '-'
             }
         },
+        getMainBoxShowText(state) {return state.mainBoxShowText},
+        getMainBoxShowIcon(state) {return state.mainBoxShowIcon},
+        getMainBoxShowNum(state) {return state.mainBoxShowNum},
+        getSidebarStatus(state) {return state.sidebarStatus},
     },
     actions: {
         setCurrentWorkspace(workspace: WorkspaceEntity) {this.currentWorkspace = workspace as any},
@@ -45,5 +55,74 @@ export const useMainStore = defineStore({
             }
         },
         setCurrentPath(path: string) { this.currentPath = path },
+        async initBoolValue() {
+            if (this.initBool) return
+            try {
+                const result = await Promise.all(
+                    [
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getMainBoxShowText,
+                        }),
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getMainBoxShowIcon,
+                        }),
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getMainBoxShowNum,
+                        }),
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getSidebarStatus,
+                        }),
+                    ],
+                )
+                if (result && result.length) {
+                    this.mainBoxShowText = result[0].data.result
+                    this.mainBoxShowIcon = result[1].data.result
+                    this.mainBoxShowNum = result[2].data.result
+                    this.sidebarStatus = result[3].data.result
+                }
+                this.initBool = true
+            } catch (e) {
+            }
+        },
+        async setMainBoxShowText(showText: boolean) {
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setMainBoxShowText,
+                    data: { showText },
+                })
+                this.mainBoxShowText = showText
+            } catch (e) {
+            }
+        },
+        async setMainBoxShowIcon(showIcon: boolean) {
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setMainBoxShowIcon,
+                    data: { showIcon },
+                })
+                this.mainBoxShowIcon = showIcon
+            } catch (e) {
+            }
+        },
+        async setMainBoxShowNum(showNum: boolean) {
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setMainBoxShowNum,
+                    data: { showNum },
+                })
+                this.mainBoxShowNum = showNum
+            } catch (e) {
+            }
+        },
+        async setSidebarStatus(sidebarStatus: boolean) {
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setSidebarStatus,
+                    data: { sidebarStatus },
+                })
+                this.sidebarStatus = sidebarStatus
+            } catch (e) {
+            }
+        },
     },
 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="transition-all ease-in-out h-full flex flex-col" :class="{'w-67':showMenu, 'w-12':!showMenu}">
+  <div class="transition-all ease-in-out h-full flex flex-col" :class="{'w-67':show, 'w-12':!show}">
     <!--头部按钮-->
     <div class="h-[64px] px-[16px] flex-none flex items-center">
       <div class="w-full fa-center">
@@ -7,18 +7,18 @@
                    :show-arrow="false"
                    placement="bottom-start">
           <template #trigger>
-            <button class="header-btn" :class="{'px-4': showMenu}">
-              <span v-show="showMenu" class="w-full fa-center block">
+            <button class="header-btn" :class="{'px-4': show}">
+              <span v-show="show" class="w-full fa-center block">
                 <span class="truncate">工作空间</span>
                 <span class="iconify flex-none text-lg" data-icon="mdi:menu-down" data-inline="false"></span>
               </span>
-              <div v-show="!showMenu" class="fa-center">
+              <div v-show="!show" class="fa-center">
                 <span class="iconify text-sm" data-icon="mdi:cog-outline" data-inline="false"></span>
               </div>
             </button>
           </template>
           <div>
-            <div>倒序{{ showMenu }}</div>
+            <div>倒序{{ show }}</div>
             <div>设置</div>
             <div>关于</div>
           </div>
@@ -29,14 +29,14 @@
     <div class="flex-grow h-0 overflow-y-auto">
       <n-spin :show="searchLoading" size="small">
         <template v-for="item in workspaceList" :key="item.id">
-          <MenuItem :active="isActiveItem(item)" :show-dot="showMenu" :workspace="item"></MenuItem>
+          <MenuItem :active="isActiveItem(item)" :show-dot="show" :workspace="item"></MenuItem>
         </template>
       </n-spin>
     </div>
     <!--底部的折叠按钮-->
     <button class="h-[44px] flex-none hover:bg-blue-50 active:bg-blue-100 focus:outline-none" @click="changeShowMenu">
       <span class="fa-center transition-all transform ease-in-out"
-            :class="{'rotate-180': showMenu}">
+            :class="{'rotate-180': show}">
         <span class="iconify text-xl"
               data-icon="mdi:chevron-right"
               data-inline="false"></span>
@@ -55,6 +55,7 @@
   import { SortType } from '/@/vo/enum/sort-type'
   import { useMainStore } from '/@/store/modules/main'
   import { ObjStatus } from '/@/vo/enum/obj-status'
+  import { propTypes } from '/@/utils/propTypes'
 
   export default defineComponent({
     name: 'Menu',
@@ -63,12 +64,13 @@
       NSpin,
       MenuItem,
     },
+    props: {
+      show: propTypes.bool.def(true),
+    },
     emits: ['changeShow'],
     setup(_prop, { emit }) {
       const mainStore = useMainStore()
-      const showMenu = ref(true)
       const changeShowMenu = () => {
-        showMenu.value = !showMenu.value
         emit('changeShow')
       }
       const workspaceList = ref<Array<WorkspaceEntity>>([])
@@ -98,7 +100,6 @@
         workspaceList,
         searchLoading,
         searchSort,
-        showMenu,
         changeShowMenu,
         isActiveItem,
       }

@@ -9,18 +9,18 @@
             <main-box-btn class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
                           show-text
-                          @btnClick="showBtnText=!showBtnText">
+                          @btnClick="changeShowBtnText">
               <template #icon>
-                <div v-show="!showBtnText">
+                <div v-show="!mainStore.mainBoxShowText">
                   <span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>
                 </div>
-                <div v-show="showBtnText">
+                <div v-show="mainStore.mainBoxShowText">
                   <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
                 </div>
               </template>
               <template #text>
-                <span v-show="showBtnText">隐藏按钮提示</span>
-                <span v-show="!showBtnText">查看按钮提示</span>
+                <span v-show="mainStore.mainBoxShowText">隐藏按钮提示</span>
+                <span v-show="!mainStore.mainBoxShowText">查看按钮提示</span>
               </template>
             </main-box-btn>
             <!--根目录添加按钮-->
@@ -39,7 +39,7 @@
             <main-box-btn v-show="layoutDir"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
+                          :show-text="mainStore.mainBoxShowText"
                           :loading="refreshLoading"
                           @btnClick="onRefresh">
               <template #icon>
@@ -53,7 +53,7 @@
             <main-box-btn v-show="layoutDir && !settingHideFile"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
+                          :show-text="mainStore.mainBoxShowText"
                           @btnClick="onSettingHideFile">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:eye-settings-outline" data-inline="false"></span>
@@ -67,7 +67,7 @@
             <main-box-btn v-show="layoutDir && settingHideFile"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
+                          :show-text="mainStore.mainBoxShowText"
                           @btnClick="onSettingHideFileOk">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:eye-check-outline" data-inline="false"></span>
@@ -80,43 +80,43 @@
             <!--图标控制按钮-->
             <main-box-btn class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
-                          @btnClick="showIcon=!showIcon">
+                          :show-text="mainStore.mainBoxShowText"
+                          @btnClick="changeShowBtIcon">
               <template #icon>
-                <div v-show="showIcon">
+                <div v-show="mainStore.mainBoxShowIcon">
                   <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
                 </div>
-                <div v-show="!showIcon">
+                <div v-show="!mainStore.mainBoxShowIcon">
                   <span class="iconify block" data-icon="mdi:lightbulb-outline" data-inline="false"></span>
                 </div>
               </template>
               <template #text>
-                <span v-show="showIcon">隐藏图标</span>
-                <span v-show="!showIcon">查看图标</span>
+                <span v-show="mainStore.mainBoxShowIcon">隐藏图标</span>
+                <span v-show="!mainStore.mainBoxShowIcon">查看图标</span>
               </template>
             </main-box-btn>
             <!--数字控制按钮-->
             <main-box-btn class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
-                          @btnClick="showNumber=!showNumber">
+                          :show-text="mainStore.mainBoxShowText"
+                          @btnClick="changeShowBtNum">
               <template #icon>
-                <div v-show="showNumber">
+                <div v-show="mainStore.mainBoxShowNum">
                   <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
                 </div>
-                <div v-show="!showNumber">
+                <div v-show="!mainStore.mainBoxShowNum">
                   <span class="iconify block" data-icon="mdi:numeric" data-inline="false"></span>
                 </div>
               </template>
               <template #text>
-                <span v-show="showIcon">隐藏序号</span>
-                <span v-show="!showIcon">查看序号</span>
+                <span v-show="mainStore.mainBoxShowNum">隐藏序号</span>
+                <span v-show="!mainStore.mainBoxShowNum">查看序号</span>
               </template>
             </main-box-btn>
             <!--编辑目录按钮-->
             <main-box-btn v-show="!layoutDir"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
+                          :show-text="mainStore.mainBoxShowText"
                           @btnClick="onLayOutDir">
               <template #icon>
                 <div>
@@ -130,7 +130,7 @@
             <!--取消编辑目录按钮-->
             <main-box-btn v-show="layoutDir"
                           btn-class="yiu-blue-square-btn-3"
-                          :show-text="showBtnText"
+                          :show-text="mainStore.mainBoxShowText"
                           @btnClick="onLayOutDirCancel">
               <template #icon>
                 <div>
@@ -158,15 +158,15 @@
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
           <YiuNoteTree :data="treeData"
-                       :show-number="showNumber"
-                       :show-icon="showIcon"
+                       :show-number="mainStore.mainBoxShowNum"
+                       :show-icon="mainStore.mainBoxShowIcon"
                        :search-str="searchKey">
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏按钮-->
                 <main-box-btn v-if="layoutDir && settingHideFile"
                               class="mr-2"
-                              :show-text="showBtnText"
+                              :show-text="mainStore.mainBoxShowText"
                               :loading="changeFileShowLoading"
                               @btnClick="changeFileShow(slotProps.node.data.id)">
                   <template #icon>
@@ -185,7 +185,7 @@
                 <!--上移按钮-->
                 <main-box-btn v-if="layoutDir && !settingHideFile"
                               class="mr-2"
-                              :show-text="showBtnText"
+                              :show-text="mainStore.mainBoxShowText"
                               :loading="changeSortLoading"
                               @btnClick="changeSort(slotProps.node.data, 'up')">
                   <template #icon>
@@ -200,7 +200,7 @@
                 <!--下移按钮-->
                 <main-box-btn v-if="layoutDir && !settingHideFile"
                               class="mr-2"
-                              :show-text="showBtnText"
+                              :show-text="mainStore.mainBoxShowText"
                               :loading="changeSortLoading"
                               @btnClick="changeSort(slotProps.node.data, 'down')">
                   <template #icon>
@@ -232,7 +232,7 @@
                 </div>
                 <!--定位按钮-->
                 <main-box-btn class="mr-2"
-                              :show-text="showBtnText"
+                              :show-text="mainStore.mainBoxShowText"
                               @btnClick="onPosition(slotProps.node.data.id)">
                   <template #icon>
                     <div>
@@ -244,7 +244,7 @@
                   </template>
                 </main-box-btn>
                 <!--删除按钮-->
-                <main-box-btn :show-text="showBtnText"
+                <main-box-btn :show-text="mainStore.mainBoxShowText"
                               @btnClick="onDelete(slotProps.node.data)">
                   <template #icon>
                     <div>
@@ -328,6 +328,7 @@
   import { NoteReadResult } from '/@/vo/enum/note-read-result'
   import { nanoid } from 'nanoid'
   import MainBoxBtn from '/@/views/dashboard/widget/main-box/MainBoxBtn.vue'
+  import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -345,11 +346,10 @@
     },
     setup() {
       const logStore = useLogStore()
+      const mainStore = useMainStore()
       const notification = useNotification()
       const treeData = ref([])
       const searchKey = ref('')
-      const showNumber = ref(false)
-      const showIcon = ref(true)
       const treeLoading = ref(false)
       const loadNote = () => {
         if (treeLoading.value) return
@@ -499,7 +499,6 @@
         return _changeTreeItemShow(noteTree)
       }
 
-      const showBtnText = ref(true)
       const changeSortLoading = ref(false)
 
       const changeSort = (data, changeType) => {
@@ -550,14 +549,25 @@
         return data
       }
 
+      const changeShowBtnText = () => {
+        mainStore.setMainBoxShowText(!mainStore.mainBoxShowText)
+      }
+
+      const changeShowBtIcon = () => {
+        mainStore.setMainBoxShowIcon(!mainStore.mainBoxShowIcon)
+      }
+
+      const changeShowBtNum = () => {
+        mainStore.setMainBoxShowNum(!mainStore.mainBoxShowNum)
+      }
+
       loadNote()
       return {
+        mainStore,
         searchKey,
         treeData,
         treeLoading,
         loadNote,
-        showNumber,
-        showIcon,
         tempNodeData,
         delStr,
         deleteModal,
@@ -576,9 +586,11 @@
         onPosition,
         changeFileShow,
         changeFileShowLoading,
-        showBtnText,
         changeSortLoading,
         changeSort,
+        changeShowBtnText,
+        changeShowBtIcon,
+        changeShowBtNum,
       }
     },
   })

@@ -1,7 +1,8 @@
 <template>
   <div class="h-full flex">
     <Menu class="border-r"
-          @changeShow="getWidgetWrapperWidth"></Menu>
+          :show="mainStore.getSidebarStatus"
+          @changeShow="changeMenu"></Menu>
     <div class="w-full flex flex-col">
       <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px]">
         <div class="fa-center text-2xl">{{ mainStore.currentWorkspace.name || '-' }}</div>
@@ -99,6 +100,12 @@
       const showSetting = ref(false)
       provide('showSetting', showSetting)
       const mainStore = useMainStore()
+      mainStore.initBoolValue()
+      const changeMenu = () => {
+        mainStore.setSidebarStatus(!mainStore.getSidebarStatus)
+        getWidgetWrapperWidth()
+      }
+
       const widgetStore = useWidgetStore()
       const customizeMode = ref(false)
       const layoutLoading = ref(false)
@@ -160,11 +167,11 @@
       return {
         showSetting,
         mainStore,
+        changeMenu,
         customizeMode,
         layoutList,
         layoutLoading,
         getLayoutList,
-        getWidgetWrapperWidth,
         onChangeCustomizeMode,
       }
     },
