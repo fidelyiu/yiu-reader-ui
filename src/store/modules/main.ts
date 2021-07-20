@@ -85,42 +85,42 @@ export const useMainStore = defineStore({
             }
         },
         async setMainBoxShowText(showText: boolean) {
+            this.mainBoxShowText = showText
             try {
                 await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.setMainBoxShowText,
                     data: { showText },
                 })
-                this.mainBoxShowText = showText
             } catch (e) {
             }
         },
         async setMainBoxShowIcon(showIcon: boolean) {
+            this.mainBoxShowIcon = showIcon
             try {
                 await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.setMainBoxShowIcon,
                     data: { showIcon },
                 })
-                this.mainBoxShowIcon = showIcon
             } catch (e) {
             }
         },
         async setMainBoxShowNum(showNum: boolean) {
+            this.mainBoxShowNum = showNum
             try {
                 await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.setMainBoxShowNum,
                     data: { showNum },
                 })
-                this.mainBoxShowNum = showNum
             } catch (e) {
             }
         },
         async setSidebarStatus(sidebarStatus: boolean) {
+            this.sidebarStatus = sidebarStatus
             try {
                 await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.setSidebarStatus,
                     data: { sidebarStatus },
                 })
-                this.sidebarStatus = sidebarStatus
             } catch (e) {
             }
         },

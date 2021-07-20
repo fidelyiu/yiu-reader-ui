@@ -163,6 +163,21 @@
                        :search-str="searchKey">
             <template #default="slotProps">
               <div class="flex">
+                <!--异常提示按钮-->
+                <main-box-btn v-if="statusIsInvalid(slotProps.node.data.status)"
+                              class="mr-2"
+                              show-text>
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectErrPath">
+                      {{ slotProps.node.data.absPath || '-' }}
+                    </div>
+                  </template>
+                </main-box-btn>
                 <!--隐藏按钮-->
                 <main-box-btn v-if="layoutDir && settingHideFile"
                               class="mr-2"
@@ -329,6 +344,7 @@
   import { nanoid } from 'nanoid'
   import MainBoxBtn from '/@/views/dashboard/widget/main-box/MainBoxBtn.vue'
   import { useMainStore } from '/@/store/modules/main'
+  import { statusIsInvalid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -561,8 +577,19 @@
         mainStore.setMainBoxShowNum(!mainStore.mainBoxShowNum)
       }
 
+      const onSelectErrPath = (e) => {
+        if (!e.target) return
+        let selection = window.getSelection()
+        if (!selection) return
+        selection.removeAllRanges()
+        let range = new Range()
+        range.selectNodeContents(e.target)
+        selection.addRange(range)
+      }
+
       loadNote()
       return {
+        statusIsInvalid,
         mainStore,
         searchKey,
         treeData,
@@ -591,6 +618,7 @@
         changeShowBtnText,
         changeShowBtIcon,
         changeShowBtNum,
+        onSelectErrPath,
       }
     },
   })

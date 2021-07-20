@@ -1,9 +1,12 @@
 <template>
   <div class="w-full">
     <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click="onClick">
-      <div class="flex-none fa-center text-gray-500">
-        <span v-show="showNumber" class="italic font-normal mr-1">{{ numberTitle }}</span>
-        <span v-show="showIcon" class="mr-1">
+      <div v-show="showNumber" class="flex-none fa-center text-gray-500 mr-1">
+        <span class="italic font-normal"
+              :class="{'text-red-400': isInvalidFile}">{{ numberTitle }}</span>
+      </div>
+      <div v-show="showIcon" class="flex-none fa-center text-gray-500 mr-1">
+        <div v-if="!isInvalidFile">
           <div v-if="!node?.data?.isDir">
             <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
           </div>
@@ -17,16 +20,21 @@
               </div>
             </transition>
           </div>
-        </span>
+        </div>
+        <div v-else>
+          <div class="text-red-400">
+            <span class="iconify block text-xl" data-icon="mdi:content-save-alert-outline" data-inline="false"></span>
+          </div>
+        </div>
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
-        <span class="mr-2 font-semibold">
+        <span class="mr-2 font-semibold" :class="{'text-red-400': isInvalidFile}">
           <span v-if="node.data.name.indexOf(searchStr) > -1">{{
               node.data.name.substr(0, node.data.name.indexOf(searchStr))
             }}<span class="bg-yellow-200">{{
                 searchStr
               }}</span>{{ node.data.name.substr(node.data.name.indexOf(searchStr) + searchStr.length) }}</span>
-        <span v-else>{{ node.data.name }}</span>
+          <span v-else>{{ node.data.name }}</span>
         </span>
         <span v-if="!node.data.sortNum" class="text-gray-400">[未排序]</span>
       </div>
@@ -53,9 +61,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, inject, ref, watch } from 'vue'
+  import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { isString } from 'lodash'
+  import { statusIsInvalid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'YiuTreeItem',
@@ -102,6 +111,8 @@
         return (index + 1) + '.'
       }
 
+      const isInvalidFile = computed(() => statusIsInvalid(prop?.node?.data?.status))
+
       return {
         isOpen,
         searchStr,
@@ -110,6 +121,7 @@
         showIcon,
         onSearchSuccess,
         getNumberTitle,
+        isInvalidFile,
       }
     },
   })

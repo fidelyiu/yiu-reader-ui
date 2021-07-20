@@ -12,7 +12,7 @@
             </div>
           </button>
         </template>
-        <div>
+        <div class="break-all">
           <slot name="text"></slot>
         </div>
       </n-popover>
