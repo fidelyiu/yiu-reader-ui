@@ -163,21 +163,11 @@
                        :search-str="searchKey">
             <template #default="slotProps">
               <div class="flex">
-                <!--异常提示按钮-->
-                <main-box-btn v-if="statusIsInvalid(slotProps.node.data.status)"
-                              class="mr-2"
-                              show-text>
-                  <template #icon>
-                    <div>
-                      <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
-                    </div>
-                  </template>
-                  <template #text>
-                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectErrPath">
-                      {{ slotProps.node.data.absPath || '-' }}
-                    </div>
-                  </template>
-                </main-box-btn>
+                <!--隐藏提示-->
+                <div v-if="layoutDir && settingHideFile"
+                     class="mr-2 fa-center text-gray-400">
+                  <span v-if="!slotProps.node.data.show">[ 已隐藏 ]</span>
+                </div>
                 <!--隐藏按钮-->
                 <main-box-btn v-if="layoutDir && settingHideFile"
                               class="mr-2"
@@ -197,6 +187,64 @@
                     <span v-show="!slotProps.node.data.show">展示文件</span>
                   </template>
                 </main-box-btn>
+                <!--异常提示按钮-->
+                <main-box-btn v-if="statusIsInvalid(slotProps.node.data.status)"
+                              class="mr-2"
+                              show-text>
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectErrPath">
+                      {{ slotProps.node.data.absPath || '-' }}
+                    </div>
+                  </template>
+                </main-box-btn>
+                <!--增加按钮-->
+                <div
+                    v-if="!settingHideFile && slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status)"
+                    class="mr-2">
+                  <button class="yiu-blue-square-btn-1">
+                    <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
+                  </button>
+                </div>
+                <!--在编辑器中打开-->
+                <main-box-btn
+                    v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
+                    class="mr-2"
+                    :show-text="mainStore.mainBoxShowText"
+                    @btnClick="onEditMarkDown(slotProps.node.data)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>在编辑器中打开</span>
+                  </template>
+                </main-box-btn>
+                <!--定位按钮-->
+                <main-box-btn v-if="!statusIsInvalid(slotProps.node.data.status)"
+                              class="mr-2"
+                              :show-text="mainStore.mainBoxShowText"
+                              @btnClick="onPosition(slotProps.node.data.id)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>在文件管理器中打开</span>
+                  </template>
+                </main-box-btn>
+                <!--修改按钮-->
+                <div class="mr-2">
+                  <button class="yiu-blue-square-btn-1">
+                    <span class="iconify block" data-icon="mdi:square-edit-outline" data-inline="false"></span>
+                  </button>
+                </div>
                 <!--上移按钮-->
                 <main-box-btn v-if="layoutDir && !settingHideFile"
                               class="mr-2"
@@ -225,46 +273,6 @@
                   </template>
                   <template #text>
                     <span>下移</span>
-                  </template>
-                </main-box-btn>
-                <!--增加按钮-->
-                <div v-if="slotProps.node.data.isDir" class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
-                    <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
-                  </button>
-                </div>
-                <!--在编辑器中打开-->
-                <main-box-btn
-                    v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
-                    class="mr-2"
-                    :show-text="mainStore.mainBoxShowText"
-                    @btnClick="onEditMarkDown(slotProps.node.data)">
-                  <template #icon>
-                    <div>
-                      <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
-                    </div>
-                  </template>
-                  <template #text>
-                    <span>在编辑器中打开</span>
-                  </template>
-                </main-box-btn>
-                <!--修改按钮-->
-                <div class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
-                    <span class="iconify block" data-icon="mdi:square-edit-outline" data-inline="false"></span>
-                  </button>
-                </div>
-                <!--定位按钮-->
-                <main-box-btn class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              @btnClick="onPosition(slotProps.node.data.id)">
-                  <template #icon>
-                    <div>
-                      <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
-                    </div>
-                  </template>
-                  <template #text>
-                    <span>在文件管理器中打开</span>
                   </template>
                 </main-box-btn>
                 <!--删除按钮-->
@@ -297,7 +305,15 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
-        <div class="mb-6">
+        <div v-if="statusIsInvalid(tempNodeData.status)" class="mb-6">
+          <div class="mb-3">
+            <span>将删除</span>
+            <span class="font-semibold mr-1">{{ tempNodeData.name }}</span>
+            <span v-if="tempNodeData.isDir" class="font-semibold">目录。</span>
+            <span v-else class="font-semibold">文件。</span>
+          </div>
+        </div>
+        <div v-else class="mb-6">
           <div class="mb-3">
             <span>将删除</span>
             <span class="font-semibold mr-1">{{ tempNodeData.name }}</span>
@@ -319,7 +335,8 @@
               type="text">
         </div>
         <div class="flex justify-end">
-          <n-button class="focus:outline-none"
+          <n-button v-if="!statusIsInvalid(tempNodeData.status)"
+                    class="focus:outline-none"
                     type="error"
                     :disabled="delStr!==tempNodeData.name"
                     :loading="deleteLoading"
@@ -331,7 +348,8 @@
                     type="primary"
                     :loading="deleteLoading"
                     @click="onDeleteOk(false)">
-            删除 YR数据
+            <span v-if="statusIsInvalid(tempNodeData.status)">删除</span>
+            <span v-else>删除 YR数据</span>
           </n-button>
           <n-button class="focus:outline-none" @click="onDeleteCancel">取消</n-button>
         </div>

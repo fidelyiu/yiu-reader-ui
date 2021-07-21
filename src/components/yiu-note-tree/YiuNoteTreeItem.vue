@@ -6,25 +6,45 @@
               :class="{'text-red-400': isInvalidFile}">{{ numberTitle }}</span>
       </div>
       <div v-show="showIcon" class="flex-none fa-center text-gray-500 mr-1">
-        <div v-if="!isInvalidFile">
-          <div v-if="!node?.data?.isDir">
-            <span class="iconify block text-xl" data-icon="mdi:language-markdown-outline" data-inline="false"></span>
+        <div v-if="!node?.data?.isDir">
+          <div v-if="isInvalidFile">
+              <span class="iconify block text-xl text-red-400"
+                    data-icon="mdi:language-markdown-outline"
+                    data-inline="false"></span>
           </div>
           <div v-else>
-            <transition name="yiu-fade-in">
-              <div v-if="isOpen">
-                <span class="iconify block text-xl" data-icon="mdi:folder-open-outline" data-inline="false"></span>
-              </div>
-              <div v-else>
-                <span class="iconify block text-xl" data-icon="mdi:folder-outline" data-inline="false"></span>
-              </div>
-            </transition>
+              <span class="iconify block text-xl"
+                    data-icon="mdi:language-markdown-outline"
+                    data-inline="false"></span>
           </div>
         </div>
         <div v-else>
-          <div class="text-red-400">
-            <span class="iconify block text-xl" data-icon="mdi:content-save-alert-outline" data-inline="false"></span>
-          </div>
+          <transition name="yiu-fade-in">
+            <div v-if="isOpen">
+              <div v-if="isInvalidFile">
+                  <span class="iconify block text-xl text-red-400"
+                        data-icon="mdi:folder-open-outline"
+                        data-inline="false"></span>
+              </div>
+              <div v-else>
+                  <span class="iconify block text-xl"
+                        data-icon="mdi:folder-open-outline"
+                        data-inline="false"></span>
+              </div>
+            </div>
+            <div v-else>
+              <div v-if="isInvalidFile">
+                  <span class="iconify block text-xl text-red-400"
+                        data-icon="mdi:folder-outline"
+                        data-inline="false"></span>
+              </div>
+              <div v-else>
+                  <span class="iconify block text-xl"
+                        data-icon="mdi:folder-outline"
+                        data-inline="false"></span>
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
@@ -94,8 +114,13 @@
         isOpen.value = true
       }
 
+      watch(() => prop.node, (v, c) => {
+        if (v.data.id !== c.data.id) isOpen.value = false
+      })
+
       const isOpen = ref(false)
       const onClick = (id: any) => {
+        if (isInvalidFile.value) return
         if (isString(id)) {
           emit('click', id)
         } else {
