@@ -32,7 +32,9 @@
           <div>dbManage</div>
         </template>
         <template v-else-if="tabKey==='editSoft'">
-          <div>editSoft</div>
+          <div class="h-full">
+            <EditSoftList></EditSoftList>
+          </div>
         </template>
         <template v-else-if="tabKey==='cacheImage'">
           <div>
@@ -60,10 +62,16 @@
   import { useMainStore } from '/@/store/modules/main'
   import { statusIsNotValid } from '/@/vo/enum/obj-status'
   import router from '/@/router'
+  import EditSoftList from '/@/views/system/edit-soft-list/EditSoftList.vue'
 
   export default defineComponent({
     name: 'System',
-    components: { SystemTab, WorkspaceList, NTooltip },
+    components: {
+      SystemTab,
+      EditSoftList,
+      WorkspaceList,
+      NTooltip,
+    },
     setup() {
       const mainStore = useMainStore()
       const tabKey = ref<systemTabKey>('workspace')

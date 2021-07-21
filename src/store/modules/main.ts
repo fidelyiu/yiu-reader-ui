@@ -24,6 +24,18 @@ export const useMainStore = defineStore({
             mainBoxShowIcon: false,
             mainBoxShowNum: false,
             sidebarStatus: false,
+            /**
+             * @type {EditSoftEntity}
+             */
+            currentEditSoft: {
+                id: '',
+                name: '',
+                img: '',
+                status: ObjStatus.NoValue,
+                path: '',
+            },
+            currentEditSoftPath: '',
+            initEditSoft: false,
         }
     },
     getters: {
@@ -47,14 +59,41 @@ export const useMainStore = defineStore({
                 const result = await yiuHttpWithPromise({
                     api: SERVER_API.mainApi.getCurrentWorkspace,
                 })
-                this.$reset()
                 if (result?.data?.result?.id) {
                     this.currentWorkspace = result.data.result
+                    this.currentPath = result.data.result.path
                 }
             } catch (e) {
             }
         },
         setCurrentPath(path: string) { this.currentPath = path },
+        async setCurrentEditSoft(editSoftId: string) {
+            try {
+                const result = await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setCurrentEditSoft,
+                    pathData: { id: editSoftId },
+                })
+                if (result?.data?.result?.id) {
+                    this.currentEditSoft = result.data.result
+                    this.currentEditSoftPath = result.data.result.path
+                }
+            } catch (e) {
+            }
+        },
+        async initCurrentEditSoft() {
+            if (this.initEditSoft) return
+            try {
+                const result = await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.getCurrentEditSoft,
+                })
+                if (result?.data?.result?.id) {
+                    this.currentEditSoft = result.data.result
+                    this.currentEditSoftPath = result.data.result.path
+                    this.initEditSoft = true
+                }
+            } catch (e) {
+            }
+        },
         async initBoolValue() {
             if (this.initBool) return
             try {

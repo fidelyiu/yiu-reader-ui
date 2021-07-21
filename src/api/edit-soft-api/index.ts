@@ -1,9 +1,9 @@
 import { MethodEnum, YiuAip } from 'yiu-axios/type'
 
-const entityUrl = '/workspace'
+const entityUrl = '/edit/soft'
 
 // noinspection DuplicatedCode
-const workspaceApi = {
+const editSoftApi = {
     search: <YiuAip>{
         url: entityUrl,
         method: MethodEnum.GET,
@@ -34,4 +34,4 @@ const workspaceApi = {
     },
 }
 
-export default workspaceApi
+export default editSoftApi

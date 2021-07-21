@@ -11,6 +11,14 @@ const mainApi = {
         url: entityUrl + '/current/workspace/{id}',
         method: MethodEnum.PUT,
     },
+    getCurrentEditSoft: <YiuAip>{
+        url: entityUrl + '/edit/soft',
+        method: MethodEnum.GET,
+    },
+    setCurrentEditSoft: <YiuAip>{
+        url: entityUrl + '/edit/soft/{id}',
+        method: MethodEnum.PUT,
+    },
     getMainBoxShowText: <YiuAip>{
         url: entityUrl + '/main/box/txt',
         method: MethodEnum.GET,

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :class="{'h-full': searchLoading||!workspaceList.length}">
+  <div class="relative" :class="{'h-full': searchLoading||!editSoftList.length}">
     <!--搜索框-->
     <div class="w-full flex px-4 pb-4 sticky top-0 bg-white">
       <div class="flex-grow mr-4">
@@ -9,13 +9,13 @@
         <!--有效按钮-->
         <button class="yiu-blue-square-btn-3 mr-4" :disabled="searchLoading" @click="onStatusChange">
           <div v-show="statusIsNoValue(searchStatus)">
-            <span class="iconify block" data-icon="mdi:text-box-outline" data-inline="false"></span>
+            <span class="iconify block" data-icon="mdi:puzzle-outline" data-inline="false"></span>
           </div>
           <div v-show="statusIsValid(searchStatus)">
-            <span class="iconify block" data-icon="mdi:text-box-check-outline" data-inline="false"></span>
+            <span class="iconify block" data-icon="mdi:puzzle-check-outline" data-inline="false"></span>
           </div>
           <div v-show="statusIsInvalid(searchStatus)">
-            <span class="iconify block" data-icon="mdi:text-box-remove-outline" data-inline="false"></span>
+            <span class="iconify block" data-icon="mdi:puzzle-remove-outline" data-inline="false"></span>
           </div>
         </button>
         <!--排序按钮-->
@@ -34,7 +34,7 @@
       </div>
     </div>
     <!--空数据栏-->
-    <div v-if="!searchLoading && !workspaceList.length"
+    <div v-if="!searchLoading && !editSoftList.length"
          class="absolute inset-0 mt-[32px] grid place-items-center">
       <div class="flex items-center text-gray-500">
         <span class="iconify text-2xl" data-icon="mdi:inbox" data-inline="false"></span>
@@ -47,20 +47,26 @@
     </div>
     <!--列表-->
     <template v-else>
-      <div v-for="item in workspaceList"
+      <div v-for="item in editSoftList"
            :key="item.id"
            class="py-3 px-4 hover:bg-blue-50 flex"
-           :class="{'bg-blue-50': workspaceItemIsCurrentWorkspace(item)}">
-        <template v-if="statusIsInvalid(item.status)">
-          <span class="iconify block flex-none text-4xl self-center mr-4 text-red-400"
-                data-icon="mdi:book-remove"
+           :class="{'bg-blue-50': editSoftItemIsCurrentWorkspace(item)}">
+        <!--头像-->
+        <template v-if="!item.img">
+          <span class="iconify block flex-none text-4xl self-center mr-4 text-blue-400"
+                data-icon="mdi:puzzle"
                 data-inline="false"></span>
         </template>
         <template v-else>
-          <span class="iconify block flex-none text-4xl self-center mr-4 text-blue-400"
-                data-icon="mdi:book"
-                data-inline="false"></span>
+          <template v-if="isDefImg(item.img)">
+            <img v-if="item.img==='typora'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/typora.png'">
+            <img v-if="item.img==='vs_code'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/vs_code.png'">
+            <img v-if="item.img==='sublime'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/sublime.png'">
+            <img v-if="item.img==='note'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/note.png'">
+          </template>
+          <img v-else class="w-[36px] h-[36px] mr-4" :src="item.img">
         </template>
+        <!--名字-->
         <div class="flex-grow w-0 mr-4">
           <div class="w-full truncate text-gray-700 font-medium"
                :class="{'!text-red-400': statusIsInvalid(item.status)}">
@@ -82,29 +88,29 @@
                   </button>
                 </div>
               </template>
-              <span>该工作空间路径已失效，请将丢失的文件夹还原，或者删除该工作空间!</span>
+              <span>该编辑软件的可执行文件不存在，请检查该文件路径!</span>
             </n-tooltip>
           </div>
-          <!--设置当前工作空间按钮-->
+          <!--设置当前编辑软件按钮-->
           <div v-if="statusIsNotInvalid(searchStatus)" class="self-center mr-4">
-            <!--已经是当前工作空间-->
-            <template v-if="workspaceItemIsCurrentWorkspace(item)">
+            <!--已经是当前编辑软件-->
+            <template v-if="editSoftItemIsCurrentWorkspace(item)">
               <button class="yiu-blue-square-btn-1">
                 <span class="iconify block" data-icon="mdi:star" data-inline="false"></span>
               </button>
             </template>
-            <!--可设置为当前工作空间-->
+            <!--可设置为当前编辑软件-->
             <template v-else-if="statusIsValid(item.status)">
-              <button class="yiu-blue-square-btn-1" @click="setCurrentWorkspaceById(item?.id)">
-                <div v-show="setCurrentWorkspaceLoading">
+              <button class="yiu-blue-square-btn-1" @click="setCurrentEditSoftById(item?.id)">
+                <div v-show="setCurrentEditSoftLoading">
                   <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
                 </div>
-                <div v-show="!setCurrentWorkspaceLoading">
+                <div v-show="!setCurrentEditSoftLoading">
                   <span class="iconify block" data-icon="mdi:star-outline" data-inline="false"></span>
                 </div>
               </button>
             </template>
-            <!--不能设置为当前工作空间-->
+            <!--不能设置为当前编辑软件-->
             <template v-else>
               <n-tooltip :style="{ maxWidth: '300px' }" placement="top">
                 <template #trigger>
@@ -114,7 +120,7 @@
                     </button>
                   </div>
                 </template>
-                <span>无效工作空间不能设置为当前工作空间!</span>
+                <span>无效编辑软件不能设置为当前编辑软件!</span>
               </n-tooltip>
             </template>
           </div>
@@ -163,7 +169,7 @@
                   <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
                 </button>
               </template>
-              <span class="max-w-55">是否删除该工作空间，此操作将删除该工作空间下所有YR记录?</span>
+              <span class="max-w-55">是否删除该编辑软件?</span>
             </n-popconfirm>
           </div>
         </div>
@@ -182,11 +188,11 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
-        <WorkspaceForm ref="addRef"
-                       type="add"
-                       @addStart="onAddStart"
-                       @addSuccess="onAddSuccess"
-                       @addError="onAddError"></WorkspaceForm>
+        <EditSoftForm ref="addRef"
+                      type="add"
+                      @addStart="onAddStart"
+                      @addSuccess="onAddSuccess"
+                      @addError="onAddError"></EditSoftForm>
         <div class="flex justify-end">
           <n-button class="focus:outline-none mr-4" @click="onAddCancel">取消</n-button>
           <n-button class="focus:outline-none"
@@ -211,14 +217,15 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
-        <WorkspaceForm ref="editRef"
-                       type="edit"
-                       @editLoadingStart="onEditLoadingStart"
-                       @editLoadingSuccess="onEditLoadingSuccess"
-                       @editLoadingError="onEditLoadingError"
-                       @editStart="onEditStart"
-                       @editSuccess="onEditSuccess"
-                       @editError="onEditError"></WorkspaceForm>
+        <div>Hello</div>
+        <EditSoftForm ref="editRef"
+                      type="edit"
+                      @editLoadingStart="onEditLoadingStart"
+                      @editLoadingSuccess="onEditLoadingSuccess"
+                      @editLoadingError="onEditLoadingError"
+                      @editStart="onEditStart"
+                      @editSuccess="onEditSuccess"
+                      @editError="onEditError"></EditSoftForm>
         <div class="flex justify-end">
           <n-button class="focus:outline-none mr-4" @click="onEditCancel">取消</n-button>
           <n-button class="focus:outline-none"
@@ -237,44 +244,35 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue'
   import { NButton, NCard, NModal, NPopconfirm, NSpin, NTooltip, useNotification } from 'naive-ui'
+  import SearchInput from '/@/components/SearchInput.vue'
+  import { useMainStore } from '/@/store/modules/main'
+  import { ObjStatus, statusIsInvalid, statusIsNotInvalid, statusIsNoValue, statusIsValid } from '/@/vo/enum/obj-status'
+  import { SortType, sortTypeIsAse, sortTypeIsDesc } from '/@/vo/enum/sort-type'
+  import { EditSoftEntity } from '/@/vo/edit-soft'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
-  import WorkspaceForm from '/@/views/system/workspace-list/WorkspaceForm.vue'
   import {
     useAddLoading,
     useAddModal,
     useAddRef,
     useOnAdd,
-    useOnAddCancel,
-    useOnAddError,
+    useOnAddCancel, useOnAddError,
     useOnAddOk,
-    useOnAddStart,
-    useOnAddSuccess,
+    useOnAddStart, useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
-  import { WorkspaceEntity } from '/@/vo/workspace'
-  import { ObjStatus, statusIsInvalid, statusIsNotInvalid, statusIsNoValue, statusIsValid } from '/@/vo/enum/obj-status'
   import {
     useEditDisableRef,
     useEditLoading,
     useEditModal,
     useEditRef,
-    useOnEdit,
-    useOnEditCancel,
-    useOnEditError,
-    useOnEditLoadingError,
-    useOnEditLoadingStart,
-    useOnEditLoadingSuccess,
-    useOnEditOk,
-    useOnEditStart,
-    useOnEditSuccess,
+    useOnEdit, useOnEditCancel, useOnEditError, useOnEditLoadingError,
+    useOnEditLoadingStart, useOnEditLoadingSuccess, useOnEditOk, useOnEditStart, useOnEditSuccess,
   } from '/@/hooks/entity/use-edit'
-  import { SortType, sortTypeIsAse, sortTypeIsDesc } from '/@/vo/enum/sort-type'
   import { YiuAip } from 'yiu-axios/type'
-  import { useMainStore } from '/@/store/modules/main'
-  import SearchInput from '/@/components/SearchInput.vue'
+  import EditSoftForm from '/@/views/system/edit-soft-list/EditSoftForm.vue'
 
   export default defineComponent({
-    name: 'WorkspaceList',
+    name: 'EditSoftList',
     components: {
       NTooltip,
       NModal,
@@ -282,16 +280,14 @@
       NButton,
       NSpin,
       NPopconfirm,
-      WorkspaceForm,
       SearchInput,
+      EditSoftForm,
     },
     setup() {
       const mainStore = useMainStore()
-      mainStore.refreshCurrentWorkspaceWithHttp().then()
+      mainStore.initCurrentEditSoft()
       const notification = useNotification()
-
       onMounted(() => onSearch())
-      // 工作空间加载状态
       const searchLoading = ref(false)
       const searchKey = ref('')
       const searchStatus = ref<ObjStatus>(ObjStatus.NoValue)
@@ -309,7 +305,6 @@
         }
         onSearch()
       }
-
       const searchSort = ref<SortType>(SortType.ASE)
       const onSortChange = () => {
         if (sortTypeIsAse(searchSort.value)) {
@@ -319,38 +314,28 @@
         }
         onSearch()
       }
-      // 工作空间列表
-      const workspaceList = ref<Array<WorkspaceEntity>>([])
+      const editSoftList = ref<Array<EditSoftEntity>>([])
 
-      const workspaceItemIsCurrentWorkspace = (item: WorkspaceEntity) => {
-        if (!mainStore.getCurrentWorkspace.status) {
+      const editSoftItemIsCurrentWorkspace = (item: EditSoftEntity) => {
+        if (!mainStore.currentEditSoft.status) {
           return false
         } else {
-          return item.id === mainStore.getCurrentWorkspace.id
+          return item.id === mainStore.currentEditSoft.id
         }
       }
-
-      const setCurrentWorkspaceLoading = ref(false)
-      const setCurrentWorkspaceById = (id) => {
+      const setCurrentEditSoftLoading = ref(false)
+      const setCurrentEditSoftById = (id) => {
         if (!id) return
-        if (setCurrentWorkspaceLoading.value) return
-        yiuHttp({
-          api: SERVER_API.mainApi.setCurrentWorkspace,
-          loading: { flag: setCurrentWorkspaceLoading },
-          tips: { anyObj: notification, error: { show: true } },
-          pathData: { id },
-          success: (res) => {
-            mainStore.setCurrentWorkspace(res?.data?.result)
-          },
-        })
+        if (setCurrentEditSoftLoading.value) return
+        setCurrentEditSoftLoading.value = true
+        mainStore.setCurrentEditSoft(id)
+        setCurrentEditSoftLoading.value = false
       }
-
-      // 获取工作空间的方法
       const onSearch = () => {
-        workspaceList.value = []
+        editSoftList.value = []
         yiuHttp({
           loading: { flag: searchLoading },
-          api: SERVER_API.workspaceApi.search,
+          api: SERVER_API.editSoftApi.search,
           params: {
             key: searchKey.value,
             sortType: searchSort.value,
@@ -358,7 +343,7 @@
           },
           success: (res) => {
             if (res.data.result) {
-              workspaceList.value = res.data.result
+              editSoftList.value = res.data.result
             }
           },
         })
@@ -389,7 +374,6 @@
       const onEditSuccess = useOnEditSuccess(onEditCancel, onSearch)
       const onEditError = useOnEditError(editLoading)
 
-
       const moveLoading = ref(false)
       // 移动
       const onMove = (id, type: 'up' | 'down') => {
@@ -397,9 +381,9 @@
         if (moveLoading.value) return
         let sendApi: YiuAip
         if (type === 'up') {
-          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.up : SERVER_API.workspaceApi.down
+          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.editSoftApi.up : SERVER_API.editSoftApi.down
         } else {
-          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.workspaceApi.down : SERVER_API.workspaceApi.up
+          sendApi = sortTypeIsAse(searchSort.value) ? SERVER_API.editSoftApi.down : SERVER_API.editSoftApi.up
         }
 
         yiuHttp({
@@ -415,22 +399,31 @@
       const onDelete = (id) => {
         if (!id) return
         yiuHttp({
-          api: SERVER_API.workspaceApi.del,
+          api: SERVER_API.editSoftApi.del,
           pathData: { id },
           tips: { anyObj: notification, error: { show: true } },
           success: (_res) => onSearch(),
         })
       }
 
+      const isDefImg = (img) => {
+        const imgMap = {
+          'typora': true,
+          'vs_code': true,
+          'sublime': true,
+          'note': true,
+        }
+        return !!imgMap[img]
+      }
       return {
         statusIsNoValue,
         statusIsValid,
         statusIsInvalid,
         statusIsNotInvalid,
-        workspaceList,
-        workspaceItemIsCurrentWorkspace,
-        setCurrentWorkspaceById,
-        setCurrentWorkspaceLoading,
+        editSoftList,
+        editSoftItemIsCurrentWorkspace,
+        setCurrentEditSoftById,
+        setCurrentEditSoftLoading,
         searchStatus,
         onStatusChange,
         searchSort,
@@ -469,6 +462,7 @@
         onMove,
         // 删除
         onDelete,
+        isDefImg,
       }
     },
   })
