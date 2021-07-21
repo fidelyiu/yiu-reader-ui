@@ -234,11 +234,20 @@
                   </button>
                 </div>
                 <!--在编辑器中打开-->
-                <div v-if="!slotProps.node.data.isDir" class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
-                    <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
-                  </button>
-                </div>
+                <main-box-btn
+                    v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
+                    class="mr-2"
+                    :show-text="mainStore.mainBoxShowText"
+                    @btnClick="onEditMarkDown(slotProps.node.data)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>在编辑器中打开</span>
+                  </template>
+                </main-box-btn>
                 <!--修改按钮-->
                 <div class="mr-2">
                   <button class="yiu-blue-square-btn-1">
@@ -363,6 +372,7 @@
     setup() {
       const logStore = useLogStore()
       const mainStore = useMainStore()
+      mainStore.initCurrentEditSoft()
       const notification = useNotification()
       const treeData = ref([])
       const searchKey = ref('')
@@ -587,6 +597,15 @@
         selection.addRange(range)
       }
 
+      const onEditMarkDown = (data) => {
+        logStore.pushLog(Date.now(), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + data.absPath)
+        yiuHttp({
+          api: SERVER_API.noteApi.editMarkdown,
+          pathData: { id: data.id },
+          tips: { anyObj: notification, error: { show: true } },
+        })
+      }
+
       loadNote()
       return {
         statusIsInvalid,
@@ -619,6 +638,7 @@
         changeShowBtIcon,
         changeShowBtNum,
         onSelectErrPath,
+        onEditMarkDown,
       }
     },
   })
