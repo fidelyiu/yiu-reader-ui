@@ -51,6 +51,10 @@ const mainApi = {
         url: entityUrl + '/sidebar/status',
         method: MethodEnum.PUT,
     },
+    getOsPathSeparator: <YiuAip>{
+        url: entityUrl + '/os/pathSeparator',
+        method: MethodEnum.GET,
+    },
 }
 
 export default mainApi

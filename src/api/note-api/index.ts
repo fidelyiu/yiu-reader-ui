@@ -3,6 +3,10 @@ import { MethodEnum, YiuAip } from 'yiu-axios/type'
 const entityUrl = '/note'
 
 const noteApi = {
+    add: <YiuAip>{
+        url: entityUrl,
+        method: MethodEnum.POST,
+    },
     refresh: <YiuAip>{
         url: entityUrl + '/refresh',
         method: MethodEnum.GET,

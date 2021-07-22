@@ -1,12 +1,144 @@
 <template>
-  <div>$END$</div>
+  <n-spin :show="spinShow">
+    <template v-if="type!=='view'">
+      <n-form ref="formRef"
+              label-placement="left"
+              :rules="rules"
+              :model="model"
+              label-align="right"
+              :label-width="80">
+        <n-formItem label="名称" path="name">
+          <n-input v-model:value="model.name" placeholder="请输入">
+            <template #suffix>
+              <span v-show="!model.isDir">.md</span>
+            </template>
+          </n-input>
+        </n-formItem>
+        <n-formItem label="别名" path="alias">
+          <n-input v-model:value="model.alias" placeholder="请输入">
+          </n-input>
+        </n-formItem>
+        <n-formItem label="文件类型" path="isDir">
+          <n-radio-group v-model:value="model.isDirStr" name="isDir">
+            <n-space>
+              <n-radio value="false">文件</n-radio>
+              <n-radio value="true">目录</n-radio>
+            </n-space>
+          </n-radio-group>
+        </n-formItem>
+        <n-formItem label="路径" path="path">
+          <n-input v-model:value="model.path" disabled placeholder="请输入">
+          </n-input>
+        </n-formItem>
+      </n-form>
+    </template>
+  </n-spin>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, reactive, ref, watch } from 'vue'
+  import { NForm, NFormItem, NInput, NRadio, NRadioGroup, NSpace, NSpin, useNotification } from 'naive-ui'
+  import { NoteEntity } from '/@/vo/note'
+  import { useCurdCallType } from '/@/hooks/entity/use-curd-call'
+  import { useMainStore } from '/@/store/modules/main'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
 
   export default defineComponent({
     name: 'NoteForm',
+    components: {
+      NForm,
+      NFormItem,
+      NInput,
+      NSpin,
+      NRadioGroup,
+      NSpace,
+      NRadio,
+    },
+    props: { type: useCurdCallType() },
+    emits: [
+      'addStart', 'addSuccess', 'addError',
+      'editLoadingStart', 'editLoadingSuccess', 'editLoadingError',
+      'editStart', 'editSuccess', 'editError',
+    ],
+    setup(_props, { emit: emit }) {
+      const mainStore = useMainStore()
+      mainStore.initOsPathSeparator()
+      // const entityId = ref()
+      const parentEntity = ref<any>()
+      const notification = useNotification()
+      const formRef = ref()
+      // 表单加载
+      const spinShow = ref(false)
+      // 表单数据
+      const model = reactive<Partial<NoteEntity>>({})
+      model.isDirStr = 'false'
+      // 规则
+      const rules = {
+        name: {
+          required: true,
+          trigger: ['blur', 'input'],
+          message: '请输入名称',
+        },
+      }
+      watch(() => model.name, (v) => {
+        if (!v) {
+          model.path = parentEntity.value?.absPath || mainStore.currentPath
+        } else {
+          model.path = (parentEntity.value?.absPath || mainStore.currentPath) + mainStore.osPathSeparator + v
+          if (!model.isDir) {
+            model.path += '.md'
+          }
+        }
+      })
+      watch(() => parentEntity.value, () => {
+        model.path = parentEntity.value?.absPath || mainStore.currentPath
+      })
+      watch(() => model.isDirStr, () => {
+        model.isDir = model.isDirStr === 'true'
+        if (model.name) {
+          model.path = (parentEntity.value?.absPath || mainStore.currentPath) + mainStore.osPathSeparator + model.name
+          if (!model.isDir) {
+            model.path += '.md'
+          }
+        }
+      })
+
+      // 发送添加方法
+      const submitAdd = () => {
+        if (parentEntity.value.id) {
+          model.parentId = parentEntity.value.id
+        }
+        if (formRef.value!.validate) {
+          formRef.value!.validate((errors) => {
+            if (!errors) {
+              emit('addStart')
+              yiuHttp({
+                api: SERVER_API.noteApi.add,
+                data: model,
+                loading: { flag: spinShow },
+                tips: { anyObj: notification, error: { show: true } },
+                success: (res) => {
+                  emit('addSuccess', res)
+                },
+                error: () => {
+                  emit('addError')
+                },
+              })
+            }
+          })
+        }
+      }
+
+      return {
+        parentEntity,
+        formRef,
+        spinShow,
+        model,
+        rules,
+        submitAdd,
+      }
+    },
   })
 </script>
 

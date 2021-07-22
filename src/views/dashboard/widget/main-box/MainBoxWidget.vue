@@ -23,18 +23,6 @@
                 <span v-show="!mainStore.mainBoxShowText">查看按钮提示</span>
               </template>
             </main-box-btn>
-            <!--根目录添加按钮-->
-            <button v-show="!layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
-            </button>
-            <!--定位所有无效note-->
-            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
-            </button>
-            <!--清除所有无效note-->
-            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
-            </button>
             <!--刷新目录按钮-->
             <main-box-btn v-show="layoutDir"
                           class="mr-2"
@@ -49,6 +37,29 @@
                 <span>从本地刷新目录，可在日志中查看刷新。</span>
               </template>
             </main-box-btn>
+            <!--清除所有无效note-->
+            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
+            </button>
+            <!--根目录添加按钮-->
+            <main-box-btn v-show="!settingHideFile"
+                          class="mr-2"
+                          btn-class="yiu-blue-square-btn-3"
+                          show-text
+                          @btnClick="onAddNote('')">
+              <template #icon>
+                <div>
+                  <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
+                </div>
+              </template>
+              <template #text>
+                <span>添加笔记</span>
+              </template>
+            </main-box-btn>
+            <!--定位所有无效note-->
+            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
+              <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
+            </button>
             <!--设置隐藏文件-->
             <main-box-btn v-show="layoutDir && !settingHideFile"
                           class="mr-2"
@@ -197,19 +208,26 @@
                     </div>
                   </template>
                   <template #text>
-                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectErrPath">
+                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectEl">
                       {{ slotProps.node.data.absPath || '-' }}
                     </div>
                   </template>
                 </main-box-btn>
                 <!--增加按钮-->
-                <div
-                    v-if="!settingHideFile && slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status)"
-                    class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
-                    <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
-                  </button>
-                </div>
+                <main-box-btn
+                    v-show="!settingHideFile && slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status)"
+                    class="mr-2"
+                    show-text
+                    @btnClick="onAddNote(slotProps.node.data)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>添加笔记</span>
+                  </template>
+                </main-box-btn>
                 <!--在编辑器中打开-->
                 <main-box-btn
                     v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
@@ -294,6 +312,35 @@
       </div>
     </div>
   </div>
+  <!--添加Modal-->
+  <n-modal v-model:show="addModal" :mask-closable="false">
+    <n-card style="width: 600px;"
+            content-style="padding: 0;"
+            class="p-5 relative"
+            size="medium"
+            :bordered="false">
+      <div class="text-base">添加笔记</div>
+      <button class="yiu-modal-close-btn-1" transparent @click="onAddCancel">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </button>
+      <div class="text-base mt-6">
+        <NoteForm ref="addRef"
+                  type="add"
+                  @addStart="onAddStart"
+                  @addSuccess="onAddSuccess"
+                  @addError="onAddError"></NoteForm>
+        <div class="flex justify-end">
+          <n-button class="focus:outline-none mr-4" @click="onAddCancel">取消</n-button>
+          <n-button class="focus:outline-none"
+                    type="primary"
+                    :loading="addLoading"
+                    @click="onAddOk">
+            确定
+          </n-button>
+        </div>
+      </div>
+    </n-card>
+  </n-modal>
   <n-modal v-model:show="deleteModal">
     <n-card style="width: 600px;"
             content-style="padding: 0;"
@@ -327,7 +374,8 @@
           <div class="border-1 border-red-500 bg-red-50 px-4 py-2 mb-5">
             <div class="mb-2">删除本地文件将无法恢复。</div>
             <div class="mb-2">为防止意外，确认继续操作请输入以下内容：</div>
-            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500">{{ tempNodeData.name }}</span>
+            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500"
+                  @click="onSelectEl">{{ tempNodeData.name }}</span>
           </div>
           <input
               v-model="delStr"
@@ -359,7 +407,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, nextTick, reactive, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
@@ -372,6 +420,15 @@
   import MainBoxBtn from '/@/views/dashboard/widget/main-box/MainBoxBtn.vue'
   import { useMainStore } from '/@/store/modules/main'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
+  import {
+    useAddLoading,
+    useAddModal,
+    useAddRef,
+    useOnAddCancel, useOnAddError,
+    useOnAddOk,
+    useOnAddStart, useOnAddSuccess,
+  } from '/@/hooks/entity/use-add'
+  import NoteForm from '/@/views/dashboard/widget/main-box/NoteForm.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -383,6 +440,7 @@
       NButton,
       NSpin,
       MainBoxBtn,
+      NoteForm,
     },
     props: {
       layout: propTypes.object.isRequired,
@@ -401,10 +459,7 @@
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: {
-            show: !settingHideFile.value,
-            badFileEnd: true,
-          },
+          data: searchDto,
           success: (res) => {
             treeData.value = res.data.result
             refreshLoading.value = false
@@ -422,6 +477,7 @@
       const onDeleteCancel = () => {
         deleteModal.value = false
         delStr.value = ''
+        tempNodeData.value = {}
       }
       const deleteLoading = ref(false)
       const onDeleteOk = (isFile: boolean) => {
@@ -431,8 +487,12 @@
           tips: { anyObj: notification, error: { show: true } },
           pathData: { id: tempNodeData.value.id || '-' },
           success: () => {
-            deleteModal.value = false
-            loadNote()
+            if (tempNodeData.value.parentId) {
+              loadNoteByParent(tempNodeData.value.parentId)
+            } else {
+              loadNote()
+            }
+            onDeleteCancel()
           },
         })
       }
@@ -555,23 +615,25 @@
             if (!data.parentId) {
               loadNote()
             } else {
-              loadNoteByParent(data.parentId, {
-                show: !settingHideFile.value,
-                badFileEnd: true,
-              })
+              loadNoteByParent(data.parentId, searchDto)
             }
           },
         })
       }
 
-      const loadNoteByParent = (id, searchDto) => {
-        if (!searchDto) searchDto = {}
-        searchDto.parentId = id
+      const searchDto = reactive({
+        show: !settingHideFile.value,
+        badFileEnd: true,
+      })
+
+      const loadNoteByParent = (id) => {
+        const tempSearchDto = searchDto
+        tempSearchDto.parentId = id
         if (treeLoading.value) return
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: searchDto,
+          data: tempSearchDto,
           success: (res) => {
             treeData.value = _loadNoteByParent(treeData.value, id, res.data.result)
           },
@@ -605,7 +667,7 @@
         mainStore.setMainBoxShowNum(!mainStore.mainBoxShowNum)
       }
 
-      const onSelectErrPath = (e) => {
+      const onSelectEl = (e) => {
         if (!e.target) return
         let selection = window.getSelection()
         if (!selection) return
@@ -616,11 +678,36 @@
       }
 
       const onEditMarkDown = (data) => {
-        logStore.pushLog(Date.now(), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + data.absPath)
+        logStore.pushLog(String(Date.now()), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + data.absPath)
         yiuHttp({
           api: SERVER_API.noteApi.editMarkdown,
           pathData: { id: data.id },
           tips: { anyObj: notification, error: { show: true } },
+        })
+      }
+
+      // 添加功能
+      const addParentId = ref('')
+      const addRef = useAddRef()
+      const addModal = useAddModal()
+      const addLoading = useAddLoading()
+      const onAddOk = useOnAddOk(addRef, addLoading)
+      const onAddStart = useOnAddStart(addLoading)
+      const onAddCancel = useOnAddCancel(addModal, addLoading)
+      const onAddSuccess = useOnAddSuccess(onAddCancel, () => {
+        if (addParentId.value) {
+          loadNoteByParent(addParentId.value, searchDto)
+        } else {
+          loadNote()
+        }
+      })
+      const onAddError = useOnAddError(addLoading)
+
+      const onAddNote = (data) => {
+        addParentId.value = data.id
+        addModal.value = true
+        nextTick(() => {
+          addRef.value.parentEntity = data
         })
       }
 
@@ -655,8 +742,18 @@
         changeShowBtnText,
         changeShowBtIcon,
         changeShowBtNum,
-        onSelectErrPath,
+        onSelectEl,
         onEditMarkDown,
+        // ↓添加
+        addRef,
+        addModal,
+        addLoading,
+        onAddOk,
+        onAddStart,
+        onAddCancel,
+        onAddSuccess,
+        onAddError,
+        onAddNote,
       }
     },
   })

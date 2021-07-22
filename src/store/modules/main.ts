@@ -36,6 +36,8 @@ export const useMainStore = defineStore({
             },
             currentEditSoftPath: '',
             initEditSoft: false,
+            osPathSeparator: '\\',
+            initOsPathSeparatorValue: false,
         }
     },
     getters: {
@@ -76,6 +78,19 @@ export const useMainStore = defineStore({
                 if (result?.data?.result?.id) {
                     this.currentEditSoft = result.data.result
                     this.currentEditSoftPath = result.data.result.path
+                }
+            } catch (e) {
+            }
+        },
+        async initOsPathSeparator() {
+            if (this.initOsPathSeparatorValue) return
+            try {
+                const result = await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.getOsPathSeparator,
+                })
+                if (result?.data?.result?.id) {
+                    this.osPathSeparator = result.data.result
+                    this.initOsPathSeparatorValue = true
                 }
             } catch (e) {
             }

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click="onClick">
+    <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click.stop="onClick">
       <div v-show="showNumber" class="flex-none fa-center text-gray-500 mr-1">
         <span class="italic font-normal"
               :class="{'text-red-400': isInvalidFile}">{{ numberTitle }}</span>
@@ -69,7 +69,7 @@
                      :node="item"
                      :number-title="numberTitle+getNumberTitle(index)"
                      class="border-l border-blue-200"
-                     @click="onClick"
+                     @click.stop="onClick"
                      @searchSuccess="onSearchSuccess">
           <template #default="slotProps">
             <slot :node="slotProps.node"></slot>
@@ -92,7 +92,7 @@
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
-    emits: ['click', 'searchSuccess'],
+    emits: ['itemClick', 'searchSuccess'],
     setup(prop, { emit }) {
       const showNumber: any = inject('showNumber')
       const showIcon: any = inject('showIcon')
@@ -122,12 +122,12 @@
       const onClick = (id: any) => {
         if (isInvalidFile.value) return
         if (isString(id)) {
-          emit('click', id)
+          emit('itemClick', id)
         } else {
           if (prop?.node?.data?.isDir) {
             isOpen.value = !isOpen.value
           } else {
-            emit('click', prop?.node?.id)
+            emit('itemClick', prop?.node?.id)
           }
         }
       }
