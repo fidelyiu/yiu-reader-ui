@@ -407,7 +407,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, nextTick, reactive, ref } from 'vue'
+  import { defineComponent, nextTick, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
@@ -459,7 +459,10 @@
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: searchDto,
+          data: {
+            show: !settingHideFile.value,
+            badFileEnd: true,
+          },
           success: (res) => {
             treeData.value = res.data.result
             refreshLoading.value = false
@@ -615,25 +618,23 @@
             if (!data.parentId) {
               loadNote()
             } else {
-              loadNoteByParent(data.parentId, searchDto)
+              loadNoteByParent(data.parentId, {
+                show: !settingHideFile.value,
+                badFileEnd: true,
+              })
             }
           },
         })
       }
 
-      const searchDto = reactive({
-        show: !settingHideFile.value,
-        badFileEnd: true,
-      })
-
-      const loadNoteByParent = (id) => {
-        const tempSearchDto = searchDto
-        tempSearchDto.parentId = id
+      const loadNoteByParent = (id, searchDto) => {
+        if (!searchDto) searchDto = {}
+        searchDto.parentId = id
         if (treeLoading.value) return
         yiuHttp({
           api: SERVER_API.noteApi.searchTree,
           loading: { flag: treeLoading },
-          data: tempSearchDto,
+          data: searchDto,
           success: (res) => {
             treeData.value = _loadNoteByParent(treeData.value, id, res.data.result)
           },
@@ -696,7 +697,10 @@
       const onAddCancel = useOnAddCancel(addModal, addLoading)
       const onAddSuccess = useOnAddSuccess(onAddCancel, () => {
         if (addParentId.value) {
-          loadNoteByParent(addParentId.value, searchDto)
+          loadNoteByParent(addParentId.value, {
+            show: !settingHideFile.value,
+            badFileEnd: true,
+          })
         } else {
           loadNote()
         }
