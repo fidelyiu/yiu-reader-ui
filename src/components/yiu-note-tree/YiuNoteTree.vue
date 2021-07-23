@@ -4,7 +4,8 @@
                  :ref="setItemRef"
                  :key="item.id"
                  :node="item"
-                 :number-title="getNumberTitle(index)">
+                 :number-title="getNumberTitle(index)"
+                 @itemClick="onItemClick">
       <template #default="slotProps">
         <slot :node="slotProps.node"></slot>
       </template>
@@ -27,7 +28,8 @@
       showIcon: propTypes.bool.def(false),
       searchStr: propTypes.string.def(''),
     },
-    setup(prop) {
+    emits: ['itemClick'],
+    setup(prop, { emit }) {
       const itemRef = []
       const setItemRef = (e) => {
         itemRef.push(e)
@@ -48,10 +50,14 @@
         index = index as number
         return (index + 1) + '.'
       }
+      const onItemClick = (id) => {
+        emit('itemClick', id)
+      }
       return {
         showErrFile,
         setItemRef,
         getNumberTitle,
+        onItemClick,
       }
     },
   })

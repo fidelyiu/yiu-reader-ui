@@ -59,6 +59,10 @@ const noteApi = {
         url: entityUrl + '/edit/md/{id}',
         method: MethodEnum.GET,
     },
+    reade: <YiuAip>{
+        url: entityUrl + '/reade/{id}',
+        method: MethodEnum.GET,
+    },
 }
 
 export default noteApi

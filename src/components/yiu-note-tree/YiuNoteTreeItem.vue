@@ -70,7 +70,7 @@
                      :node="item"
                      :number-title="numberTitle+getNumberTitle(index)"
                      class="border-l border-blue-200"
-                     @click.stop="onClick"
+                     @itemClick="onItemClick"
                      @searchSuccess="onSearchSuccess"
                      @errFile="onErrFile">
           <template #default="slotProps">
@@ -85,7 +85,7 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { isFunction, isString } from 'lodash'
+  import { isFunction } from 'lodash'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
@@ -141,17 +141,18 @@
       })
 
       const isOpen = ref(false)
-      const onClick = (id: any) => {
+      const onClick = () => {
         if (isInvalidFile.value) return
-        if (isString(id)) {
-          emit('itemClick', id)
-        } else {
+        {
           if (prop?.node?.data?.isDir) {
             isOpen.value = !isOpen.value
           } else {
-            emit('itemClick', prop?.node?.id)
+            emit('itemClick', prop?.node?.data?.id)
           }
         }
+      }
+      const onItemClick = (id) => {
+        emit('itemClick', id)
       }
       const getNumberTitle = (index: any) => {
         index = index as number
@@ -174,6 +175,7 @@
         setItemRef,
         showErrFile,
         onErrFile,
+        onItemClick,
       }
     },
   })

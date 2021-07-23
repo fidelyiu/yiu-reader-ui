@@ -11,4 +11,8 @@ export const routes: RouteRecordRaw[] = [
         path: '/system',
         component: () => import('/@/views/system/System.vue'),
     },
+    {
+        path: '/note/:id',
+        component: () => import('/@/views/note/NotePage.vue'),
+    },
 ]

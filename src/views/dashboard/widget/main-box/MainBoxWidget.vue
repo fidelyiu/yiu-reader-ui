@@ -205,7 +205,8 @@
                        :data="treeData"
                        :show-number="mainStore.mainBoxShowNum"
                        :show-icon="mainStore.mainBoxShowIcon"
-                       :search-str="searchKey">
+                       :search-str="searchKey"
+                       @itemClick="onClickItem">
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏提示-->
@@ -512,6 +513,7 @@
     useOnEditLoadingStart, useOnEditLoadingSuccess, useOnEditOk, useOnEditStart, useOnEditSuccess,
   } from '/@/hooks/entity/use-edit'
   import { isFunction } from 'lodash'
+  import router from '/@/router'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -851,7 +853,7 @@
         yiuHttp({
           api: SERVER_API.noteApi.delBad,
           pathData: {
-            id: mainStore.currentWorkspace.id
+            id: mainStore.currentWorkspace.id,
           },
           loading: { flag: delBadLoading },
           tips: { anyObj: notification, error: { show: true } },
@@ -859,6 +861,12 @@
             loadNote()
           },
         })
+      }
+
+      const onClickItem = (id) => {
+        if (id) {
+          router.push(`/note/${id}`)
+        }
       }
 
       loadNote()
@@ -923,6 +931,7 @@
         onPositionErrFile,
         delBadLoading,
         onDelBad,
+        onClickItem,
       }
     },
   })

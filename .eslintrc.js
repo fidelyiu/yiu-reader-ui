@@ -56,5 +56,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off',
         // 空花括号
         'no-empty': 'off',
+        // 使用v-html
+        'vue/no-v-html': 'off',
     },
 }

@@ -8,7 +8,7 @@ import 'virtual:windi.css'
 import 'virtual:windi-devtools'
 import '@purge-icons/generated'
 import '/@/design/index.less'
-
+import '/@/prism'
 
 async function bootstrap() {
     const app = createApp(App)
