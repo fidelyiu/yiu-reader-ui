@@ -7,6 +7,14 @@ const noteApi = {
         url: entityUrl,
         method: MethodEnum.POST,
     },
+    update: <YiuAip>{
+        url: entityUrl,
+        method: MethodEnum.PUT,
+    },
+    view: <YiuAip>{
+        url: entityUrl + '/{id}',
+        method: MethodEnum.GET,
+    },
     refresh: <YiuAip>{
         url: entityUrl + '/refresh',
         method: MethodEnum.GET,

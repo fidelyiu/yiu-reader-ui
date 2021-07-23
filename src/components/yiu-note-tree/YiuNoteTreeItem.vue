@@ -49,12 +49,12 @@
       </div>
       <div class="flex-grow flex items-center w-0 truncate select-none mr-2">
         <span class="mr-2 font-semibold" :class="{'text-red-400': isInvalidFile}">
-          <span v-if="node.data.name.indexOf(searchStr) > -1">{{
-              node.data.name.substr(0, node.data.name.indexOf(searchStr))
+          <span v-if="itemName.indexOf(searchStr) > -1">{{
+              itemName.substr(0, itemName.indexOf(searchStr))
             }}<span class="bg-yellow-200">{{
                 searchStr
-              }}</span>{{ node.data.name.substr(node.data.name.indexOf(searchStr) + searchStr.length) }}</span>
-          <span v-else>{{ node.data.name }}</span>
+              }}</span>{{ itemName.substr(itemName.indexOf(searchStr) + searchStr.length) }}</span>
+          <span v-else>{{ itemName }}</span>
         </span>
         <span v-if="!node.data.sortNum" class="text-gray-400">[未排序]</span>
       </div>
@@ -137,6 +137,7 @@
       }
 
       const isInvalidFile = computed(() => statusIsInvalid(prop?.node?.data?.status))
+      const itemName = computed<string>(() => prop?.node?.data?.alias || prop?.node?.data?.name)
 
       return {
         isOpen,
@@ -147,6 +148,7 @@
         onSearchSuccess,
         getNumberTitle,
         isInvalidFile,
+        itemName,
       }
     },
   })

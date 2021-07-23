@@ -217,7 +217,6 @@
         <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
       </button>
       <div class="text-base mt-6">
-        <div>Hello</div>
         <EditSoftForm ref="editRef"
                       type="edit"
                       @editLoadingStart="onEditLoadingStart"

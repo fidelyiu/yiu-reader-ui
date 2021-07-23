@@ -45,7 +45,7 @@
             <main-box-btn v-show="!settingHideFile"
                           class="mr-2"
                           btn-class="yiu-blue-square-btn-3"
-                          show-text
+                          :show-text="mainStore.mainBoxShowText"
                           @btnClick="onAddNote('')">
               <template #icon>
                 <div>
@@ -217,7 +217,7 @@
                 <main-box-btn
                     v-show="!settingHideFile && slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status)"
                     class="mr-2"
-                    show-text
+                    :show-text="mainStore.mainBoxShowText"
                     @btnClick="onAddNote(slotProps.node.data)">
                   <template #icon>
                     <div>
@@ -258,11 +258,18 @@
                   </template>
                 </main-box-btn>
                 <!--修改按钮-->
-                <div class="mr-2">
-                  <button class="yiu-blue-square-btn-1">
-                    <span class="iconify block" data-icon="mdi:square-edit-outline" data-inline="false"></span>
-                  </button>
-                </div>
+                <main-box-btn class="mr-2"
+                              :show-text="mainStore.mainBoxShowText"
+                              @btnClick="onEditNote(slotProps.node.data)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:square-edit-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>修改笔记</span>
+                  </template>
+                </main-box-btn>
                 <!--上移按钮-->
                 <main-box-btn v-if="layoutDir && !settingHideFile"
                               class="mr-2"
@@ -335,6 +342,39 @@
                     type="primary"
                     :loading="addLoading"
                     @click="onAddOk">
+            确定
+          </n-button>
+        </div>
+      </div>
+    </n-card>
+  </n-modal>
+  <!--修改Modal-->
+  <n-modal v-model:show="editModal" :mask-closable="false">
+    <n-card style="width: 600px;"
+            content-style="padding: 0;"
+            class="p-5 relative"
+            size="medium"
+            :bordered="false">
+      <div class="text-base">修改笔记</div>
+      <button class="yiu-modal-close-btn-1" transparent @click="onEditCancel">
+        <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+      </button>
+      <div class="text-base mt-6">
+        <NoteForm ref="editRef"
+                  type="edit"
+                  @editLoadingStart="onEditLoadingStart"
+                  @editLoadingSuccess="onEditLoadingSuccess"
+                  @editLoadingError="onEditLoadingError"
+                  @editStart="onEditStart"
+                  @editSuccess="onEditSuccess"
+                  @editError="onEditError"></NoteForm>
+        <div class="flex justify-end">
+          <n-button class="focus:outline-none mr-4" @click="onEditCancel">取消</n-button>
+          <n-button class="focus:outline-none"
+                    type="primary"
+                    :loading="editLoading"
+                    :disabled="editDisable"
+                    @click="onEditOk">
             确定
           </n-button>
         </div>
@@ -429,6 +469,15 @@
     useOnAddStart, useOnAddSuccess,
   } from '/@/hooks/entity/use-add'
   import NoteForm from '/@/views/dashboard/widget/main-box/NoteForm.vue'
+  import {
+    useEditDisableRef,
+    useEditLoading,
+    useEditModal,
+    useEditRef,
+    useOnEditCancel, useOnEditError, useOnEditLoadingError,
+    useOnEditLoadingStart, useOnEditLoadingSuccess, useOnEditOk, useOnEditStart, useOnEditSuccess,
+  } from '/@/hooks/entity/use-edit'
+  import { isFunction } from 'lodash'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -480,7 +529,9 @@
       const onDeleteCancel = () => {
         deleteModal.value = false
         delStr.value = ''
-        tempNodeData.value = {}
+        setTimeout(() => {
+          tempNodeData.value = {}
+        }, 300)
       }
       const deleteLoading = ref(false)
       const onDeleteOk = (isFile: boolean) => {
@@ -715,6 +766,44 @@
         })
       }
 
+      // 修改功能
+      const editParentId = ref('')
+      const editRef = useEditRef()
+      const editModal = useEditModal()
+      const editLoading = useEditLoading()
+      const editDisable = useEditDisableRef()
+      // const onEdit = useOnEdit(editModal, editRef)
+      const onEditNote = (data) => {
+        editParentId.value = data.parentId
+        editModal.value = true
+        nextTick(() => {
+          if (!editRef.value) {
+            return
+          }
+          if (!isFunction(editRef.value.loadData)) {
+            return
+          }
+          editRef.value.loadData(data.id)
+        })
+      }
+      const onEditLoadingStart = useOnEditLoadingStart(editLoading)
+      const onEditLoadingSuccess = useOnEditLoadingSuccess(editLoading)
+      const onEditLoadingError = useOnEditLoadingError(editLoading, editDisable)
+      const onEditOk = useOnEditOk(editRef, editLoading)
+      const onEditCancel = useOnEditCancel(editModal, editLoading, editDisable)
+      const onEditStart = useOnEditStart(editLoading)
+      const onEditSuccess = useOnEditSuccess(onEditCancel, () => {
+        if (editParentId.value) {
+          loadNoteByParent(editParentId.value, {
+            show: !settingHideFile.value,
+            badFileEnd: true,
+          })
+        } else {
+          loadNote()
+        }
+      })
+      const onEditError = useOnEditError(editLoading)
+
       loadNote()
       return {
         statusIsInvalid,
@@ -758,6 +847,21 @@
         onAddSuccess,
         onAddError,
         onAddNote,
+
+        // ↓修改
+        editRef,
+        editModal,
+        editLoading,
+        editDisable,
+        onEditNote,
+        onEditLoadingStart,
+        onEditLoadingSuccess,
+        onEditLoadingError,
+        onEditOk,
+        onEditCancel,
+        onEditStart,
+        onEditSuccess,
+        onEditError,
       }
     },
   })
