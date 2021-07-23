@@ -1,7 +1,13 @@
 <template>
-  <div class="h-full w-full overflow-auto">
-    <div>{{ $route.params.id }}</div>
-    <div v-html="pageContent"></div>
+  <div class="h-full w-full flex flex-col">
+    <div class="flex-none border-b">{{ $route.params.id }}</div>
+    <div class="flex-grow h-0 flex">
+      <div class="h-full overflow-auto min-w-[255px] flex-grow border-r">大纲</div>
+      <div class="h-full overflow-auto px-[96px]">
+        <div class="mx-auto max-w-[960px]" v-html="pageContent"></div>
+      </div>
+      <div class="h-full overflow-auto min-w-[255px] flex-grow border-l">目录</div>
+    </div>
   </div>
 </template>
 
