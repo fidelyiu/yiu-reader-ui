@@ -35,6 +35,10 @@ const noteApi = {
         url: entityUrl + '/file/{id}',
         method: MethodEnum.DELETE,
     },
+    delBad: <YiuAip>{
+        url: entityUrl + '/bad/{id}',
+        method: MethodEnum.DELETE,
+    },
     positionFile: <YiuAip>{
         url: entityUrl + '/position/{id}',
         method: MethodEnum.GET,

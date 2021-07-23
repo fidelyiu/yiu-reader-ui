@@ -31,16 +31,40 @@
                           :loading="refreshLoading"
                           @btnClick="onRefresh">
               <template #icon>
-                <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+                <span class="iconify block" data-icon="mdi:folder-refresh-outline" data-inline="false"></span>
               </template>
               <template #text>
                 <span>从本地刷新目录，可在日志中查看刷新。</span>
               </template>
             </main-box-btn>
             <!--清除所有无效note-->
-            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
-            </button>
+            <main-box-btn v-show="layoutDir"
+                          class="mr-2"
+                          btn-class="yiu-blue-square-btn-3"
+                          :show-text="mainStore.mainBoxShowText"
+                          @btnClick="onDelBad">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>清除所有无效笔记</span>
+              </template>
+            </main-box-btn>
+            <!--刷新按钮-->
+            <main-box-btn class="mr-2"
+                          btn-class="yiu-blue-square-btn-3"
+                          :show-text="mainStore.mainBoxShowText"
+                          :loading="treeLoading"
+                          @btnClick="loadNote">
+              <template #icon>
+                <div>
+                  <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
+                </div>
+              </template>
+              <template #text>
+                <span>刷新笔记</span>
+              </template>
+            </main-box-btn>
             <!--根目录添加按钮-->
             <main-box-btn v-show="!settingHideFile"
                           class="mr-2"
@@ -57,9 +81,18 @@
               </template>
             </main-box-btn>
             <!--定位所有无效note-->
-            <button v-show="layoutDir" class="yiu-blue-square-btn-3 mr-2">
-              <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
-            </button>
+            <main-box-btn v-show="layoutDir"
+                          class="mr-2"
+                          btn-class="yiu-blue-square-btn-3"
+                          :show-text="mainStore.mainBoxShowText"
+                          @btnClick="onPositionErrFile">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>定位所有无效笔记</span>
+              </template>
+            </main-box-btn>
             <!--设置隐藏文件-->
             <main-box-btn v-show="layoutDir && !settingHideFile"
                           class="mr-2"
@@ -168,7 +201,8 @@
         </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
-          <YiuNoteTree :data="treeData"
+          <YiuNoteTree ref="treeRef"
+                       :data="treeData"
                        :show-number="mainStore.mainBoxShowNum"
                        :show-icon="mainStore.mainBoxShowIcon"
                        :search-str="searchKey">
@@ -495,6 +529,7 @@
       layout: propTypes.object.isRequired,
     },
     setup() {
+      const treeRef = ref()
       const logStore = useLogStore()
       const mainStore = useMainStore()
       mainStore.initCurrentEditSoft()
@@ -804,11 +839,34 @@
       })
       const onEditError = useOnEditError(editLoading)
 
+      const onPositionErrFile = () => {
+        if (treeRef.value && isFunction(treeRef.value.showErrFile)) {
+          treeRef.value.showErrFile()
+        }
+      }
+
+      const delBadLoading = ref(false)
+
+      const onDelBad = () => {
+        yiuHttp({
+          api: SERVER_API.noteApi.delBad,
+          pathData: {
+            id: mainStore.currentWorkspace.id
+          },
+          loading: { flag: delBadLoading },
+          tips: { anyObj: notification, error: { show: true } },
+          success: () => {
+            loadNote()
+          },
+        })
+      }
+
       loadNote()
       return {
         statusIsInvalid,
         mainStore,
         searchKey,
+        treeRef,
         treeData,
         treeLoading,
         loadNote,
@@ -862,6 +920,9 @@
         onEditStart,
         onEditSuccess,
         onEditError,
+        onPositionErrFile,
+        delBadLoading,
+        onDelBad,
       }
     },
   })

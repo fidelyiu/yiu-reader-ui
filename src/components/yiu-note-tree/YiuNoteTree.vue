@@ -1,6 +1,7 @@
 <template>
   <div class="w-full h-full overflow-auto">
     <YiuTreeItem v-for="(item, index) in data"
+                 :ref="setItemRef"
                  :key="item.id"
                  :node="item"
                  :number-title="getNumberTitle(index)">
@@ -15,6 +16,7 @@
   import { computed, defineComponent, provide } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import YiuTreeItem from '/@/components/yiu-note-tree/YiuNoteTreeItem.vue'
+  import { isFunction } from 'lodash'
 
   export default defineComponent({
     name: 'YiuTree',
@@ -26,6 +28,19 @@
       searchStr: propTypes.string.def(''),
     },
     setup(prop) {
+      const itemRef = []
+      const setItemRef = (e) => {
+        itemRef.push(e)
+      }
+      const showErrFile = () => {
+        if (itemRef && itemRef.length) {
+          itemRef.forEach(item => {
+            if (item && isFunction(item.showErrFile)) {
+              item.showErrFile()
+            }
+          })
+        }
+      }
       provide('showNumber', computed(() => prop.showNumber))
       provide('showIcon', computed(() => prop.showIcon))
       provide('searchStr', computed(() => prop.searchStr))
@@ -34,6 +49,8 @@
         return (index + 1) + '.'
       }
       return {
+        showErrFile,
+        setItemRef,
         getNumberTitle,
       }
     },

@@ -71,6 +71,7 @@
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { strGetDelEndStr } from 'yiu-js/str/str-get'
+  import { strIsContainSStr } from 'yiu-js/str/str-is'
 
   export default defineComponent({
     name: 'NoteForm',
@@ -106,11 +107,27 @@
       model.isDirStr = 'false'
       // 规则
       const rules = {
-        name: {
-          required: true,
-          trigger: ['blur', 'input'],
-          message: '请输入名称',
-        },
+        name: [
+          {
+            required: true,
+            trigger: ['blur', 'input'],
+            message: '请输入名称',
+          },
+          {
+            trigger: ['blur', 'input'],
+            validator: (_rule: any, value: any) => {
+              return !value.startsWith(' ')
+            },
+            message: '文件名不能以空格开头',
+          },
+          {
+            trigger: ['blur', 'input'],
+            validator: (_rule: any, value: any) => {
+              return !strIsContainSStr(value, ['\\', '/', ':', '*', '?', '"', '<', '>', '|'])
+            },
+            message: '文件名不能包含下列任何字符串：\\/:*?"<>|',
+          },
+        ],
       }
       watch(() => model.name, (v) => {
         if (!v) {

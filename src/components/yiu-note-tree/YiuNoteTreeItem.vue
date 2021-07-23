@@ -65,12 +65,14 @@
     <transition name="yiu-fade-in">
       <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[16px]">
         <YiuTreeItem v-for="(item, index) in node.child"
+                     :ref="setItemRef"
                      :key="item.id"
                      :node="item"
                      :number-title="numberTitle+getNumberTitle(index)"
                      class="border-l border-blue-200"
                      @click.stop="onClick"
-                     @searchSuccess="onSearchSuccess">
+                     @searchSuccess="onSearchSuccess"
+                     @errFile="onErrFile">
           <template #default="slotProps">
             <slot :node="slotProps.node"></slot>
           </template>
@@ -83,7 +85,7 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
-  import { isString } from 'lodash'
+  import { isFunction, isString } from 'lodash'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
@@ -92,8 +94,29 @@
       node: propTypes.object,
       numberTitle: propTypes.string.isRequired,
     },
-    emits: ['itemClick', 'searchSuccess'],
+    emits: ['itemClick', 'searchSuccess', 'errFile'],
     setup(prop, { emit }) {
+      const itemRef = []
+      const setItemRef = (e) => {
+        itemRef.push(e)
+      }
+      const showErrFile = () => {
+        if (isInvalidFile.value) {
+          emit('errFile')
+        }
+        isOpen.value = false
+        if (itemRef && itemRef.length) {
+          itemRef.forEach(item => {
+            if (item && isFunction(item.showErrFile)) {
+              item.showErrFile()
+            }
+          })
+        }
+      }
+      const onErrFile = () => {
+        emit('errFile')
+        isOpen.value = true
+      }
       const showNumber: any = inject('showNumber')
       const showIcon: any = inject('showIcon')
       const searchStr: any = inject('searchStr')
@@ -105,9 +128,8 @@
           if (prop.node.data.name.indexOf(v) != -1) {
             emit('searchSuccess')
           }
-        } else {
-          isOpen.value = false
         }
+        isOpen.value = false
       })
       const onSearchSuccess = () => {
         emit('searchSuccess')
@@ -149,6 +171,9 @@
         getNumberTitle,
         isInvalidFile,
         itemName,
+        setItemRef,
+        showErrFile,
+        onErrFile,
       }
     },
   })
