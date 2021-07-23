@@ -2,11 +2,12 @@
   <div class="h-full w-full flex flex-col">
     <div class="flex-none border-b">{{ $route.params.id }}</div>
     <div class="flex-grow h-0 flex">
-      <div class="h-full overflow-auto min-w-[255px] flex-grow border-r">大纲</div>
-      <div class="h-full overflow-auto px-[96px]">
+      <div class="h-full overflow-auto w-[255px] flex-none border-r">大纲</div>
+      <div class="h-full overflow-auto px-[96px] pt-[32px] pb-[128px] flex-grow">
         <div class="mx-auto max-w-[960px]" v-html="pageContent"></div>
+        <n-back-top :right="100"></n-back-top>
       </div>
-      <div class="h-full overflow-auto min-w-[255px] flex-grow border-l">目录</div>
+      <div class="h-full overflow-auto w-[255px] flex-none border-l">目录</div>
     </div>
   </div>
 </template>
@@ -15,7 +16,7 @@
   import { defineComponent, nextTick, ref, watch } from 'vue'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
-  import { useNotification } from 'naive-ui'
+  import { NBackTop, useNotification } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import md from '/@/utils/mi'
   import { isFunction } from 'lodash'
@@ -23,6 +24,9 @@
 
   export default defineComponent({
     name: 'NotePage',
+    components: {
+      NBackTop,
+    },
     setup() {
       const route = useRoute()
       const notification = useNotification()
