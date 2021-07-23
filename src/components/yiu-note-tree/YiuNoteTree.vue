@@ -30,13 +30,13 @@
     },
     emits: ['itemClick'],
     setup(prop, { emit }) {
-      const itemRef = []
-      const setItemRef = (e) => {
+      const itemRef: Array<any> = []
+      const setItemRef = (e: any) => {
         itemRef.push(e)
       }
       const showErrFile = () => {
         if (itemRef && itemRef.length) {
-          itemRef.forEach(item => {
+          itemRef.forEach((item: any) => {
             if (item && isFunction(item.showErrFile)) {
               item.showErrFile()
             }
