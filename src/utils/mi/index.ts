@@ -16,9 +16,9 @@ const md = new MarkdownIt({
 md.renderer.rules.code_inline = function (tokens, idx, _options, _env, slf) {
     const token = tokens[idx]
     const codeLang = token.codeLang || ''
-    return `<div class="inline-code-div"><code class="inline-code language-${codeLang}" ${slf.renderAttrs(token)}>` +
+    return `<span class="inline-code-div"><code class="inline-code language-${codeLang}" ${slf.renderAttrs(token)}>` +
         md.utils.escapeHtml(tokens[idx].content) +
-        `</code><span class="inline-code-copy" data-clipboard-text="${tokens[idx].content}">c</span></div>`
+        `</code><span class="inline-code-copy" data-clipboard-text="${tokens[idx].content}">c</span></span>`
 }
 md.use(InlineCodeName)
 
