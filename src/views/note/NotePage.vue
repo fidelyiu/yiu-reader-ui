@@ -1,13 +1,21 @@
 <template>
   <div class="h-full w-full flex flex-col">
-    <div class="flex-none border-b">{{ $route.params.id }}</div>
+    <div class="flex-none h-[64px] bg-blue-100 border-b">{{ $route.params.id }}</div>
     <div class="flex-grow h-0 flex">
-      <div class="h-full overflow-auto w-[255px] flex-none border-r">大纲</div>
-      <div class="h-full overflow-auto px-[96px] pt-[32px] pb-[128px] flex-grow">
-        <div class="mx-auto max-w-[960px]" v-html="pageContent"></div>
-        <n-back-top :right="100"></n-back-top>
+      <div class="flex-grow bg-blue-50"></div>
+      <div class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+        <div class="mt-[32px]">大纲</div>
       </div>
-      <div class="h-full overflow-auto w-[255px] flex-none border-l">目录</div>
+      <div class="flex-none w-[32px] bg-blue-50"></div>
+      <div class="note-page-white main-content">
+        <div class="mx-auto" v-html="pageContent"></div>
+        <n-back-top :right="96" :bottom="96"></n-back-top>
+      </div>
+      <div class="flex-none w-[32px] bg-blue-50"></div>
+      <div class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+        <div class="mt-[32px]">目录</div>
+      </div>
+      <div class="flex-grow bg-blue-50"></div>
     </div>
   </div>
 </template>
@@ -68,5 +76,15 @@
 </script>
 
 <style scoped>
+  .main-content {
+    @apply h-full w-[960px] overflow-auto;
+    @apply border-l border-r;
+    @apply px-[96px] pt-[32px] pb-[128px];
+    @apply flex-none;
+  }
 
+  .note-page-white {
+    @apply bg-indigo-50;
+    --tw-bg-opacity: .1;
+  }
 </style>
