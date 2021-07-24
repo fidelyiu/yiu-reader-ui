@@ -2619,10 +2619,10 @@ yiu-axios@^1.0.60:
     lodash "^4.17.21"
     qs "^6.10.1"
 
-yiu-js@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.18.tgz?cache=0&sync_timestamp=1627014950495&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-js%2Fdownload%2Fyiu-js-1.0.18.tgz#a0c2225187ac51fdeb1996ea616d77aa3c7ee359"
-  integrity sha1-oMIiUYesUf3rGZbqYW13qjx+41k=
+yiu-js@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.nlark.com/yiu-js/download/yiu-js-1.0.19.tgz?cache=0&sync_timestamp=1627102673079&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyiu-js%2Fdownload%2Fyiu-js-1.0.19.tgz#67fb7cebd0757935ca3c4846418d815100348c44"
+  integrity sha1-Z/t869B1eTXKPEhGQY2BUQA0jEQ=
   dependencies:
     lodash "^4.17.21"
     moment "^2.29.1"

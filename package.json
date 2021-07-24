@@ -29,7 +29,7 @@
     "vue-router": "4",
     "vue-types": "3",
     "yiu-axios": "^1.0.60",
-    "yiu-js": "^1.0.18",
+    "yiu-js": "^1.0.19",
     "yiu-learn": "^1.0.6"
   },
   "devDependencies": {

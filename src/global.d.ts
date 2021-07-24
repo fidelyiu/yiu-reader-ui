@@ -1,1 +1,4 @@
-declare const Prism = any
+declare const Prism: any
+interface Window {
+    Prism: any
+}

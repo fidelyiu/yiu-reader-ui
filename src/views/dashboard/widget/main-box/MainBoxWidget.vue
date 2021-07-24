@@ -579,7 +579,10 @@
           pathData: { id: tempNodeData.value.id || '-' },
           success: () => {
             if (tempNodeData.value.parentId) {
-              loadNoteByParent(tempNodeData.value.parentId)
+              loadNoteByParent(tempNodeData.value.parentId, {
+                show: !settingHideFile.value,
+                badFileEnd: true,
+              })
             } else {
               loadNote()
             }
