@@ -71,7 +71,9 @@
       <div class="flex-none border-l border-r note-page-white overflow-hidden"
            :class="{'flex-none': width>990,'flex-grow': width<=990}"
            :style="{'width': width>990?'960px':'0'}">
-        <div style="padding: 32px  96px 128px;width: 100%;height: 100%;" class="overflow-auto">
+        <div style="width: 100%;height: 100%;"
+             :style="{'padding': width>900?'32px  96px 128px':'16px'}"
+             class="overflow-auto">
           <div v-if="noteLoading" class="h-full w-full fa-center">
             <div class="text-center">
               <div class="text-gray-500">文档渲染中...</div>
