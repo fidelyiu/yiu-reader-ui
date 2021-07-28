@@ -20,7 +20,7 @@ function uniqueSlug(slug, slugs) {
 }
 
 const outChildTree = (sourceChild: Array<MarkdownItemInfo>) => {
-    let childList: Array<MarkdownItemInfo> = []
+    const childList: Array<MarkdownItemInfo> = []
     let minChildGrade = -1
 
     sourceChild.forEach((item, index) => {
@@ -96,8 +96,10 @@ const setListItemOrder = (list: Array<MarkdownItemInfo>, tree: Array<MarkdownIte
     const _setListItemOrder = (list: Array<MarkdownItemInfo>, tree: Array<MarkdownItemInfo>) => {
         tree.forEach(item => {
             if (setIndex < list.length) {
-                list[setIndex].orderNum = item.orderNum
-                setIndex++
+                if (item.isNode) {
+                    list[setIndex].orderNum = item.orderNum
+                    setIndex++
+                }
                 if (item.child.length) {
                     _setListItemOrder(list, item.child)
                 }
