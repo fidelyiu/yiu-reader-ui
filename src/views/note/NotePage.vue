@@ -1,13 +1,15 @@
 <template>
   <div class="h-full w-full flex flex-col">
     <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
-      <div class="fa-center text-2xl">
-        <span>{{ noteName }}{{ width }}</span>
-        <span v-show="noteLoading">
-          <n-spin class="ml-[8px] p-[4px]"/>
-        </span>
+      <div class="fa-center text-2xl flex-grow w-0">
+        <div class="w-full truncate">
+          <span>{{ noteName }}</span>
+          <span v-show="noteLoading">
+            <n-spin class="ml-[8px] p-[4px]"/>
+          </span>
+        </div>
       </div>
-      <div class="fa-center">
+      <div class="fa-center flex-none">
         <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
           <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
           <span>全局搜索</span>

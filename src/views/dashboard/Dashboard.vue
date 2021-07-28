@@ -5,8 +5,10 @@
           @changeShow="changeMenu"></Menu>
     <div class="w-full flex flex-col">
       <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px]">
-        <div class="fa-center text-2xl">{{ mainStore.currentWorkspace.name || '-' }}</div>
-        <div class="fa-center">
+        <div class="fa-center text-2xl flex-grow w-0">
+          <span class="w-full truncate">{{ mainStore.currentWorkspace.name || '-' }}</span>
+        </div>
+        <div class="fa-center flex-none">
           <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
             <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
             <span>全局搜索</span>
