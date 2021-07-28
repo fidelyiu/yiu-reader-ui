@@ -7,12 +7,25 @@
           <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
           <span>全局搜索</span>
         </button>
+        <button v-show="hideOrder"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="hideOrder = false">
+          <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
+          <span>展示序号</span>
+        </button>
+        <button v-show="!hideOrder"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="hideOrder = true">
+          <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+          <span>隐藏序号</span>
+        </button>
         <button class="yiu-blue-big-circular-btn fa-center focus:outline-none" @click="onShowNoteInfo">
           <span class="iconify block mr-1" data-icon="mdi:information-outline" data-inline="false"></span>
           <span>笔记信息</span>
         </button>
       </div>
     </div>
+    <!--<div class="h-[16px] bg-blue-50 flex-none"></div>-->
     <div class="flex-grow h-0 flex">
       <div class="flex-grow bg-blue-50"></div>
       <div class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
@@ -20,7 +33,7 @@
       </div>
       <div class="flex-none w-[32px] bg-blue-50"></div>
       <div class="note-page-white main-content">
-        <div class="mx-auto" v-html="pageContent"></div>
+        <div class="mx-auto" :class="{'hide-order': hideOrder}" v-html="pageContent"></div>
         <n-back-top :right="96" :bottom="96"></n-back-top>
       </div>
       <div class="flex-none w-[32px] bg-blue-50"></div>
@@ -84,9 +97,10 @@
   import SERVER_API from '/@/api'
   import { NBackTop, NButton, NCard, NForm, NFormItem, NModal, useNotification } from 'naive-ui'
   import { useRoute } from 'vue-router'
-  import md from '/@/utils/mi'
+  import { genMd } from '/@/utils/mi'
   import { isFunction } from 'lodash'
   import { timeGetStr2 } from 'yiu-js/time/time-get'
+  import { MarkdownItemInfo } from '/@/vo/note/markdown-item-info'
 
   export default defineComponent({
     name: 'NotePage',
@@ -109,6 +123,10 @@
       const modTime = ref('')
       const noteSize = ref(0)
 
+      const markdownTree = ref<Array<MarkdownItemInfo>>([])
+
+      const md = genMd(markdownTree)
+
       const loadNote = (id) => {
         workspace.value = {}
         note.value = {}
@@ -127,7 +145,9 @@
               parentName.value = res.data.result.parentName
               modTime.value = timeGetStr2(res.data.result.modTime)
               noteSize.value = res.data.result.size
+              markdownTree.value = []
               pageContent.value = md.render(res.data.result.content) as string
+              console.log(markdownTree.value)
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
@@ -189,6 +209,8 @@
         infoModal.value = true
       }
 
+      const hideOrder = ref(false)
+
       return {
         loadNote,
         pageContent,
@@ -201,6 +223,7 @@
         onInfoCancel,
         modTime,
         noteSizeWithUnit,
+        hideOrder,
       }
     },
   })
