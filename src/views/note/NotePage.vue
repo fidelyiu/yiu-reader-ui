@@ -3,7 +3,7 @@
     <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
       <div class="fa-center text-2xl flex-grow w-0">
         <div class="w-full truncate">
-          <span>{{ noteName }}{{ width }}</span>
+          <span>{{ noteName }}</span>
           <span v-show="noteLoading">
             <n-spin class="ml-[8px] p-[4px]"/>
           </span>
