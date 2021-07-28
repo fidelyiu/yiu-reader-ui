@@ -202,7 +202,9 @@
             if (res.data.result) {
               workspace.value = res.data.result.workspace
               note.value = res.data.result.note
-              pageTitle.value = 'YR - ' + (res.data.result.note.alias || res.data.result.note.name || '-')
+              pageTitle.value = (res.data.result.workspace.alias || res.data.result.workspace.name || 'YR')
+                  + ' - '
+                  + (res.data.result.note.alias || res.data.result.note.name || '-')
               parentName.value = res.data.result.parentName
               modTime.value = timeGetStr2(res.data.result.modTime)
               noteSize.value = res.data.result.size
