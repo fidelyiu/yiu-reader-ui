@@ -214,6 +214,22 @@
                      class="mr-2 fa-center text-gray-400">
                   <span v-if="!slotProps.node.data.show">[ 已隐藏 ]</span>
                 </div>
+                <!--在新窗口打开-->
+                <main-box-btn
+                    v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
+                    class="mr-2"
+                    :show-text="mainStore.mainBoxShowText"
+                    @btnClick="onOpenInNew(slotProps.node.data.id)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:open-in-new" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>在新窗口打开</span>
+                  </template>
+                </main-box-btn>
+
                 <!--隐藏按钮-->
                 <main-box-btn v-if="layoutDir && settingHideFile"
                               class="mr-2"
@@ -867,8 +883,17 @@
       }
 
       const onClickItem = (id) => {
-        if (id) {
+        if (id && !layoutDir.value) {
           router.push(`/note/${id}`)
+        }
+      }
+
+      const onOpenInNew = (id) => {
+        if (id) {
+          const { href } = router.resolve({
+            path: `/note/${id}`,
+          })
+          window.open(href, '_blank')
         }
       }
 
@@ -935,6 +960,7 @@
         delBadLoading,
         onDelBad,
         onClickItem,
+        onOpenInNew,
       }
     },
   })

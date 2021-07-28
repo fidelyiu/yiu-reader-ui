@@ -2,7 +2,7 @@
   <div class="h-full w-full flex flex-col">
     <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
       <div class="fa-center text-2xl">
-        <span>{{ noteName }}</span>
+        <span>{{ noteName }}{{ width }}</span>
         <span v-show="noteLoading">
           <n-spin class="ml-[8px] p-[4px]"/>
         </span>
@@ -11,6 +11,30 @@
         <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
           <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
           <span>全局搜索</span>
+        </button>
+        <button v-show="!showDir"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="onShowDir">
+          <span class="iconify block mr-1" data-icon="mdi:clipboard-list-outline" data-inline="false"></span>
+          <span>展示目录</span>
+        </button>
+        <button v-show="showDir"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="showDir = false">
+          <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+          <span>隐藏目录</span>
+        </button>
+        <button v-show="!showMainPoint"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="onShowMainPoint">
+          <span class="iconify block mr-1" data-icon="mdi:format-list-numbered" data-inline="false"></span>
+          <span>展示大纲</span>
+        </button>
+        <button v-show="showMainPoint"
+                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
+                @click="showMainPoint = false">
+          <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+          <span>隐藏大纲</span>
         </button>
         <button v-show="hideOrder"
                 class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
@@ -32,31 +56,42 @@
     </div>
     <!--<div class="h-[16px] bg-blue-50 flex-none"></div>-->
     <div class="flex-grow h-0 flex">
+      <!--左留白-->
       <div class="flex-grow bg-blue-50"></div>
-      <div class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
-        <div class="mt-[32px]">大纲</div>
+      <!--目录-->
+      <div v-show="showDir" class="flex-none w-[16px] bg-blue-50"></div>
+      <div v-show="showDir" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">目录</div>
       </div>
-      <div class="flex-none w-[32px] bg-blue-50"></div>
-      <div class="note-page-white main-content">
-        <div v-if="noteLoading" class="h-full w-full fa-center">
-          <div class="text-center">
-            <div class="text-gray-500">文档渲染中...</div>
-            <i class="h-[5px] w-[80px] bg-blue-100 inline-block relative overflow-hidden">
-              <i class="absolute top-0 left-[-16px] inline-block h-[5px] w-[16px] bg-blue-200 note-loading"></i>
-            </i>
+      <!--左填充空格-->
+      <div class="flex-none w-[16px] bg-blue-50"></div>
+      <!--中间部门-->
+      <div style="width: 960px;" class="flex-none border-l border-r note-page-white overflow-hidden">
+        <div style="padding: 32px  96px 128px;width: 100%;height: 100%;" class="overflow-auto">
+          <div v-if="noteLoading" class="h-full w-full fa-center">
+            <div class="text-center">
+              <div class="text-gray-500">文档渲染中...</div>
+              <i class="h-[5px] w-[80px] bg-blue-100 inline-block relative overflow-hidden">
+                <i class="absolute top-0 left-[-16px] inline-block h-[5px] w-[16px] bg-blue-200 note-loading"></i>
+              </i>
+            </div>
           </div>
+          <div class="mx-auto" :class="{'hide-order': hideOrder}" v-html="pageContent"></div>
+          <div v-if="!pageContent" class="h-full w-full fa-center text-gray-500">
+            <span class="iconify text-xl mr-1" data-icon="mdi:script-outline" data-inline="false"></span>
+            <span>文档为空!</span>
+          </div>
+          <n-back-top :right="96" :bottom="96"></n-back-top>
         </div>
-        <div class="mx-auto" :class="{'hide-order': hideOrder}" v-html="pageContent"></div>
-        <div v-if="!pageContent" class="h-full w-full fa-center text-gray-500">
-          <span class="iconify text-xl mr-1" data-icon="mdi:script-outline" data-inline="false"></span>
-          <span>文档为空!</span>
-        </div>
-        <n-back-top :right="96" :bottom="96"></n-back-top>
       </div>
-      <div class="flex-none w-[32px] bg-blue-50"></div>
-      <div class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
-        <div class="mt-[32px]">目录</div>
+      <!--右填充空格-->
+      <div class="flex-none w-[16px] bg-blue-50"></div>
+      <!--大纲-->
+      <div v-show="showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">大纲</div>
       </div>
+      <div v-show="showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
+      <!--右留白-->
       <div class="flex-grow bg-blue-50"></div>
     </div>
   </div>
@@ -118,6 +153,7 @@
   import { isFunction } from 'lodash'
   import { timeGetStr2 } from 'yiu-js/time/time-get'
   import { MarkdownItemInfo } from '/@/vo/note/markdown-item-info'
+  import { useTitle, useWindowSize } from '@vueuse/core'
 
   export default defineComponent({
     name: 'NotePage',
@@ -131,6 +167,7 @@
       NSpin,
     },
     setup() {
+      const pageTitle = useTitle()
       const route = useRoute()
       const notification = useNotification()
       const pageContent = ref('')
@@ -145,6 +182,7 @@
       const markdownTree = ref<Array<MarkdownItemInfo>>([])
 
       const md = genMd(markdownTree)
+      const { width } = useWindowSize()
 
       const loadNote = (id) => {
         workspace.value = {}
@@ -162,6 +200,7 @@
             if (res.data.result) {
               workspace.value = res.data.result.workspace
               note.value = res.data.result.note
+              pageTitle.value = 'YR - ' + (res.data.result.note.alias || res.data.result.note.name || '-')
               parentName.value = res.data.result.parentName
               modTime.value = timeGetStr2(res.data.result.modTime)
               noteSize.value = res.data.result.size
@@ -189,6 +228,14 @@
           }
         }
       })
+      watch(
+          () => route.path,
+          () => {
+            if (!route.path.startsWith('/note')) {
+              pageTitle.value = import.meta.env.VITE_GLOB_APP_TITLE || 'Yiu Reader'
+            }
+          },
+      )
 
       const noteName = computed(() => note.value.alias || note.value.name || '-')
       const notePath = computed(() => {
@@ -234,6 +281,16 @@
       }
 
       const hideOrder = ref(false)
+      const showMainPoint = ref(false)
+      // 展示大纲
+      const onShowMainPoint = () => {
+        showMainPoint.value = true
+      }
+      const showDir = ref(false)
+      // 展示大纲
+      const onShowDir = () => {
+        showDir.value = true
+      }
 
       return {
         loadNote,
@@ -249,19 +306,17 @@
         noteSizeWithUnit,
         hideOrder,
         noteLoading,
+        width,
+        showMainPoint,
+        onShowMainPoint,
+        showDir,
+        onShowDir,
       }
     },
   })
 </script>
 
 <style scoped>
-  .main-content {
-    @apply h-full w-[960px] overflow-auto;
-    @apply border-l border-r;
-    @apply px-[96px] pt-[32px] pb-[128px];
-    @apply flex-none;
-  }
-
   .note-page-white {
     @apply bg-indigo-50;
     --tw-bg-opacity: .1;
