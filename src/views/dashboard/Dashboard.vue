@@ -13,25 +13,25 @@
             <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
             <span>全局搜索</span>
           </button>
-          <button v-show="!showSetting"
+          <button v-show="!showSetting && width > 480"
                   class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                   @click="showSetting=!showSetting">
             <span class="iconify block mr-1" data-icon="mdi:cog" data-inline="false"></span>
             <span>开启设置</span>
           </button>
-          <button v-show="showSetting"
+          <button v-show="showSetting && width > 480"
                   class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                   @click="showSetting=!showSetting">
             <span class="iconify block mr-1" data-icon="mdi:cog-off" data-inline="false"></span>
             <span>关闭设置</span>
           </button>
-          <button v-show="!customizeMode"
+          <button v-show="!customizeMode && width > 480"
                   class="yiu-blue-big-circular-btn fa-center focus:outline-none"
                   @click="onChangeCustomizeMode">
             <span class="iconify block mr-1" data-icon="mdi:pencil-outline" data-inline="false"></span>
             <span>自定义</span>
           </button>
-          <button v-show="customizeMode"
+          <button v-show="customizeMode && width > 480"
                   class="yiu-blue-big-circular-btn fa-center focus:outline-none"
                   @click="onChangeCustomizeMode">
             <span class="iconify block mr-1" data-icon="mdi:check" data-inline="false"></span>
@@ -83,6 +83,7 @@
   import { NSpin } from 'naive-ui'
   import { useWidgetStore } from '/@/store/modules/widget'
   import { layoutTypeIsLink, layoutTypeIsMainBox } from '/@/vo/enum/layout-type'
+  import { useWindowSize } from '@vueuse/core'
 
   export default defineComponent({
     name: 'Dashboard',
@@ -93,6 +94,7 @@
       NSpin,
     },
     setup() {
+      const { width } = useWindowSize()
       const widgetWrapperWidth = ref(0)
       provide('widgetWrapperWidth', widgetWrapperWidth)
       const linkCount = ref(0)
@@ -167,6 +169,7 @@
 
       getLayoutList()
       return {
+        width,
         showSetting,
         mainStore,
         changeMenu,

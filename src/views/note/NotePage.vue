@@ -3,7 +3,7 @@
     <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
       <div class="fa-center text-2xl flex-grow w-0">
         <div class="w-full truncate">
-          <span>{{ noteName }}</span>
+          <span>{{ noteName }}{{ width }}</span>
           <span v-show="noteLoading">
             <n-spin class="ml-[8px] p-[4px]"/>
           </span>
@@ -14,25 +14,25 @@
           <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
           <span>全局搜索</span>
         </button>
-        <button v-show="!showDir"
+        <button v-show="!showDir && width>1270"
                 class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                 @click="onShowDir">
           <span class="iconify block mr-1" data-icon="mdi:clipboard-list-outline" data-inline="false"></span>
           <span>展示目录</span>
         </button>
-        <button v-show="showDir"
+        <button v-show="showDir && width>1270"
                 class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                 @click="showDir = false">
           <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
           <span>隐藏目录</span>
         </button>
-        <button v-show="!showMainPoint"
+        <button v-show="!showMainPoint && width>1270"
                 class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                 @click="onShowMainPoint">
           <span class="iconify block mr-1" data-icon="mdi:format-list-numbered" data-inline="false"></span>
           <span>展示大纲</span>
         </button>
-        <button v-show="showMainPoint"
+        <button v-show="showMainPoint && width>1270"
                 class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
                 @click="showMainPoint = false">
           <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
@@ -59,16 +59,18 @@
     <!--<div class="h-[16px] bg-blue-50 flex-none"></div>-->
     <div class="flex-grow h-0 flex">
       <!--左留白-->
-      <div class="flex-grow bg-blue-50"></div>
+      <div v-show="width>990" class="flex-grow bg-blue-50"></div>
       <!--目录-->
-      <div v-show="showDir" class="flex-none w-[16px] bg-blue-50"></div>
-      <div v-show="showDir" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+      <div v-show="width>1270 && showDir" class="flex-none w-[16px] bg-blue-50"></div>
+      <div v-show="width>1270 && showDir" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">目录</div>
       </div>
       <!--左填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
       <!--中间部门-->
-      <div style="width: 960px;" class="flex-none border-l border-r note-page-white overflow-hidden">
+      <div class="flex-none border-l border-r note-page-white overflow-hidden"
+           :class="{'flex-none': width>990,'flex-grow': width<=990}"
+           :style="{'width': width>990?'960px':'0'}">
         <div style="padding: 32px  96px 128px;width: 100%;height: 100%;" class="overflow-auto">
           <div v-if="noteLoading" class="h-full w-full fa-center">
             <div class="text-center">
@@ -89,12 +91,12 @@
       <!--右填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
       <!--大纲-->
-      <div v-show="showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+      <div v-show="width>1270 && showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">大纲</div>
       </div>
-      <div v-show="showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
+      <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
       <!--右留白-->
-      <div class="flex-grow bg-blue-50"></div>
+      <div v-show="width>990" class="flex-grow bg-blue-50"></div>
     </div>
   </div>
   <n-modal v-model:show="infoModal">
@@ -288,12 +290,26 @@
       const showMainPoint = ref(false)
       // 展示大纲
       const onShowMainPoint = () => {
-        showMainPoint.value = true
+        if (1540 <= width.value) {
+          showMainPoint.value = true
+        } else if (1270 <= width.value) {
+          showDir.value = false
+          showMainPoint.value = true
+        } else {
+          showMainPoint.value = false
+        }
       }
       const showDir = ref(false)
       // 展示大纲
       const onShowDir = () => {
-        showDir.value = true
+        if (1540 <= width.value) {
+          showDir.value = true
+        } else if (1270 <= width.value) {
+          showMainPoint.value = false
+          showDir.value = true
+        } else {
+          showDir.value = false
+        }
       }
 
       return {
