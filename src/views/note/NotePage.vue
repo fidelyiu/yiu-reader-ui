@@ -1,7 +1,12 @@
 <template>
   <div class="h-full w-full flex flex-col">
     <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
-      <div class="fa-center text-2xl">{{ noteName }}</div>
+      <div class="fa-center text-2xl">
+        <span>{{ noteName }}</span>
+        <span v-show="noteLoading">
+          <n-spin class="ml-[8px] p-[4px]"/>
+        </span>
+      </div>
       <div class="fa-center">
         <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
           <span class="iconify block mr-1" data-icon="mdi:magnify" data-inline="false"></span>
@@ -33,7 +38,19 @@
       </div>
       <div class="flex-none w-[32px] bg-blue-50"></div>
       <div class="note-page-white main-content">
+        <div v-if="noteLoading" class="h-full w-full fa-center">
+          <div class="text-center">
+            <div class="text-gray-500">文档渲染中...</div>
+            <i class="h-[5px] w-[80px] bg-blue-100 inline-block relative overflow-hidden">
+              <i class="absolute top-0 left-[-16px] inline-block h-[5px] w-[16px] bg-blue-200 note-loading"></i>
+            </i>
+          </div>
+        </div>
         <div class="mx-auto" :class="{'hide-order': hideOrder}" v-html="pageContent"></div>
+        <div v-if="!pageContent" class="h-full w-full fa-center text-gray-500">
+          <span class="iconify text-xl mr-1" data-icon="mdi:script-outline" data-inline="false"></span>
+          <span>文档为空!</span>
+        </div>
         <n-back-top :right="96" :bottom="96"></n-back-top>
       </div>
       <div class="flex-none w-[32px] bg-blue-50"></div>
@@ -95,7 +112,7 @@
   import { computed, defineComponent, nextTick, ref, watch } from 'vue'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
-  import { NBackTop, NButton, NCard, NForm, NFormItem, NModal, useNotification } from 'naive-ui'
+  import { NBackTop, NButton, NCard, NForm, NFormItem, NModal, NSpin, useNotification } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import { genMd } from '/@/utils/mi'
   import { isFunction } from 'lodash'
@@ -111,12 +128,14 @@
       NForm,
       NFormItem,
       NButton,
+      NSpin,
     },
     setup() {
       const route = useRoute()
       const notification = useNotification()
       const pageContent = ref('')
       const pageLoading = ref(false)
+      const noteLoading = ref(false)
       const workspace = ref<any>({})
       const note = ref<any>({})
       const parentName = ref<Array<string>>([])
@@ -133,6 +152,7 @@
         parentName.value = []
         modTime.value = ''
         noteSize.value = 0
+        noteLoading.value = true
         yiuHttp({
           api: SERVER_API.noteApi.reade,
           loading: { flag: pageLoading },
@@ -154,6 +174,9 @@
                 }
               })
             }
+          },
+          finally: () => {
+            noteLoading.value = false
           },
         })
       }
@@ -206,6 +229,7 @@
         infoModal.value = false
       }
       const onShowNoteInfo = () => {
+        if (pageLoading.value) return
         infoModal.value = true
       }
 
@@ -224,6 +248,7 @@
         modTime,
         noteSizeWithUnit,
         hideOrder,
+        noteLoading,
       }
     },
   })
@@ -240,5 +265,15 @@
   .note-page-white {
     @apply bg-indigo-50;
     --tw-bg-opacity: .1;
+  }
+
+  .note-loading {
+    animation: am-end 1s linear infinite
+  }
+
+  @keyframes am-end {
+    to {
+      left: 64px;
+    }
   }
 </style>
