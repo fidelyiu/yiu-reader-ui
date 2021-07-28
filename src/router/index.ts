@@ -1,12 +1,12 @@
 import { App } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '/@/router/routes'
 import nProgress from 'nprogress'
 import { useMainStore } from '/@/store/modules/main'
 import { statusIsNotValid } from '/@/vo/enum/obj-status'
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: routes,
     strict: true,
     scrollBehavior: () => ({ left: 0, top: 0 }),

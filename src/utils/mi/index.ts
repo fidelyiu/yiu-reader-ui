@@ -154,6 +154,7 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             tokens[index + 1].children?.unshift(
                 Object.assign(new state.Token('yiu_anchor_open', 'span', 1), {
                     attrs: [
+                        // italic mr-2
                         ['class', 'yiu-anchor-order'],
                     ],
                 }),

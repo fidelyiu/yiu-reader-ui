@@ -94,7 +94,10 @@
       <div class="flex-none w-[16px] bg-blue-50"></div>
       <!--大纲-->
       <div v-show="width>1270 && showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
-        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">大纲</div>
+        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">
+          <MainPointTree :data="markdownTree"
+                         :show-number="!hideOrder"></MainPointTree>
+        </div>
       </div>
       <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
       <!--右留白-->
@@ -160,6 +163,7 @@
   import { timeGetStr2 } from 'yiu-js/time/time-get'
   import { MarkdownItemInfo } from '/@/vo/note/markdown-item-info'
   import { useTitle, useWindowSize } from '@vueuse/core'
+  import MainPointTree from '/@/views/note/MainPointTree.vue'
 
   export default defineComponent({
     name: 'NotePage',
@@ -171,6 +175,7 @@
       NFormItem,
       NButton,
       NSpin,
+      MainPointTree,
     },
     setup() {
       const pageTitle = useTitle()
@@ -289,7 +294,7 @@
       }
 
       const hideOrder = ref(false)
-      const showMainPoint = ref(false)
+      const showMainPoint = ref(true)
       // 展示大纲
       const onShowMainPoint = () => {
         if (1540 <= width.value) {
@@ -333,6 +338,7 @@
         onShowMainPoint,
         showDir,
         onShowDir,
+        markdownTree,
       }
     },
   })
