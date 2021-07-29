@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="flex p-[5px]" :class="{'bg-blue-50': isActive}">
+    <div class="flex p-[5px] border border-transparent"
+         :class="{'bg-blue-50': isActive}">
       <div class="flex-none border border-transparent mr-1"
-           :class="{'arrow-icon':node.child.length}">
+           :class="{'arrow-icon':node.child.length}"
+           @click="onChangeOpen">
         <div v-show="!node.child.length" class="mt-[-4px] max-h-[15px]">
           <span class="iconify text-2xl text-gray-200" data-icon="mdi:circle-small" data-inline="false"></span>
         </div>
@@ -79,6 +81,11 @@
         //   e.preventDefault()
         //   element.scrollIntoView(true)
       }
+      const onChangeOpen = () => {
+        if (prop.node.child.length) {
+          isOpen.value = !isOpen.value
+        }
+      }
       return {
         showNumber,
         searchStr,
@@ -86,6 +93,7 @@
         getNumberTitle,
         onClickItem,
         isActive,
+        onChangeOpen,
       }
     },
   })

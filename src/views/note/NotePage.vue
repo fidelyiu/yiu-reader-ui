@@ -94,8 +94,10 @@
       <!--右填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
       <!--大纲-->
-      <div v-show="width>1270 && showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
-        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">
+      <div v-show="width>1270 && showMainPoint"
+           style="width: 256px"
+           class="h-full overflow-auto flex-none bg-blue-50">
+        <div style="height: calc(100% - 140px);" class="w-full border-l border-r border-b bg-white">
           <MainPointTree :data="markdownTree"
                          :show-number="!hideOrder"
                          :active-el-id="activeElId"></MainPointTree>
