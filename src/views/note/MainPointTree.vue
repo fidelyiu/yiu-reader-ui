@@ -21,11 +21,14 @@
       data: propTypes.object,
       showNumber: propTypes.bool.def(false),
       searchStr: propTypes.string.def(''),
+      activeElId: propTypes.string.def(''),
     },
     setup(prop) {
       provide('showNumber', computed(() => prop.showNumber))
       provide('searchStr', computed(() => prop.searchStr))
-      return {}
+      provide('activeElId', computed(() => prop.activeElId))
+      return {
+      }
     },
   })
 </script>

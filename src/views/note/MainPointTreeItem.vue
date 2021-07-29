@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex p-[5px]">
-      <div class="flex-none border border-transparent"
+    <div class="flex p-[5px]" :class="{'bg-blue-50': isActive}">
+      <div class="flex-none border border-transparent mr-1"
            :class="{'arrow-icon':node.child.length}">
         <div v-show="!node.child.length" class="mt-[-4px] max-h-[15px]">
           <span class="iconify text-2xl text-gray-200" data-icon="mdi:circle-small" data-inline="false"></span>
@@ -16,8 +16,12 @@
       <div v-show="showNumber" class="flex-none text-gray-400">
         <span class="font-extrabold text-xs">{{ getNumberTitle }}</span>
       </div>
-      <a class="block break-all ml-1 hover:underline min-w-[120px]" :href="'#'+node.href">
-        <span class="text-xs font-medium ">{{ node.title || '-' }}</span>
+      <a class="block break-all ml-1 hover:underline min-w-[120px]"
+         :class="{'underline': isActive}"
+         :href="'#'+node.href"
+         @click="onClickItem">
+        <!--text-blue-400-->
+        <span class="text-xs font-medium">{{ node.title || '-' }}</span>
       </a>
     </div>
     <transition name="yiu-fade-in">
@@ -43,13 +47,45 @@
     setup(prop) {
       const showNumber: any = inject('showNumber')
       const searchStr: any = inject('searchStr')
+      const activeElId: any = inject('activeElId')
+      const isActive = computed(() => {
+        if (!activeElId.value || !prop?.node?.href) {
+          return false
+        }
+        return activeElId.value === prop.node.href
+      })
       const isOpen = ref(true)
       const getNumberTitle = computed(() => prop.node.orderNum.reduce((acc, t) => acc + t + '.', ''))
+      const onClickItem = (e) => {
+        if (!activeElId.value) return
+        if (!prop?.node?.href) return
+        if (activeElId.value === prop.node.href) {
+          e.preventDefault()
+        }
+        //   if (!activeElId.value) return
+        //   if (!prop?.node?.href) return
+        //   let activeEl = document.getElementById(activeElId.value)
+        //   if (!activeEl) return
+        //   let element = document.getElementById(prop.node.href)
+        //   if (!element) return
+        //   let scrollPx = activeEl.offsetTop - element.offsetTop
+        //   if (scrollPx < 0) {
+        //     scrollPx = -scrollPx
+        //   }
+        //   if (scrollPx > 1000) {
+        //     return
+        //   }
+        //   // 小于1000的滚动
+        //   e.preventDefault()
+        //   element.scrollIntoView(true)
+      }
       return {
         showNumber,
         searchStr,
         isOpen,
         getNumberTitle,
+        onClickItem,
+        isActive,
       }
     },
   })
@@ -57,7 +93,7 @@
 
 <style scoped>
   .arrow-icon:hover {
-    @apply border border-blue-100 bg-blue-50;
+    @apply border border-blue-200 bg-blue-100;
     /*--tw-bg-opacity: 1;*/
   }
 

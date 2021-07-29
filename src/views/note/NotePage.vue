@@ -71,7 +71,8 @@
       <div class="flex-none border-l border-r note-page-white overflow-hidden"
            :class="{'flex-none': width>990,'flex-grow': width<=990}"
            :style="{'width': width>990?'960px':'0'}">
-        <div style="width: 100%;height: 100%;"
+        <div id="yiu-note-container"
+             style="width: 100%;height: 100%;"
              :style="{'padding': width>900?'32px  96px 128px':'16px'}"
              class="overflow-auto">
           <div v-if="noteLoading" class="h-full w-full fa-center">
@@ -96,7 +97,8 @@
       <div v-show="width>1270 && showMainPoint" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">
           <MainPointTree :data="markdownTree"
-                         :show-number="!hideOrder"></MainPointTree>
+                         :show-number="!hideOrder"
+                         :active-el-id="activeElId"></MainPointTree>
         </div>
       </div>
       <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
@@ -189,6 +191,7 @@
       const parentName = ref<Array<string>>([])
       const modTime = ref('')
       const noteSize = ref(0)
+      const activeElId = ref('')
 
       const markdownTree = ref<Array<MarkdownItemInfo>>([])
 
@@ -223,6 +226,11 @@
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
+                  if (activeElId.value) {
+                    let a = document.createElement('a')
+                    a.href = route.fullPath
+                    a.click()
+                  }
                 }
               })
             }
@@ -245,8 +253,25 @@
           () => route.path,
           () => {
             if (!route.path.startsWith('/note')) {
-              pageTitle.value = import.meta.env.VITE_GLOB_APP_TITLE || 'Yiu Reader'
+              pageTitle.value = (import.meta.env.VITE_GLOB_APP_TITLE || 'Yiu Reader') as string
             }
+          },
+      )
+      watch(
+          () => route.fullPath,
+          (v) => {
+            let symbolIndex = v.lastIndexOf('#')
+            if (symbolIndex !== -1) {
+              activeElId.value = v.slice(symbolIndex + 1)
+            }
+            if (!noteLoading.value) {
+              let a = document.createElement('a')
+              a.href = route.fullPath
+              a.click()
+            }
+          },
+          {
+            immediate: true,
           },
       )
 
@@ -339,6 +364,7 @@
         showDir,
         onShowDir,
         markdownTree,
+        activeElId,
       }
     },
   })
