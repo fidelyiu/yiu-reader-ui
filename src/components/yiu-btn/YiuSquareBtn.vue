@@ -3,7 +3,7 @@
     <div v-show="showText">
       <n-popover trigger="hover" :style="{ maxWidth: '160px' }">
         <template #trigger>
-          <button :class="btnClass" @click.stop="$emit('btnClick')">
+          <button :style="{padding: paddingPx+'px'}" :class="btnClass" @click.stop="$emit('btnClick')">
             <div v-show="loading">
               <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
             </div>
@@ -18,7 +18,7 @@
       </n-popover>
     </div>
     <div v-show="!showText">
-      <button :class="btnClass" @click.stop="$emit('btnClick')">
+      <button :style="{padding: paddingPx+'px'}" :class="btnClass" @click.stop="$emit('btnClick')">
         <div v-show="loading">
           <span class="iconify block animate-spin" data-icon="mdi:loading" data-inline="false"></span>
         </div>
@@ -43,6 +43,7 @@
     props: {
       showText: propTypes.bool.def(false),
       loading: propTypes.bool.def(false),
+      paddingPx: propTypes.number.def(8),
       btnClass: propTypes.string.def('yiu-blue-square-btn-1'),
     },
     emits: ['btnClick'],

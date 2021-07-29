@@ -6,10 +6,10 @@
           <SearchInput v-model="searchKey" class="flex-grow mr-2"></SearchInput>
           <div class="flex-none flex">
             <!--是否展示提示-->
-            <main-box-btn class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          show-text
-                          @btnClick="changeShowBtnText">
+            <yiu-square-btn class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            show-text
+                            @btnClick="changeShowBtnText">
               <template #icon>
                 <div v-show="!mainStore.mainBoxShowText">
                   <span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>
@@ -22,40 +22,40 @@
                 <span v-show="mainStore.mainBoxShowText">隐藏按钮提示</span>
                 <span v-show="!mainStore.mainBoxShowText">查看按钮提示</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--刷新目录按钮-->
-            <main-box-btn v-show="layoutDir"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          :loading="refreshLoading"
-                          @btnClick="onRefresh">
+            <yiu-square-btn v-show="layoutDir"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            :loading="refreshLoading"
+                            @btnClick="onRefresh">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:folder-refresh-outline" data-inline="false"></span>
               </template>
               <template #text>
                 <span>从本地刷新目录，可在日志中查看刷新。</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--清除所有无效note-->
-            <main-box-btn v-show="layoutDir"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onDelBad">
+            <yiu-square-btn v-show="layoutDir"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onDelBad">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:delete-alert-outline" data-inline="false"></span>
               </template>
               <template #text>
                 <span>清除所有无效笔记</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--刷新按钮-->
-            <main-box-btn class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          :loading="treeLoading"
-                          @btnClick="loadNote">
+            <yiu-square-btn class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            :loading="treeLoading"
+                            @btnClick="loadNote">
               <template #icon>
                 <div>
                   <span class="iconify block" data-icon="mdi:autorenew" data-inline="false"></span>
@@ -64,13 +64,13 @@
               <template #text>
                 <span>刷新笔记</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--根目录添加按钮-->
-            <main-box-btn v-show="!settingHideFile"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onAddNote('')">
+            <yiu-square-btn v-show="!settingHideFile"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onAddNote('')">
               <template #icon>
                 <div>
                   <span class="iconify block" data-icon="mdi:plus" data-inline="false"></span>
@@ -79,26 +79,26 @@
               <template #text>
                 <span>添加笔记</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--定位所有无效note-->
-            <main-box-btn v-show="layoutDir"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onPositionErrFile">
+            <yiu-square-btn v-show="layoutDir"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onPositionErrFile">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
               </template>
               <template #text>
                 <span>定位所有无效笔记</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--设置隐藏文件-->
-            <main-box-btn v-show="layoutDir && !settingHideFile"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onSettingHideFile">
+            <yiu-square-btn v-show="layoutDir && !settingHideFile"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onSettingHideFile">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:eye-settings-outline" data-inline="false"></span>
                 <!--<span class="iconify block" data-icon="mdi:eye-outline" data-inline="false"></span>-->
@@ -106,13 +106,13 @@
               <template #text>
                 <span>设置文件隐藏属性</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--设置隐藏文件完成-->
-            <main-box-btn v-show="layoutDir && settingHideFile"
-                          class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onSettingHideFileOk">
+            <yiu-square-btn v-show="layoutDir && settingHideFile"
+                            class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onSettingHideFileOk">
               <template #icon>
                 <span class="iconify block" data-icon="mdi:eye-check-outline" data-inline="false"></span>
                 <!--<span class="iconify block" data-icon="mdi:eye-remove-outline" data-inline="false"></span>-->
@@ -120,12 +120,12 @@
               <template #text>
                 <span>设置文件隐藏完成</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--图标控制按钮-->
-            <main-box-btn class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="changeShowBtIcon">
+            <yiu-square-btn class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="changeShowBtIcon">
               <template #icon>
                 <div v-show="mainStore.mainBoxShowIcon">
                   <span class="iconify block" data-icon="mdi:lightbulb-off-outline" data-inline="false"></span>
@@ -138,12 +138,12 @@
                 <span v-show="mainStore.mainBoxShowIcon">隐藏图标</span>
                 <span v-show="!mainStore.mainBoxShowIcon">查看图标</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--数字控制按钮-->
-            <main-box-btn class="mr-2"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="changeShowBtNum">
+            <yiu-square-btn class="mr-2"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="changeShowBtNum">
               <template #icon>
                 <div v-show="mainStore.mainBoxShowNum">
                   <span class="iconify block" data-icon="mdi:alphabetical-off" data-inline="false"></span>
@@ -156,12 +156,12 @@
                 <span v-show="mainStore.mainBoxShowNum">隐藏序号</span>
                 <span v-show="!mainStore.mainBoxShowNum">查看序号</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--编辑目录按钮-->
-            <main-box-btn v-show="!layoutDir"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onLayOutDir">
+            <yiu-square-btn v-show="!layoutDir"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onLayOutDir">
               <template #icon>
                 <div>
                   <span class="iconify block" data-icon="mdi:list-status" data-inline="false"></span>
@@ -170,12 +170,12 @@
               <template #text>
                 <span>编辑目录</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
             <!--取消编辑目录按钮-->
-            <main-box-btn v-show="layoutDir"
-                          btn-class="yiu-blue-square-btn-3"
-                          :show-text="mainStore.mainBoxShowText"
-                          @btnClick="onLayOutDirCancel">
+            <yiu-square-btn v-show="layoutDir"
+                            btn-class="yiu-blue-square-btn-3"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onLayOutDirCancel">
               <template #icon>
                 <div>
                   <span class="iconify block" data-icon="mdi:playlist-remove" data-inline="false"></span>
@@ -184,7 +184,7 @@
               <template #text>
                 <span>编辑完成</span>
               </template>
-            </main-box-btn>
+            </yiu-square-btn>
           </div>
         </div>
         <!--空数据栏-->
@@ -215,7 +215,7 @@
                   <span v-if="!slotProps.node.data.show">[ 已隐藏 ]</span>
                 </div>
                 <!--在新窗口打开-->
-                <main-box-btn
+                <yiu-square-btn
                     v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
                     class="mr-2"
                     :show-text="mainStore.mainBoxShowText"
@@ -228,14 +228,14 @@
                   <template #text>
                     <span>在新窗口打开</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
 
                 <!--隐藏按钮-->
-                <main-box-btn v-if="layoutDir && settingHideFile"
-                              class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              :loading="changeFileShowLoading"
-                              @btnClick="changeFileShow(slotProps.node.data.id)">
+                <yiu-square-btn v-if="layoutDir && settingHideFile"
+                                class="mr-2"
+                                :show-text="mainStore.mainBoxShowText"
+                                :loading="changeFileShowLoading"
+                                @btnClick="changeFileShow(slotProps.node.data.id)">
                   <template #icon>
                     <div v-show="slotProps.node.data.show">
                       <span class="iconify block" data-icon="mdi:eye-off-outline" data-inline="false"></span>
@@ -248,11 +248,11 @@
                     <span v-show="slotProps.node.data.show">隐藏文件</span>
                     <span v-show="!slotProps.node.data.show">展示文件</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--异常提示按钮-->
-                <main-box-btn v-if="statusIsInvalid(slotProps.node.data.status)"
-                              class="mr-2"
-                              show-text>
+                <yiu-square-btn v-if="statusIsInvalid(slotProps.node.data.status)"
+                                class="mr-2"
+                                show-text>
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:map-marker-alert-outline" data-inline="false"></span>
@@ -263,9 +263,9 @@
                       {{ slotProps.node.data.absPath || '-' }}
                     </div>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--增加按钮-->
-                <main-box-btn
+                <yiu-square-btn
                     v-show="!settingHideFile && slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status)"
                     class="mr-2"
                     :show-text="mainStore.mainBoxShowText"
@@ -278,9 +278,9 @@
                   <template #text>
                     <span>添加笔记</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--在编辑器中打开-->
-                <main-box-btn
+                <yiu-square-btn
                     v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
                     class="mr-2"
                     :show-text="mainStore.mainBoxShowText"
@@ -293,12 +293,12 @@
                   <template #text>
                     <span>在编辑器中打开</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--定位按钮-->
-                <main-box-btn v-if="!statusIsInvalid(slotProps.node.data.status)"
-                              class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              @btnClick="onPosition(slotProps.node.data.id)">
+                <yiu-square-btn v-if="!statusIsInvalid(slotProps.node.data.status)"
+                                class="mr-2"
+                                :show-text="mainStore.mainBoxShowText"
+                                @btnClick="onPosition(slotProps.node.data.id)">
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
@@ -307,11 +307,11 @@
                   <template #text>
                     <span>在文件管理器中打开</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--修改按钮-->
-                <main-box-btn class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              @btnClick="onEditNote(slotProps.node.data)">
+                <yiu-square-btn class="mr-2"
+                                :show-text="mainStore.mainBoxShowText"
+                                @btnClick="onEditNote(slotProps.node.data)">
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:square-edit-outline" data-inline="false"></span>
@@ -320,13 +320,13 @@
                   <template #text>
                     <span>修改笔记</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--上移按钮-->
-                <main-box-btn v-if="layoutDir && !settingHideFile"
-                              class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              :loading="changeSortLoading"
-                              @btnClick="changeSort(slotProps.node.data, 'up')">
+                <yiu-square-btn v-if="layoutDir && !settingHideFile"
+                                class="mr-2"
+                                :show-text="mainStore.mainBoxShowText"
+                                :loading="changeSortLoading"
+                                @btnClick="changeSort(slotProps.node.data, 'up')">
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:arrow-up" data-inline="false"></span>
@@ -335,13 +335,13 @@
                   <template #text>
                     <span>上移</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--下移按钮-->
-                <main-box-btn v-if="layoutDir && !settingHideFile"
-                              class="mr-2"
-                              :show-text="mainStore.mainBoxShowText"
-                              :loading="changeSortLoading"
-                              @btnClick="changeSort(slotProps.node.data, 'down')">
+                <yiu-square-btn v-if="layoutDir && !settingHideFile"
+                                class="mr-2"
+                                :show-text="mainStore.mainBoxShowText"
+                                :loading="changeSortLoading"
+                                @btnClick="changeSort(slotProps.node.data, 'down')">
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:arrow-down" data-inline="false"></span>
@@ -350,10 +350,10 @@
                   <template #text>
                     <span>下移</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
                 <!--删除按钮-->
-                <main-box-btn :show-text="mainStore.mainBoxShowText"
-                              @btnClick="onDelete(slotProps.node.data)">
+                <yiu-square-btn :show-text="mainStore.mainBoxShowText"
+                                @btnClick="onDelete(slotProps.node.data)">
                   <template #icon>
                     <div>
                       <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
@@ -362,7 +362,7 @@
                   <template #text>
                     <span>删除</span>
                   </template>
-                </main-box-btn>
+                </yiu-square-btn>
               </div>
             </template>
           </YiuNoteTree>
@@ -508,7 +508,6 @@
   import { useLogStore } from '/@/store/modules/log'
   import { NoteReadResult } from '/@/vo/enum/note-read-result'
   import { nanoid } from 'nanoid'
-  import MainBoxBtn from '/@/views/dashboard/widget/main-box/MainBoxBtn.vue'
   import { useMainStore } from '/@/store/modules/main'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
   import {
@@ -530,6 +529,7 @@
   } from '/@/hooks/entity/use-edit'
   import { isFunction } from 'lodash'
   import router from '/@/router'
+  import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
@@ -540,7 +540,7 @@
       NCard,
       NButton,
       NSpin,
-      MainBoxBtn,
+      YiuSquareBtn,
       NoteForm,
     },
     props: {

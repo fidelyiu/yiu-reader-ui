@@ -70,13 +70,14 @@
       <!--左填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
       <!--中间部门-->
-      <div class="flex-none border-l border-r note-page-white overflow-hidden"
+      <div class="flex-none note-page-white overflow-hidden h-full flex flex-col"
            :class="{'flex-none': width>990,'flex-grow': width<=990}"
            :style="{'width': width>990?'960px':'0'}">
+        <div class="h-[8px] bg-blue-50 flex-none"></div>
         <div id="yiu-note-container"
-             style="width: 100%;height: 100%;"
+             style="width: 100%;"
              :style="{'padding': width>900?'32px  96px 128px':'16px'}"
-             class="overflow-auto">
+             class="border overflow-auto flex-grow h-0">
           <div v-if="noteLoading" class="h-full w-full fa-center">
             <div class="text-center">
               <div class="text-gray-500">文档渲染中...</div>
@@ -101,8 +102,66 @@
            class="h-full overflow-auto flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);"
              class="w-full bg-white flex flex-col">
-          <div class="border-l border-r border-b flex-none">
-            Hello
+          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="border-l border flex-none px-[10px] py-[8px] flex justify-between">
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>定位当前文档</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>定位当前大纲</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>关闭所有大纲</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>展开所有大纲</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <!--<span class="iconify block" data-icon="mdi:magnify" data-inline="false"></span>-->
+                <span class="iconify block" data-icon="mdi:magnify-remove-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>打开搜索</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
+                <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>按钮提示</span>
+              </template>
+            </yiu-square-btn>
+            <yiu-square-btn show-text :padding-px="4">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>关闭大纲</span>
+              </template>
+            </yiu-square-btn>
           </div>
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <div class="flex-grow h-0 w-full flex flex-col border">
@@ -185,6 +244,7 @@
   import { useTitle, useWindowSize } from '@vueuse/core'
   import MainPointTree from '/@/views/note/MainPointTree.vue'
   import SearchInput from '/@/components/SearchInput.vue'
+  import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
 
   export default defineComponent({
     name: 'NotePage',
@@ -198,6 +258,7 @@
       NSpin,
       MainPointTree,
       SearchInput,
+      YiuSquareBtn,
     },
     setup() {
       const pageTitle = useTitle()
