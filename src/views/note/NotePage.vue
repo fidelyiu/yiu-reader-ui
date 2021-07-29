@@ -62,7 +62,9 @@
       <div v-show="width>990" class="flex-grow bg-blue-50"></div>
       <!--目录-->
       <div v-show="width>1270 && showDir" class="flex-none w-[16px] bg-blue-50"></div>
-      <div v-show="width>1270 && showDir" class="h-full overflow-auto w-[256px] flex-none bg-blue-50">
+      <div v-show="width>1270 && showDir"
+           style="width: 256px"
+           class="h-full overflow-auto flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">目录</div>
       </div>
       <!--左填充空格-->
