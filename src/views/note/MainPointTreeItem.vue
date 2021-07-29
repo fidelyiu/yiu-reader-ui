@@ -40,8 +40,8 @@
                            :ref="setItemRef"
                            :key="item.id"
                            :node="item"
-                           @searchSuccess="onSearchSuccess"
-                           class="border-l border-blue-200"></MainPointTreeItem>
+                           class="border-l border-blue-200"
+                           @searchSuccess="onSearchSuccess"></MainPointTreeItem>
       </div>
     </transition>
   </div>
