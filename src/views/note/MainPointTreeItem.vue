@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex p-[5px] border border-transparent"
-         :class="{'bg-blue-50': isActive}">
+    <div class="flex p-[5px] border-t border-b border-transparent"
+         :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder}">
       <div class="flex-none border border-transparent mr-1"
            :class="{'arrow-icon':node.child.length}"
            @click="onChangeOpen">
@@ -19,7 +19,7 @@
         <span class="font-extrabold text-xs">{{ getNumberTitle }}</span>
       </div>
       <a class="block break-all ml-1 hover:underline min-w-[120px]"
-         :class="{'underline': isActive}"
+         :class="{'underline': isActive||showBlueBorder}"
          :href="'#'+node.href"
          @click="onClickItem">
         <!--text-blue-400-->
@@ -29,6 +29,7 @@
     <transition name="yiu-fade-in">
       <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[18px]">
         <MainPointTreeItem v-for="item in node.child"
+                           :ref="setItemRef"
                            :key="item.id"
                            :node="item"
                            class="border-l border-blue-200"></MainPointTreeItem>
@@ -47,6 +48,10 @@
       node: propTypes.object,
     },
     setup(prop) {
+      const itemRef = ref<Array<any>>([])
+      const setItemRef = (e: any) => {
+        itemRef.value.push(e)
+      }
       const showNumber: any = inject('showNumber')
       const searchStr: any = inject('searchStr')
       const activeElId: any = inject('activeElId')
@@ -55,6 +60,21 @@
           return false
         }
         return activeElId.value === prop.node.href
+      })
+      const hasChildActive = computed(() => {
+        if (!itemRef.value.length) return false
+        for (const refEl of itemRef.value) {
+          if (refEl.isActive) {
+            return true
+          }
+          if (refEl.hasChildActive) {
+            return true
+          }
+        }
+        return false
+      })
+      const showBlueBorder = computed(() => {
+        return hasChildActive.value && !isOpen.value && prop.node.isNode
       })
       const isOpen = ref(true)
       const getNumberTitle = computed(() => prop.node.orderNum.reduce((acc, t) => acc + t + '.', ''))
@@ -93,7 +113,10 @@
         getNumberTitle,
         onClickItem,
         isActive,
+        hasChildActive,
+        showBlueBorder,
         onChangeOpen,
+        setItemRef,
       }
     },
   })
