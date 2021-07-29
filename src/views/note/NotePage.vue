@@ -98,7 +98,8 @@
            style="width: 256px"
            class="h-full overflow-auto flex-none bg-blue-50">
         <div style="height: calc(100% - 140px);" class="w-full border-l border-r border-b bg-white">
-          <MainPointTree :data="markdownTree"
+          <MainPointTree ref="mainPointTreeRef"
+                         :data="markdownTree"
                          :show-number="!hideOrder"
                          :active-el-id="activeElId"></MainPointTree>
         </div>
@@ -194,6 +195,7 @@
       const modTime = ref('')
       const noteSize = ref(0)
       const activeElId = ref('')
+      const mainPointTreeRef = ref()
 
       const markdownTree = ref<Array<MarkdownItemInfo>>([])
 
@@ -232,6 +234,9 @@
                     let a = document.createElement('a')
                     a.href = route.fullPath
                     a.click()
+                    if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.setScrollMainPoint)) {
+                      mainPointTreeRef.value.setScrollMainPoint(activeElId.value)
+                    }
                   }
                 }
               })
@@ -367,6 +372,7 @@
         onShowDir,
         markdownTree,
         activeElId,
+        mainPointTreeRef,
       }
     },
   })

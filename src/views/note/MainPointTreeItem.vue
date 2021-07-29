@@ -11,7 +11,7 @@
         <div v-show="node.child.length && isOpen" class="mt-[-4px] max-h-[15px]">
           <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-down" data-inline="false"></span>
         </div>
-        <div v-show="node.child.length && !isOpen" class="mt-[-4px] max-h-[15px]">
+        <div v-show="node.child.length && !isOpen" class="mt-[-3px] max-h-[15px]">
           <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-right" data-inline="false"></span>
         </div>
       </div>
@@ -29,6 +29,7 @@
     <transition name="yiu-fade-in">
       <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[18px]">
         <MainPointTreeItem v-for="item in node.child"
+                           :id="'yiu-main-point-'+item.href"
                            :ref="setItemRef"
                            :key="item.id"
                            :node="item"

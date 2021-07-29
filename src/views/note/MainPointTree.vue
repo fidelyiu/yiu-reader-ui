@@ -1,6 +1,7 @@
 <template>
   <div class="h-full overflow-auto">
     <MainPointTreeItem v-for="item in data"
+                       :id="'yiu-main-point-'+item.href"
                        :key="item.id"
                        :node="item">
     </MainPointTreeItem>
@@ -27,7 +28,17 @@
       provide('showNumber', computed(() => prop.showNumber))
       provide('searchStr', computed(() => prop.searchStr))
       provide('activeElId', computed(() => prop.activeElId))
+      // 大纲滚动
+      const setScrollMainPoint = (mainPoint) => {
+        if (!mainPoint) return
+        const el = document.getElementById(`yiu-main-point-${mainPoint}`)
+        if (!el) return
+        setTimeout(() => {
+          el.scrollIntoView(true)
+        })
+      }
       return {
+        setScrollMainPoint,
       }
     },
   })
