@@ -8,7 +8,7 @@ Prism.plugins.toolbar.registerButton('showOrClose', function (env) {
         button.innerHTML = '关闭'
     } else {
         button.innerHTML = '展开'
-        env.element.parentNode.style.maxHeight = '38.19px'
+        env.element.parentNode.style.maxHeight = '45.19px'
         env.element.parentNode.style.overflow = 'hidden'
     }
     button.addEventListener('click', function (e: any) {
@@ -16,7 +16,7 @@ Prism.plugins.toolbar.registerButton('showOrClose', function (env) {
         if (parseInt(tempDataShowState)) {
             e.target.innerHTML = '展开'
             env.element.parentNode.setAttribute('data-show-state', '0')
-            env.element.parentNode.style.maxHeight = '49px'
+            env.element.parentNode.style.maxHeight = '45.19px'
             env.element.parentNode.style.overflow = 'hidden'
         } else {
             e.target.innerHTML = '关闭'

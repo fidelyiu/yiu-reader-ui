@@ -5,8 +5,9 @@
           data-icon="mdi:magnify"
           data-inline="false"></span>
     <input :value="modelValue"
-           class="w-full h-[30px] outline-none text-sm bg-blue-50 transition-all ease-in-out"
+           class="w-full outline-none text-sm bg-blue-50 transition-all ease-in-out"
            :class="{'!bg-white': active}"
+           :style="{'height': size+'px'}"
            type="text"
            @input="onValueChange"
            @focus="active = true"
@@ -23,9 +24,10 @@
     name: 'SearchInput',
     props: {
       modelValue: propTypes.string.def(''),
+      size: propTypes.number.def(30),
     },
     emits: ['update:modelValue', 'change'],
-    setup(_props, { emit }) {
+    setup(_prop, { emit }) {
       const active = ref(false)
       const onValueChange = debounce((e) => {
         emit('update:modelValue', e.target.value || '')

@@ -99,11 +99,24 @@
       <div v-show="width>1270 && showMainPoint"
            style="width: 256px"
            class="h-full overflow-auto flex-none bg-blue-50">
-        <div style="height: calc(100% - 140px);" class="w-full border-l border-r border-b bg-white">
-          <MainPointTree ref="mainPointTreeRef"
-                         :data="markdownTree"
-                         :show-number="!hideOrder"
-                         :active-el-id="activeElId"></MainPointTree>
+        <div style="height: calc(100% - 140px);"
+             class="w-full bg-white flex flex-col">
+          <div class="border-l border-r border-b flex-none">
+            Hello
+          </div>
+          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="flex-grow h-0 w-full flex flex-col border">
+            <div class="flex-none p-[8px]">
+              <SearchInput v-model="searchMainPointKey" :size="25"></SearchInput>
+            </div>
+            <div class="flex-grow h-0 w-full">
+              <MainPointTree ref="mainPointTreeRef"
+                             :data="markdownTree"
+                             :search-str="searchMainPointKey"
+                             :show-number="!hideOrder"
+                             :active-el-id="activeElId"></MainPointTree>
+            </div>
+          </div>
         </div>
       </div>
       <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
@@ -171,6 +184,7 @@
   import { MarkdownItemInfo } from '/@/vo/note/markdown-item-info'
   import { useTitle, useWindowSize } from '@vueuse/core'
   import MainPointTree from '/@/views/note/MainPointTree.vue'
+  import SearchInput from '/@/components/SearchInput.vue'
 
   export default defineComponent({
     name: 'NotePage',
@@ -183,6 +197,7 @@
       NButton,
       NSpin,
       MainPointTree,
+      SearchInput,
     },
     setup() {
       const pageTitle = useTitle()
@@ -198,6 +213,7 @@
       const noteSize = ref(0)
       const activeElId = ref('')
       const mainPointTreeRef = ref()
+      const searchMainPointKey = ref('')
 
       const markdownTree = ref<Array<MarkdownItemInfo>>([])
 
@@ -375,6 +391,7 @@
         markdownTree,
         activeElId,
         mainPointTreeRef,
+        searchMainPointKey,
       }
     },
   })

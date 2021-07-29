@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full overflow-auto">
+  <div class="h-full w-full overflow-auto">
     <MainPointTreeItem v-for="item in data"
                        :id="'yiu-main-point-'+item.href"
                        :key="item.id"

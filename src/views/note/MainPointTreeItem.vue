@@ -23,7 +23,14 @@
          :href="'#'+node.href"
          @click="onClickItem">
         <!--text-blue-400-->
-        <span class="text-xs font-medium">{{ node.title || '-' }}</span>
+        <span class="text-xs font-medium">
+          <span v-if="node.title.indexOf(searchStr) > -1">{{
+              node.title.substr(0, node.title.indexOf(searchStr))
+            }}<span class="bg-yellow-200">{{
+                searchStr
+              }}</span>{{ node.title.substr(node.title.indexOf(searchStr) + searchStr.length) }}</span>
+          <span v-else>{{ node.title || '-' }}</span>
+        </span>
       </a>
     </div>
     <transition name="yiu-fade-in">
@@ -33,6 +40,7 @@
                            :ref="setItemRef"
                            :key="item.id"
                            :node="item"
+                           @searchSuccess="onSearchSuccess"
                            class="border-l border-blue-200"></MainPointTreeItem>
       </div>
     </transition>
@@ -40,7 +48,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, inject, ref } from 'vue'
+  import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
 
   export default defineComponent({
@@ -48,7 +56,8 @@
     props: {
       node: propTypes.object,
     },
-    setup(prop) {
+    emits: ['searchSuccess'],
+    setup(prop, { emit }) {
       const itemRef = ref<Array<any>>([])
       const setItemRef = (e: any) => {
         itemRef.value.push(e)
@@ -107,6 +116,21 @@
           isOpen.value = !isOpen.value
         }
       }
+      watch(() => searchStr.value, (v) => {
+        if (!v) {
+          return
+        }
+        if (prop?.node?.title) {
+          if (prop.node.title.indexOf(v) != -1) {
+            emit('searchSuccess')
+          }
+        }
+        isOpen.value = false
+      })
+      const onSearchSuccess = () => {
+        emit('searchSuccess')
+        isOpen.value = true
+      }
       return {
         showNumber,
         searchStr,
@@ -118,6 +142,7 @@
         showBlueBorder,
         onChangeOpen,
         setItemRef,
+        onSearchSuccess,
       }
     },
   })
