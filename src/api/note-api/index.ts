@@ -63,6 +63,10 @@ const noteApi = {
         url: entityUrl + '/reade/{id}',
         method: MethodEnum.GET,
     },
+    dirTree: <YiuAip>{
+        url: entityUrl + '/dir/tree/{id}',
+        method: MethodEnum.GET,
+    },
 }
 
 export default noteApi

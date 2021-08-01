@@ -65,7 +65,60 @@
       <div v-show="width>1270 && showDir"
            style="width: 256px"
            class="h-full overflow-auto flex-none bg-blue-50">
-        <div style="height: calc(100% - 140px);" class="border-l border-r border-b bg-white">目录</div>
+        <div style="height: calc(100% - 140px);" class="w-full bg-white flex flex-col">
+          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <ToolBox title="文档工具栏">
+            <div class="flex justify-between">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="positionDocument(false)">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>定位当前文档</span>
+                </template>
+              </yiu-square-btn>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+            </div>
+          </ToolBox>
+          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <ToolBox title="目录工具栏">
+            <div class="flex justify-between">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="positionDocument(false)">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>定位当前文档</span>
+                </template>
+              </yiu-square-btn>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+            </div>
+          </ToolBox>
+          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="flex-grow h-0 w-full flex flex-col border">
+            <div class="flex-none p-[8px]">
+              <SearchInput v-model="searchDirKey" :size="25"></SearchInput>
+            </div>
+            <div class="flex-grow h-0 w-full">
+              <DirTree :data="dirTree"
+                       :search-str="searchDirKey"
+                       :show-number="showDirNum"
+                       :active-el-id="noteId"></DirTree>
+            </div>
+          </div>
+        </div>
       </div>
       <!--左填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
@@ -242,6 +295,7 @@
   import ToolBox from '/@/views/note/ToolBox.vue'
   import SearchInput from '/@/components/SearchInput.vue'
   import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
+  import DirTree from '/@/views/note/DirTree.vue'
 
   export default defineComponent({
     name: 'NotePage',
@@ -257,8 +311,10 @@
       SearchInput,
       YiuSquareBtn,
       ToolBox,
+      DirTree,
     },
     setup() {
+      const noteId = ref('')
       const pageTitle = useTitle()
       const route = useRoute()
       const notification = useNotification()
@@ -299,6 +355,7 @@
       }
 
       const loadNote = (id) => {
+        noteId.value = id as string
         workspace.value = {}
         note.value = {}
         parentName.value = []
@@ -322,7 +379,6 @@
               noteSize.value = res.data.result.size
               markdownTree.value = []
               pageContent.value = md.render(res.data.result.content) as string
-              console.log(markdownTree.value)
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
@@ -337,6 +393,45 @@
         })
       }
       loadNote(route.params.id)
+
+      const dirTree = ref<Array<any>>()
+      const dirLoading = ref(false)
+      const setDirNumber = (arr) => {
+        const _setDirNumber = (arr, numArr) => {
+          if (arr && arr.length) {
+            arr.forEach((item, index) => {
+              let tempNumArr = [...numArr]
+              if (tempNumArr) {
+                tempNumArr.push(index + 1)
+              } else {
+                tempNumArr = [index + 1]
+              }
+              item.number = tempNumArr
+              if (item.child && item.child.length) {
+                item.child = _setDirNumber(item.child, tempNumArr)
+              }
+            })
+          }
+          return arr
+        }
+        return _setDirNumber(arr, [])
+      }
+      const loadDir = (id) => {
+        yiuHttp({
+          api: SERVER_API.noteApi.dirTree,
+          loading: { flag: dirLoading },
+          pathData: { id },
+          tips: { anyObj: notification, error: { show: true } },
+          success: (res) => {
+            if (res.data.result) {
+              dirTree.value = setDirNumber(res.data.result)
+            }
+          },
+        })
+      }
+      loadDir(route.params.id)
+      const searchDirKey = ref('')
+      const showDirNum = ref(true)
 
       watch(() => route.params, (toParams, previousParams) => {
         if (toParams.id !== previousParams.id) {
@@ -413,7 +508,7 @@
       }
 
       const hideOrder = ref(false)
-      const showMainPoint = ref(true)
+      const showMainPoint = ref(false)
       // 展示大纲
       const onShowMainPoint = () => {
         if (1540 <= width.value) {
@@ -437,6 +532,29 @@
           showDir.value = false
         }
       }
+
+      const initShowDirAndMainPoint = () => {
+        if (1540 <= width.value) {
+          showMainPoint.value = true
+          showDir.value = true
+        } else if (1270 <= width.value) {
+          showMainPoint.value = true
+          showDir.value = false
+        } else {
+          showMainPoint.value = false
+          showDir.value = false
+        }
+      }
+      initShowDirAndMainPoint()
+
+      watch(
+          () => width.value,
+          (v) => {
+            if (1270 <= v && showDir.value && showMainPoint.value) {
+              showDir.value = false
+            }
+          },
+      )
 
       const openAllMainPointTreeItem = () => {
         if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.openAll)) {
@@ -477,6 +595,10 @@
         positionMainPointTree,
         openAllMainPointTreeItem,
         closeAllMainPointTreeItem,
+        dirTree,
+        searchDirKey,
+        showDirNum,
+        noteId,
       }
     },
   })
