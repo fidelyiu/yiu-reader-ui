@@ -7,7 +7,6 @@
           <div class="flex-none flex">
             <!--是否展示提示-->
             <yiu-square-btn class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             show-text
                             @btnClick="changeShowBtnText">
               <template #icon>
@@ -26,7 +25,6 @@
             <!--刷新目录按钮-->
             <yiu-square-btn v-show="layoutDir"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             :loading="refreshLoading"
                             @btnClick="onRefresh">
@@ -40,7 +38,6 @@
             <!--清除所有无效note-->
             <yiu-square-btn v-show="layoutDir"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onDelBad">
               <template #icon>
@@ -52,7 +49,6 @@
             </yiu-square-btn>
             <!--刷新按钮-->
             <yiu-square-btn class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             :loading="treeLoading"
                             @btnClick="loadNote">
@@ -68,7 +64,6 @@
             <!--根目录添加按钮-->
             <yiu-square-btn v-show="!settingHideFile"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onAddNote('')">
               <template #icon>
@@ -83,7 +78,6 @@
             <!--定位所有无效note-->
             <yiu-square-btn v-show="layoutDir"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onPositionErrFile">
               <template #icon>
@@ -96,7 +90,6 @@
             <!--设置隐藏文件-->
             <yiu-square-btn v-show="layoutDir && !settingHideFile"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onSettingHideFile">
               <template #icon>
@@ -110,7 +103,6 @@
             <!--设置隐藏文件完成-->
             <yiu-square-btn v-show="layoutDir && settingHideFile"
                             class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onSettingHideFileOk">
               <template #icon>
@@ -123,7 +115,6 @@
             </yiu-square-btn>
             <!--图标控制按钮-->
             <yiu-square-btn class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="changeShowBtIcon">
               <template #icon>
@@ -141,7 +132,6 @@
             </yiu-square-btn>
             <!--数字控制按钮-->
             <yiu-square-btn class="mr-2"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="changeShowBtNum">
               <template #icon>
@@ -159,7 +149,6 @@
             </yiu-square-btn>
             <!--编辑目录按钮-->
             <yiu-square-btn v-show="!layoutDir"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onLayOutDir">
               <template #icon>
@@ -173,7 +162,6 @@
             </yiu-square-btn>
             <!--取消编辑目录按钮-->
             <yiu-square-btn v-show="layoutDir"
-                            btn-class="yiu-blue-square-btn-3"
                             :show-text="mainStore.mainBoxShowText"
                             @btnClick="onLayOutDirCancel">
               <template #icon>
@@ -205,8 +193,7 @@
                        :data="treeData"
                        :show-number="mainStore.mainBoxShowNum"
                        :show-icon="mainStore.mainBoxShowIcon"
-                       :search-str="searchKey"
-                       @itemClick="onClickItem">
+                       :search-str="searchKey">
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏提示-->
@@ -214,6 +201,21 @@
                      class="mr-2 fa-center text-gray-400">
                   <span v-if="!slotProps.node.data.show">[ 已隐藏 ]</span>
                 </div>
+                <!--在新窗口打开-->
+                <yiu-square-btn
+                    v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
+                    class="mr-2"
+                    :show-text="mainStore.mainBoxShowText"
+                    @btnClick="onReadMD(slotProps.node.data.id)">
+                  <template #icon>
+                    <div>
+                      <span class="iconify block" data-icon="mdi:script-text-outline" data-inline="false"></span>
+                    </div>
+                  </template>
+                  <template #text>
+                    <span>阅读文档</span>
+                  </template>
+                </yiu-square-btn>
                 <!--在新窗口打开-->
                 <yiu-square-btn
                     v-if="!slotProps.node.data.isDir && !statusIsInvalid(slotProps.node.data.status) && !layoutDir"
@@ -229,7 +231,6 @@
                     <span>在新窗口打开</span>
                   </template>
                 </yiu-square-btn>
-
                 <!--隐藏按钮-->
                 <yiu-square-btn v-if="layoutDir && settingHideFile"
                                 class="mr-2"
@@ -882,7 +883,7 @@
         })
       }
 
-      const onClickItem = (id) => {
+      const onReadMD = (id) => {
         if (id && !layoutDir.value) {
           router.push(`/note/${id}`)
         }
@@ -959,7 +960,7 @@
         onPositionErrFile,
         delBadLoading,
         onDelBad,
-        onClickItem,
+        onReadMD,
         onOpenInNew,
       }
     },
