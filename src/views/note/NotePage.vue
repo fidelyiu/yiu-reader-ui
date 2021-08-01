@@ -119,7 +119,7 @@
               </yiu-square-btn>
               <yiu-square-btn show-text
                               :padding-px="6"
-                              @btnClick="positionMainPointTree()">
+                              @btnClick="positionMainPointTree">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
@@ -127,7 +127,9 @@
                   <span>定位当前大纲</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="closeAllMainPointTreeItem">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
                 </template>
@@ -135,7 +137,9 @@
                   <span>关闭所有大纲</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="openAllMainPointTreeItem">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
                 </template>
@@ -288,6 +292,7 @@
       }
 
       const positionMainPointTree = () => {
+        openAllMainPointTreeItem()
         if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.setScrollMainPoint)) {
           mainPointTreeRef.value.setScrollMainPoint(activeElId.value)
         }
@@ -433,6 +438,18 @@
         }
       }
 
+      const openAllMainPointTreeItem = () => {
+        if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.openAll)) {
+          mainPointTreeRef.value.openAll()
+        }
+      }
+
+      const closeAllMainPointTreeItem = () => {
+        if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.closeAll)) {
+          mainPointTreeRef.value.closeAll()
+        }
+      }
+
       return {
         loadNote,
         pageContent,
@@ -458,6 +475,8 @@
         searchMainPointKey,
         positionDocument,
         positionMainPointTree,
+        openAllMainPointTreeItem,
+        closeAllMainPointTreeItem,
       }
     },
   })

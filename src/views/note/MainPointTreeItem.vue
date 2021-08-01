@@ -50,6 +50,7 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
+  import { isFunction } from 'lodash'
 
   export default defineComponent({
     name: 'MainPointTreeItem',
@@ -131,6 +132,24 @@
         emit('searchSuccess')
         isOpen.value = true
       }
+      const closeAll = () => {
+        isOpen.value = false
+        for (const refItem of itemRef.value) {
+          if (refItem && isFunction(refItem.closeAll)) {
+            refItem.closeAll()
+          }
+        }
+      }
+      const openAll = () => {
+        if (prop.node.child.length) {
+          isOpen.value = true
+          for (const refItem of itemRef.value) {
+            if (refItem && isFunction(refItem.openAll)) {
+              refItem.openAll()
+            }
+          }
+        }
+      }
       return {
         showNumber,
         searchStr,
@@ -143,6 +162,8 @@
         onChangeOpen,
         setItemRef,
         onSearchSuccess,
+        closeAll,
+        openAll,
       }
     },
   })

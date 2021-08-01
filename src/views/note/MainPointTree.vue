@@ -2,6 +2,7 @@
   <div class="h-full w-full overflow-auto">
     <MainPointTreeItem v-for="item in data"
                        :id="'yiu-main-point-'+item.href"
+                       :ref="setItemRef"
                        :key="item.id"
                        :node="item">
     </MainPointTreeItem>
@@ -9,9 +10,10 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, provide } from 'vue'
+  import { computed, defineComponent, provide, ref } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import MainPointTreeItem from '/@/views/note/MainPointTreeItem.vue'
+  import { isFunction } from 'lodash'
 
   export default defineComponent({
     name: 'MainPointTree',
@@ -25,6 +27,10 @@
       activeElId: propTypes.string.def(''),
     },
     setup(prop) {
+      const itemRef = ref<Array<any>>([])
+      const setItemRef = (e: any) => {
+        itemRef.value.push(e)
+      }
       provide('showNumber', computed(() => prop.showNumber))
       provide('searchStr', computed(() => prop.searchStr))
       provide('activeElId', computed(() => prop.activeElId))
@@ -37,8 +43,25 @@
           el.scrollIntoView(true)
         })
       }
+      const closeAll = () => {
+        for (const refItem of itemRef.value) {
+          if (refItem && isFunction(refItem.closeAll)) {
+            refItem.closeAll()
+          }
+        }
+      }
+      const openAll = () => {
+        for (const refItem of itemRef.value) {
+          if (refItem && isFunction(refItem.openAll)) {
+            refItem.openAll()
+          }
+        }
+      }
       return {
         setScrollMainPoint,
+        setItemRef,
+        closeAll,
+        openAll,
       }
     },
   })
