@@ -49,6 +49,7 @@
 <script lang="ts">
   import { computed, defineComponent, inject, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
+  import { isFunction } from 'lodash'
 
   export default defineComponent({
     name: 'DirTreeItem',
@@ -129,6 +130,24 @@
         emit('searchSuccess')
         isOpen.value = true
       }
+      const closeAll = () => {
+        isOpen.value = false
+        for (const refItem of itemRef.value) {
+          if (refItem && isFunction(refItem.closeAll)) {
+            refItem.closeAll()
+          }
+        }
+      }
+      const openAll = () => {
+        if (prop.node.isDir) {
+          isOpen.value = true
+          for (const refItem of itemRef.value) {
+            if (refItem && isFunction(refItem.openAll)) {
+              refItem.openAll()
+            }
+          }
+        }
+      }
       return {
         setItemRef,
         isActive,
@@ -141,6 +160,8 @@
         searchStr,
         onSearchSuccess,
         noteName,
+        closeAll,
+        openAll,
       }
     },
   })

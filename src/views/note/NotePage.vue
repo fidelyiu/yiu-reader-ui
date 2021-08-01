@@ -69,17 +69,25 @@
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <ToolBox title="文档工具栏">
             <div class="flex justify-between">
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
+                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>文档按钮提示</span>
+                </template>
+              </yiu-square-btn>
               <yiu-square-btn show-text
                               :padding-px="6"
-                              @btnClick="positionDocument(false)">
+                              @btnClick="positionDocument(false, false)">
                 <template #icon>
-                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                  <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
                 <template #text>
                   <span>定位当前文档</span>
                 </template>
               </yiu-square-btn>
-              <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
@@ -89,19 +97,45 @@
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <ToolBox title="目录工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text
-                              :padding-px="6"
-                              @btnClick="positionDocument(false)">
+              <yiu-square-btn show-text :padding-px="6">
                 <template #icon>
-                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
+                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
                 </template>
                 <template #text>
-                  <span>定位当前文档</span>
+                  <span>目录按钮提示</span>
                 </template>
               </yiu-square-btn>
-              <div class="w-[28px] h-[28px] flex-none"></div>
-              <div class="w-[28px] h-[28px] flex-none"></div>
-              <div class="w-[28px] h-[28px] flex-none"></div>
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="positionMainPointTree">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>定位当前目录</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="closeAllDirTreeItem">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>关闭所有目录</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="openAllDirTreeItem">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>展开所有目录</span>
+                </template>
+              </yiu-square-btn>
               <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
@@ -112,7 +146,8 @@
               <SearchInput v-model="searchDirKey" :size="25"></SearchInput>
             </div>
             <div class="flex-grow h-0 w-full">
-              <DirTree :data="dirTree"
+              <DirTree ref="dirTreeRef"
+                       :data="dirTree"
                        :search-str="searchDirKey"
                        :show-number="showDirNum"
                        :active-el-id="noteId"></DirTree>
@@ -160,14 +195,13 @@
           <!--工具栏-->
           <ToolBox title="大纲工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text
-                              :padding-px="6"
-                              @btnClick="positionDocument(false)">
+              <yiu-square-btn show-text :padding-px="6">
                 <template #icon>
-                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
+                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
                 </template>
                 <template #text>
-                  <span>定位当前文档</span>
+                  <span>大纲按钮提示</span>
                 </template>
               </yiu-square-btn>
               <yiu-square-btn show-text
@@ -200,15 +234,7 @@
                   <span>展开所有大纲</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text :padding-px="6">
-                <template #icon>
-                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
-                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
-                </template>
-                <template #text>
-                  <span>按钮提示</span>
-                </template>
-              </yiu-square-btn>
+              <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
@@ -335,7 +361,7 @@
       const md = genMd(markdownTree)
       const { width } = useWindowSize()
 
-      const positionDocument = (pM: boolean) => {
+      const positionDocument = (pM: boolean, pD: boolean) => {
         if (activeElId.value) {
           const titleDom = document.getElementById(activeElId.value)
           if (titleDom) {
@@ -344,6 +370,9 @@
           if (pM) {
             positionMainPointTree()
           }
+          if (pD) {
+            positionDirTree()
+          }
         }
       }
 
@@ -351,6 +380,13 @@
         openAllMainPointTreeItem()
         if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.setScrollMainPoint)) {
           mainPointTreeRef.value.setScrollMainPoint(activeElId.value)
+        }
+      }
+
+      const positionDirTree = () => {
+        openAllDirTreeItem()
+        if (dirTreeRef.value && isFunction(dirTreeRef.value.setScrollMainPoint)) {
+          dirTreeRef.value.setScrollDir(noteId.value)
         }
       }
 
@@ -382,7 +418,7 @@
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
-                  positionDocument(true)
+                  positionDocument(true, true)
                 }
               })
             }
@@ -416,6 +452,7 @@
         }
         return _setDirNumber(arr, [])
       }
+      const dirTreeRef = ref()
       const loadDir = (id) => {
         yiuHttp({
           api: SERVER_API.noteApi.dirTree,
@@ -456,7 +493,7 @@
               activeElId.value = v.slice(symbolIndex + 1)
             }
             if (!noteLoading.value) {
-              positionDocument(true)
+              positionDocument(true, true)
             }
           },
           {
@@ -568,6 +605,18 @@
         }
       }
 
+      const openAllDirTreeItem = () => {
+        if (dirTreeRef.value && isFunction(dirTreeRef.value.openAll)) {
+          dirTreeRef.value.openAll()
+        }
+      }
+
+      const closeAllDirTreeItem = () => {
+        if (dirTreeRef.value && isFunction(dirTreeRef.value.closeAll)) {
+          dirTreeRef.value.closeAll()
+        }
+      }
+
       return {
         loadNote,
         pageContent,
@@ -596,9 +645,13 @@
         openAllMainPointTreeItem,
         closeAllMainPointTreeItem,
         dirTree,
+        dirTreeRef,
         searchDirKey,
         showDirNum,
         noteId,
+        openAllDirTreeItem,
+        closeAllDirTreeItem,
+        positionDirTree,
       }
     },
   })
