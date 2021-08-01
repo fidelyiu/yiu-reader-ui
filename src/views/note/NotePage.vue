@@ -119,7 +119,7 @@
               </yiu-square-btn>
               <yiu-square-btn show-text
                               :padding-px="6"
-                              @btnClick="positionMainPointTree(false)">
+                              @btnClick="positionMainPointTree()">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
