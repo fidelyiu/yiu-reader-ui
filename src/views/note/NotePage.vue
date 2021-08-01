@@ -103,66 +103,54 @@
         <div style="height: calc(100% - 140px);"
              class="w-full bg-white flex flex-col">
           <div class="h-[8px] bg-blue-50 flex-none"></div>
-          <div class="border-l border flex-none px-[10px] py-[8px] flex justify-between">
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>定位当前文档</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>定位当前大纲</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>关闭所有大纲</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>展开所有大纲</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <!--<span class="iconify block" data-icon="mdi:magnify" data-inline="false"></span>-->
-                <span class="iconify block" data-icon="mdi:magnify-remove-outline" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>打开搜索</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
-                <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>按钮提示</span>
-              </template>
-            </yiu-square-btn>
-            <yiu-square-btn show-text :padding-px="4">
-              <template #icon>
-                <span class="iconify block" data-icon="mdi:close" data-inline="false"></span>
-              </template>
-              <template #text>
-                <span>关闭大纲</span>
-              </template>
-            </yiu-square-btn>
-          </div>
+          <!--grid grid-cols-5 gap-2-->
+          <!--工具栏-->
+          <ToolBox title="大纲工具栏">
+            <div class="flex justify-between">
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>定位当前文档</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>定位当前大纲</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>关闭所有大纲</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>展开所有大纲</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn show-text :padding-px="6">
+                <template #icon>
+                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
+                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>按钮提示</span>
+                </template>
+              </yiu-square-btn>
+              <div class="w-[28px] h-[28px] flex-none"></div>
+            </div>
+          </ToolBox>
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <div class="flex-grow h-0 w-full flex flex-col border">
             <div class="flex-none p-[8px]">
@@ -243,6 +231,7 @@
   import { MarkdownItemInfo } from '/@/vo/note/markdown-item-info'
   import { useTitle, useWindowSize } from '@vueuse/core'
   import MainPointTree from '/@/views/note/MainPointTree.vue'
+  import ToolBox from '/@/views/note/ToolBox.vue'
   import SearchInput from '/@/components/SearchInput.vue'
   import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
 
@@ -259,6 +248,7 @@
       MainPointTree,
       SearchInput,
       YiuSquareBtn,
+      ToolBox,
     },
     setup() {
       const pageTitle = useTitle()
