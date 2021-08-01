@@ -107,7 +107,9 @@
           <!--工具栏-->
           <ToolBox title="大纲工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="positionDocument(false)">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:file-marker-outline" data-inline="false"></span>
                 </template>
@@ -115,7 +117,9 @@
                   <span>定位当前文档</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="positionMainPointTree(false)">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
@@ -271,6 +275,24 @@
       const md = genMd(markdownTree)
       const { width } = useWindowSize()
 
+      const positionDocument = (notPM: boolean) => {
+        if (activeElId.value) {
+          const titleDom = document.getElementById(activeElId.value)
+          if (titleDom) {
+            titleDom.scrollIntoView(true)
+          }
+          if (!notPM) {
+            positionMainPointTree()
+          }
+        }
+      }
+
+      const positionMainPointTree = () => {
+        if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.setScrollMainPoint)) {
+          mainPointTreeRef.value.setScrollMainPoint(activeElId.value)
+        }
+      }
+
       const loadNote = (id) => {
         workspace.value = {}
         note.value = {}
@@ -299,14 +321,7 @@
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
-                  if (activeElId.value) {
-                    let a = document.createElement('a')
-                    a.href = route.fullPath
-                    a.click()
-                    if (mainPointTreeRef.value && isFunction(mainPointTreeRef.value.setScrollMainPoint)) {
-                      mainPointTreeRef.value.setScrollMainPoint(activeElId.value)
-                    }
-                  }
+                  positionDocument(true)
                 }
               })
             }
@@ -341,9 +356,7 @@
               activeElId.value = v.slice(symbolIndex + 1)
             }
             if (!noteLoading.value) {
-              let a = document.createElement('a')
-              a.href = route.fullPath
-              a.click()
+              positionDocument(false)
             }
           },
           {
@@ -443,6 +456,8 @@
         activeElId,
         mainPointTreeRef,
         searchMainPointKey,
+        positionDocument,
+        positionMainPointTree,
       }
     },
   })
