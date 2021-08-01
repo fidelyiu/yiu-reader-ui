@@ -279,13 +279,13 @@
       const md = genMd(markdownTree)
       const { width } = useWindowSize()
 
-      const positionDocument = (notPM: boolean) => {
+      const positionDocument = (pM: boolean) => {
         if (activeElId.value) {
           const titleDom = document.getElementById(activeElId.value)
           if (titleDom) {
             titleDom.scrollIntoView(true)
           }
-          if (!notPM) {
+          if (pM) {
             positionMainPointTree()
           }
         }
@@ -361,7 +361,7 @@
               activeElId.value = v.slice(symbolIndex + 1)
             }
             if (!noteLoading.value) {
-              positionDocument(false)
+              positionDocument(true)
             }
           },
           {
