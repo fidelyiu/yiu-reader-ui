@@ -38,10 +38,6 @@
           <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
           <span>隐藏大纲</span>
         </button>
-        <button class="yiu-blue-big-circular-btn fa-center focus:outline-none" @click="onShowNoteInfo">
-          <span class="iconify block mr-1" data-icon="mdi:information-outline" data-inline="false"></span>
-          <span>笔记信息</span>
-        </button>
       </div>
     </div>
     <!--<div class="h-[16px] bg-blue-50 flex-none"></div>-->
@@ -99,9 +95,40 @@
                   <span>定位当前文档</span>
                 </template>
               </yiu-square-btn>
-              <div class="w-[28px] h-[28px] flex-none"></div>
-              <div class="w-[28px] h-[28px] flex-none"></div>
-              <div class="w-[28px] h-[28px] flex-none"></div>
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDocumentTxt"
+                              @btnClick="onShowNoteInfo">
+                <template #icon>
+                  <span class="iconify block" data-icon="mdi:file-document-outline" data-inline="false"></span>
+                </template>
+                <template #text>
+                  <span>文档信息</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDocumentTxt"
+                              @btnClick="onPosition">
+                <template #icon>
+                  <div>
+                    <span class="iconify block" data-icon="mdi:folder-marker-outline" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span>在文件管理器中打开</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDocumentTxt"
+                              @btnClick="onEditMarkDown">
+                <template #icon>
+                  <div>
+                    <span class="iconify block" data-icon="mdi:file-code-outline" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span>在编辑器中打开</span>
+                </template>
+              </yiu-square-btn>
             </div>
           </ToolBox>
           <div class="h-[8px] bg-blue-50 flex-none"></div>
@@ -377,6 +404,7 @@
   import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
   import DirTree from '/@/views/note/DirTree.vue'
   import { useMainStore } from '/@/store/modules/main'
+  import { useLogStore } from '/@/store/modules/log'
 
   export default defineComponent({
     name: 'NotePage',
@@ -395,6 +423,7 @@
       DirTree,
     },
     setup() {
+      const logStore = useLogStore()
       const mainStore = useMainStore()
       const noteId = ref('')
       const pageTitle = useTitle()
@@ -759,6 +788,25 @@
         }
       }
 
+      const onPosition = () => {
+        if (!noteId.value) return
+        yiuHttp({
+          api: SERVER_API.noteApi.positionFile,
+          pathData: { id: noteId.value },
+          tips: { anyObj: notification, error: { show: true } },
+        })
+      }
+
+      const onEditMarkDown = () => {
+        if (!noteId.value) return
+        logStore.pushLog(String(Date.now()), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + note.value.absPath)
+        yiuHttp({
+          api: SERVER_API.noteApi.editMarkdown,
+          pathData: { id: noteId.value },
+          tips: { anyObj: notification, error: { show: true } },
+        })
+      }
+
       return {
         mainStore,
         loadNote,
@@ -802,6 +850,8 @@
         changeDocumentTxt,
         changeDirTxt,
         changeMainPointTxt,
+        onPosition,
+        onEditMarkDown,
       }
     },
   })
