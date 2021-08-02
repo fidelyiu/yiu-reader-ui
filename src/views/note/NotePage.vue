@@ -38,18 +38,18 @@
           <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
           <span>隐藏大纲</span>
         </button>
-        <button v-show="hideOrder"
-                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
-                @click="hideOrder = false">
-          <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
-          <span>展示序号</span>
-        </button>
-        <button v-show="!hideOrder"
-                class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"
-                @click="hideOrder = true">
-          <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
-          <span>隐藏序号</span>
-        </button>
+        <!--<button v-show="hideOrder"-->
+        <!--        class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"-->
+        <!--        @click="hideOrder = false">-->
+        <!--  <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>-->
+        <!--  <span>展示序号</span>-->
+        <!--</button>-->
+        <!--<button v-show="!hideOrder"-->
+        <!--        class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"-->
+        <!--        @click="hideOrder = true">-->
+        <!--  <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>-->
+        <!--  <span>隐藏序号</span>-->
+        <!--</button>-->
         <button class="yiu-blue-big-circular-btn fa-center focus:outline-none" @click="onShowNoteInfo">
           <span class="iconify block mr-1" data-icon="mdi:information-outline" data-inline="false"></span>
           <span>笔记信息</span>
@@ -69,17 +69,40 @@
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <ToolBox title="文档工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text :padding-px="6">
-                <template #icon>
-                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
-                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
-                </template>
-                <template #text>
-                  <span>文档按钮提示</span>
-                </template>
-              </yiu-square-btn>
               <yiu-square-btn show-text
                               :padding-px="6"
+                              @btnClick="changeDocumentTxt">
+                <template #icon>
+                  <div v-show="!mainStore.showDocumentTxt">
+                    <span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>
+                  </div>
+                  <div v-show="mainStore.showDocumentTxt">
+                    <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span v-show="!mainStore.showDocumentTxt">显示文档按钮提示</span>
+                  <span v-show="mainStore.showDocumentTxt">隐藏文档按钮提示</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDocumentTxt"
+                              @btnClick="changeShowDocumentNum">
+                <template #icon>
+                  <div v-show="!showDocumentNum">
+                    <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+                  </div>
+                  <div v-show="showDocumentNum">
+                    <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span v-show="!showDocumentNum">隐藏文档序号</span>
+                  <span v-show="showDocumentNum">展示文档序号</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDocumentTxt"
                               @btnClick="positionDocument(false, false)">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
@@ -91,22 +114,44 @@
               <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
-              <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
           <div class="h-[8px] bg-blue-50 flex-none"></div>
           <ToolBox title="目录工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="changeDirTxt">
                 <template #icon>
-                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
-                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                  <div v-show="!mainStore.showDirTxt">
+                    <span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>
+                  </div>
+                  <div v-show="mainStore.showDirTxt">
+                    <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                  </div>
                 </template>
                 <template #text>
-                  <span>目录按钮提示</span>
+                  <span v-show="!mainStore.showDirTxt">显示目录按钮提示</span>
+                  <span v-show="mainStore.showDirTxt">隐藏目录按钮提示</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showDirTxt"
+                              @btnClick="changeShowDirNum">
+                <template #icon>
+                  <div v-show="!showDirNum">
+                    <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+                  </div>
+                  <div v-show="showDirNum">
+                    <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span v-show="!showDirNum">隐藏目录序号</span>
+                  <span v-show="showDirNum">展示目录序号</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :show-text="mainStore.showDirTxt"
                               :padding-px="6"
                               @btnClick="positionMainPointTree">
                 <template #icon>
@@ -116,7 +161,7 @@
                   <span>定位当前目录</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :show-text="mainStore.showDirTxt"
                               :padding-px="6"
                               @btnClick="closeAllDirTreeItem">
                 <template #icon>
@@ -126,7 +171,7 @@
                   <span>关闭所有目录</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :show-text="mainStore.showDirTxt"
                               :padding-px="6"
                               @btnClick="openAllDirTreeItem">
                 <template #icon>
@@ -136,7 +181,6 @@
                   <span>展开所有目录</span>
                 </template>
               </yiu-square-btn>
-              <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
@@ -195,16 +239,39 @@
           <!--工具栏-->
           <ToolBox title="大纲工具栏">
             <div class="flex justify-between">
-              <yiu-square-btn show-text :padding-px="6">
+              <yiu-square-btn show-text
+                              :padding-px="6"
+                              @btnClick="changeMainPointTxt">
                 <template #icon>
-                  <!--<span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>-->
-                  <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                  <div v-show="!mainStore.showMainPointTxt">
+                    <span class="iconify block" data-icon="mdi:comment-eye-outline" data-inline="false"></span>
+                  </div>
+                  <div v-show="mainStore.showMainPointTxt">
+                    <span class="iconify block" data-icon="mdi:comment-off-outline" data-inline="false"></span>
+                  </div>
                 </template>
                 <template #text>
-                  <span>大纲按钮提示</span>
+                  <span v-show="!mainStore.showMainPointTxt">显示大纲按钮提示</span>
+                  <span v-show="mainStore.showMainPointTxt">隐藏大纲按钮提示</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :padding-px="6"
+                              :show-text="mainStore.showMainPointTxt"
+                              @btnClick="changeMainPointNum">
+                <template #icon>
+                  <div v-show="!showMainPointNum">
+                    <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
+                  </div>
+                  <div v-show="showMainPointNum">
+                    <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
+                  </div>
+                </template>
+                <template #text>
+                  <span v-show="!showMainPointNum">隐藏大纲序号</span>
+                  <span v-show="showMainPointNum">展示大纲序号</span>
+                </template>
+              </yiu-square-btn>
+              <yiu-square-btn :show-text="mainStore.showMainPointTxt"
                               :padding-px="6"
                               @btnClick="positionMainPointTree">
                 <template #icon>
@@ -214,7 +281,7 @@
                   <span>定位当前大纲</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :show-text="mainStore.showMainPointTxt"
                               :padding-px="6"
                               @btnClick="closeAllMainPointTreeItem">
                 <template #icon>
@@ -224,7 +291,7 @@
                   <span>关闭所有大纲</span>
                 </template>
               </yiu-square-btn>
-              <yiu-square-btn show-text
+              <yiu-square-btn :show-text="mainStore.showMainPointTxt"
                               :padding-px="6"
                               @btnClick="openAllMainPointTreeItem">
                 <template #icon>
@@ -234,7 +301,6 @@
                   <span>展开所有大纲</span>
                 </template>
               </yiu-square-btn>
-              <div class="w-[28px] h-[28px] flex-none"></div>
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
@@ -322,6 +388,7 @@
   import SearchInput from '/@/components/SearchInput.vue'
   import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
   import DirTree from '/@/views/note/DirTree.vue'
+  import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
     name: 'NotePage',
@@ -340,6 +407,7 @@
       DirTree,
     },
     setup() {
+      const mainStore = useMainStore()
       const noteId = ref('')
       const pageTitle = useTitle()
       const route = useRoute()
@@ -391,6 +459,7 @@
       }
 
       const loadNote = (id) => {
+        if (!id) return
         noteId.value = id as string
         workspace.value = {}
         note.value = {}
@@ -430,6 +499,90 @@
       }
       loadNote(route.params.id)
 
+      const showDocumentNum = ref(true)
+      const getShowDocumentNum = (id) => {
+        if (!id) return
+        yiuHttp({
+          api: SERVER_API.noteApi.getNumDocument,
+          pathData: { id },
+          success: (res) => {
+            showDocumentNum.value = !!res.data.result
+          },
+        })
+      }
+      getShowDocumentNum(route.params.id)
+      const changeShowDocumentNum = () => {
+        showDocumentNum.value = !showDocumentNum.value
+        if (!noteId.value) return
+        yiuHttp({
+          api: SERVER_API.noteApi.setNumDocument,
+          data: {
+            id: noteId.value,
+            numDocument: showDocumentNum.value,
+          },
+        })
+      }
+
+
+      const showDirNum = ref(true)
+      const getShowDirNum = (id) => {
+        if (!id) return
+        yiuHttp({
+          api: SERVER_API.noteApi.getNumDir,
+          pathData: { id },
+          success: (res) => {
+            showDirNum.value = !!res.data.result
+          },
+        })
+      }
+      getShowDirNum(route.params.id)
+      const changeShowDirNum = () => {
+        showDirNum.value = !showDirNum.value
+        if (!noteId.value) return
+        yiuHttp({
+          api: SERVER_API.noteApi.setNumDir,
+          data: {
+            id: noteId.value,
+            numDir: showDirNum.value,
+          },
+        })
+      }
+
+      const showMainPointNum = ref(true)
+      const getMainPointNum = (id) => {
+        if (!id) return
+        yiuHttp({
+          api: SERVER_API.noteApi.getNumMainPoint,
+          pathData: { id },
+          success: (res) => {
+            showMainPointNum.value = !!res.data.result
+          },
+        })
+      }
+      getMainPointNum(route.params.id)
+      const changeMainPointNum = () => {
+        showMainPointNum.value = !showMainPointNum.value
+        if (!noteId.value) return
+        yiuHttp({
+          api: SERVER_API.noteApi.setNumMainPoint,
+          data: {
+            id: noteId.value,
+            numMainPoint: showMainPointNum.value,
+          },
+        })
+      }
+
+      mainStore.initNotePageBoolValue()
+      const changeDocumentTxt = () => {
+        mainStore.setShowDocumentTxt(!mainStore.showDocumentTxt)
+      }
+      const changeDirTxt = () => {
+        mainStore.setShowDirTxt(!mainStore.showDirTxt)
+      }
+      const changeMainPointTxt = () => {
+        mainStore.setShowMainPointTxt(!mainStore.showMainPointTxt)
+      }
+
       const dirTree = ref<Array<any>>()
       const dirLoading = ref(false)
       const setDirNumber = (arr) => {
@@ -468,12 +621,14 @@
       }
       loadDir(route.params.id)
       const searchDirKey = ref('')
-      const showDirNum = ref(true)
 
       watch(() => route.params, (toParams, previousParams) => {
         if (toParams.id !== previousParams.id) {
           if (toParams.id) {
             loadNote(toParams.id)
+            getShowDocumentNum(toParams.id)
+            getShowDirNum(route.params.id)
+            getMainPointNum(route.params.id)
           }
         }
       })
@@ -493,7 +648,7 @@
               activeElId.value = v.slice(symbolIndex + 1)
             }
             if (!noteLoading.value) {
-              positionDocument(true, true)
+              positionDocument(false, false)
             }
           },
           {
@@ -618,6 +773,7 @@
       }
 
       return {
+        mainStore,
         loadNote,
         pageContent,
         workspace,
@@ -647,11 +803,19 @@
         dirTree,
         dirTreeRef,
         searchDirKey,
-        showDirNum,
         noteId,
         openAllDirTreeItem,
         closeAllDirTreeItem,
         positionDirTree,
+        showDocumentNum,
+        showDirNum,
+        showMainPointNum,
+        changeShowDocumentNum,
+        changeShowDirNum,
+        changeMainPointNum,
+        changeDocumentTxt,
+        changeDirTxt,
+        changeMainPointTxt,
       }
     },
   })

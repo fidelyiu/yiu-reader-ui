@@ -55,6 +55,30 @@ const mainApi = {
         url: entityUrl + '/os/pathSeparator',
         method: MethodEnum.GET,
     },
+    getNoteTextDocument: <YiuAip>{
+        url: entityUrl + '/note/txt/document',
+        method: MethodEnum.GET,
+    },
+    setNoteTextDocument: <YiuAip>{
+        url: entityUrl + '/note/txt/document',
+        method: MethodEnum.PUT,
+    },
+    getNoteTextMainPoint: <YiuAip>{
+        url: entityUrl + '/note/txt/main/point',
+        method: MethodEnum.GET,
+    },
+    setNoteTextMainPoint: <YiuAip>{
+        url: entityUrl + '/note/txt/main/point',
+        method: MethodEnum.PUT,
+    },
+    getNoteTextDir: <YiuAip>{
+        url: entityUrl + '/note/txt/dir',
+        method: MethodEnum.GET,
+    },
+    setNoteTextDir: <YiuAip>{
+        url: entityUrl + '/note/txt/dir',
+        method: MethodEnum.PUT,
+    },
 }
 
 export default mainApi

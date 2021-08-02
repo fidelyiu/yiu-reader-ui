@@ -38,6 +38,10 @@ export const useMainStore = defineStore({
             initEditSoft: false,
             osPathSeparator: '\\',
             initOsPathSeparatorValue: false,
+            initNotePageBool: false,
+            showDocumentTxt: false,
+            showDirTxt: false,
+            showMainPointTxt: false,
         }
     },
     getters: {
@@ -135,6 +139,61 @@ export const useMainStore = defineStore({
                     this.sidebarStatus = result[3].data.result
                 }
                 this.initBool = true
+            } catch (e) {
+            }
+        },
+        async initNotePageBoolValue() {
+            if (this.initNotePageBool) return
+            try {
+                const result = await Promise.all(
+                    [
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getNoteTextDocument,
+                        }),
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getNoteTextDir,
+                        }),
+                        yiuHttpWithPromise({
+                            api: SERVER_API.mainApi.getNoteTextMainPoint,
+                        }),
+                    ],
+                )
+                if (result && result.length) {
+                    this.showDocumentTxt = result[0].data.result
+                    this.showDirTxt = result[1].data.result
+                    this.showMainPointTxt = result[2].data.result
+                }
+                this.initNotePageBool = true
+            } catch (e) {
+            }
+        },
+        async setShowDocumentTxt(noteTextDocument: boolean) {
+            this.showDocumentTxt = noteTextDocument
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setNoteTextDocument,
+                    data: { noteTextDocument },
+                })
+            } catch (e) {
+            }
+        },
+        async setShowDirTxt(noteTextDir: boolean) {
+            this.showDirTxt = noteTextDir
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setNoteTextDir,
+                    data: { noteTextDir },
+                })
+            } catch (e) {
+            }
+        },
+        async setShowMainPointTxt(noteTextMainPoint: boolean) {
+            this.showMainPointTxt = noteTextMainPoint
+            try {
+                await yiuHttpWithPromise({
+                    api: SERVER_API.mainApi.setNoteTextMainPoint,
+                    data: { noteTextMainPoint },
+                })
             } catch (e) {
             }
         },
