@@ -205,11 +205,19 @@
               <SearchInput v-model="searchDirKey" :size="25"></SearchInput>
             </div>
             <div class="flex-grow h-0 w-full">
-              <DirTree ref="dirTreeRef"
+              <DirTree v-show="dirTree.length"
+                       ref="dirTreeRef"
                        :data="dirTree"
                        :search-str="searchDirKey"
                        :show-number="showDirNum"
                        :active-el-id="noteId"></DirTree>
+              <div v-show="!dirTree.length"
+                   class="h-full grid place-items-center">
+                <div class="fa-center text-gray-500">
+                  <span class="iconify mr-1" data-icon="mdi:inbox-outline" data-inline="false"></span>
+                  <span class="text-xs">没有目录</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -334,11 +342,19 @@
               <SearchInput v-model="searchMainPointKey" :size="25"></SearchInput>
             </div>
             <div class="flex-grow h-0 w-full">
-              <MainPointTree ref="mainPointTreeRef"
+              <MainPointTree v-show="markdownTree.length"
+                             ref="mainPointTreeRef"
                              :data="markdownTree"
                              :search-str="searchMainPointKey"
                              :show-number="showMainPointNum"
                              :active-el-id="activeElId"></MainPointTree>
+              <div v-show="!markdownTree.length"
+                   class="h-full grid place-items-center">
+                <div class="fa-center text-gray-500">
+                  <span class="iconify mr-1" data-icon="mdi:format-line-style" data-inline="false"></span>
+                  <span class="text-xs">没有大纲</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -618,7 +634,7 @@
         mainStore.setShowMainPointTxt(!mainStore.showMainPointTxt)
       }
 
-      const dirTree = ref<Array<any>>()
+      const dirTree = ref<Array<any>>([])
       const dirLoading = ref(false)
       const setDirNumber = (arr) => {
         const _setDirNumber = (arr, numArr) => {
