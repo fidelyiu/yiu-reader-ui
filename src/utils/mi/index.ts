@@ -215,6 +215,17 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
                 continue
             }
             const index = tokens.indexOf(token)
+
+            let topPx = 32
+            if (index !== 0) {
+                const classStr = token.attrGet('class')
+                if (classStr) {
+                    token.attrSet('class', `${classStr} pt-[${topPx}px]`)
+                } else {
+                    token.attrSet('class', `pt-[${topPx}px]`)
+                }
+            }
+
             const titleBlock = tokens[index + 1]
             if (titleBlock.children && titleBlock.children.length) {
                 titleBlock.children.forEach((item, childIndex) => {
@@ -228,6 +239,13 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
 
         markdownTree.value = markdownItemTree
     })
+
+    // md.core.ruler.push('yiu_anchor_log', state => {
+    //     const tokens = state.tokens
+    //     for (const token of tokens) {
+    //         console.log(token)
+    //     }
+    // })
 
     // 重写行内代码渲染器
     md.renderer.rules.code_inline = function (tokens, idx, _options, _env, slf) {
