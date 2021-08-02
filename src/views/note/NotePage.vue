@@ -38,18 +38,6 @@
           <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
           <span>隐藏大纲</span>
         </button>
-        <!--<button v-show="hideOrder"-->
-        <!--        class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"-->
-        <!--        @click="hideOrder = false">-->
-        <!--  <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>-->
-        <!--  <span>展示序号</span>-->
-        <!--</button>-->
-        <!--<button v-show="!hideOrder"-->
-        <!--        class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none"-->
-        <!--        @click="hideOrder = true">-->
-        <!--  <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>-->
-        <!--  <span>隐藏序号</span>-->
-        <!--</button>-->
         <button class="yiu-blue-big-circular-btn fa-center focus:outline-none" @click="onShowNoteInfo">
           <span class="iconify block mr-1" data-icon="mdi:information-outline" data-inline="false"></span>
           <span>笔记信息</span>
@@ -89,16 +77,16 @@
                               :show-text="mainStore.showDocumentTxt"
                               @btnClick="changeShowDocumentNum">
                 <template #icon>
-                  <div v-show="!showDocumentNum">
+                  <div v-show="showDocumentNum">
                     <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
                   </div>
-                  <div v-show="showDocumentNum">
+                  <div v-show="!showDocumentNum">
                     <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
                   </div>
                 </template>
                 <template #text>
-                  <span v-show="!showDocumentNum">隐藏文档序号</span>
-                  <span v-show="showDocumentNum">展示文档序号</span>
+                  <span v-show="showDocumentNum">隐藏文档序号</span>
+                  <span v-show="!showDocumentNum">展示文档序号</span>
                 </template>
               </yiu-square-btn>
               <yiu-square-btn :padding-px="6"
@@ -139,16 +127,16 @@
                               :show-text="mainStore.showDirTxt"
                               @btnClick="changeShowDirNum">
                 <template #icon>
-                  <div v-show="!showDirNum">
+                  <div v-show="showDirNum">
                     <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
                   </div>
-                  <div v-show="showDirNum">
+                  <div v-show="!showDirNum">
                     <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
                   </div>
                 </template>
                 <template #text>
-                  <span v-show="!showDirNum">隐藏目录序号</span>
-                  <span v-show="showDirNum">展示目录序号</span>
+                  <span v-show="showDirNum">隐藏目录序号</span>
+                  <span v-show="!showDirNum">展示目录序号</span>
                 </template>
               </yiu-square-btn>
               <yiu-square-btn :show-text="mainStore.showDirTxt"
@@ -218,7 +206,7 @@
               </i>
             </div>
           </div>
-          <div class="mx-auto" :class="{'hide-order': hideOrder}" v-html="pageContent"></div>
+          <div class="mx-auto" :class="{'hide-order': !showDocumentNum}" v-html="pageContent"></div>
           <div v-if="!pageContent" class="h-full w-full fa-center text-gray-500">
             <span class="iconify text-xl mr-1" data-icon="mdi:script-outline" data-inline="false"></span>
             <span>文档为空!</span>
@@ -259,16 +247,16 @@
                               :show-text="mainStore.showMainPointTxt"
                               @btnClick="changeMainPointNum">
                 <template #icon>
-                  <div v-show="!showMainPointNum">
+                  <div v-show="showMainPointNum">
                     <span class="iconify block mr-1" data-icon="mdi:alphabetical-off" data-inline="false"></span>
                   </div>
-                  <div v-show="showMainPointNum">
+                  <div v-show="!showMainPointNum">
                     <span class="iconify block mr-1" data-icon="mdi:numeric" data-inline="false"></span>
                   </div>
                 </template>
                 <template #text>
-                  <span v-show="!showMainPointNum">隐藏大纲序号</span>
-                  <span v-show="showMainPointNum">展示大纲序号</span>
+                  <span v-show="showMainPointNum">隐藏大纲序号</span>
+                  <span v-show="!showMainPointNum">展示大纲序号</span>
                 </template>
               </yiu-square-btn>
               <yiu-square-btn :show-text="mainStore.showMainPointTxt"
@@ -313,7 +301,7 @@
               <MainPointTree ref="mainPointTreeRef"
                              :data="markdownTree"
                              :search-str="searchMainPointKey"
-                             :show-number="!hideOrder"
+                             :show-number="showMainPointNum"
                              :active-el-id="activeElId"></MainPointTree>
             </div>
           </div>
@@ -699,7 +687,6 @@
         infoModal.value = true
       }
 
-      const hideOrder = ref(false)
       const showMainPoint = ref(false)
       // 展示大纲
       const onShowMainPoint = () => {
@@ -785,7 +772,6 @@
         onInfoCancel,
         modTime,
         noteSizeWithUnit,
-        hideOrder,
         noteLoading,
         width,
         showMainPoint,

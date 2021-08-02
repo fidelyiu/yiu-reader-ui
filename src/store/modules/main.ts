@@ -38,10 +38,12 @@ export const useMainStore = defineStore({
             initEditSoft: false,
             osPathSeparator: '\\',
             initOsPathSeparatorValue: false,
+
+            // 笔记页面3个bool值
             initNotePageBool: false,
-            showDocumentTxt: false,
-            showDirTxt: false,
-            showMainPointTxt: false,
+            showDocumentTxt: true,
+            showDirTxt: true,
+            showMainPointTxt: true,
         }
     },
     getters: {
