@@ -227,7 +227,8 @@
           <div class="text-gray-400 font-semibold mb-2">上一篇</div>
           <a class="inline-block break-all hover:underline"
              :href="'/note/'+previousNote.data.id">
-            {{ previousNote.data.name || '-' }}
+            <span v-show="showDirNum">{{ getNumArrStr(previousNote.number) }}</span>
+            <span>{{ previousNote.data.name || '-' }}</span>
           </a>
         </div>
       </div>
@@ -364,7 +365,8 @@
           <div class="text-gray-400 font-semibold mb-2">下一篇</div>
           <a class="inline-block break-all hover:underline"
              :href="'/note/'+nextNote.data.id">
-            {{ nextNote.data.name || '-' }}
+            <span v-show="showDirNum">{{ getNumArrStr(nextNote.number) }}</span>
+            <span>{{ nextNote.data.name || '-' }}</span>
           </a>
         </div>
       </div>
@@ -886,6 +888,13 @@
         })
       }
 
+      const getNumArrStr = (arr) => {
+        if (arr && arr.length) {
+          return arr.reduce((acc, t) => acc + t + '.', '')
+        }
+        return ''
+      }
+
       return {
         mainStore,
         loadNote,
@@ -933,6 +942,7 @@
         onEditMarkDown,
         previousNote,
         nextNote,
+        getNumArrStr,
       }
     },
   })
