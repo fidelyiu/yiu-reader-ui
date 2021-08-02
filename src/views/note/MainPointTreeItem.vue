@@ -1,25 +1,30 @@
 <template>
   <div>
-    <div v-if="node.isNode"
-         class="flex p-[5px] border-t border-b border-transparent"
+    <div class="flex p-[5px] border-t border-b border-transparent min-w-[150px]"
          :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder}">
-      <div class="flex-none border border-transparent mr-1"
-           :class="{'arrow-icon':node.child.length}"
+      <div class="flex-none border border-transparent mr-1 active:select-none"
+           :class="{'arrow-icon':node.child.length&&node.isNode}"
            @click="onChangeOpen">
-        <div v-show="!node.child.length" class="mt-[-4px] max-h-[15px]">
-          <span class="iconify text-2xl text-gray-200" data-icon="mdi:circle-small" data-inline="false"></span>
+        <div v-if="!node.isNode" class="mt-[-3px] max-h-[15px]">
+          <span class="iconify text-xl text-gray-400" data-icon="mdi:menu-down-outline" data-inline="false"></span>
         </div>
-        <div v-show="node.child.length && isOpen" class="mt-[-4px] max-h-[15px]">
-          <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-down" data-inline="false"></span>
-        </div>
-        <div v-show="node.child.length && !isOpen" class="mt-[-3px] max-h-[15px]">
-          <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-right" data-inline="false"></span>
-        </div>
+        <template v-else>
+          <div v-show="!node.child.length" class="mt-[-4px] max-h-[15px]">
+            <span class="iconify text-2xl text-gray-200" data-icon="mdi:circle-small" data-inline="false"></span>
+          </div>
+          <div v-show="node.child.length && isOpen" class="mt-[-4px] max-h-[15px]">
+            <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-down" data-inline="false"></span>
+          </div>
+          <div v-show="node.child.length && !isOpen" class="mt-[-3px] max-h-[15px]">
+            <span class="iconify text-2xl text-gray-400" data-icon="mdi:menu-right" data-inline="false"></span>
+          </div>
+        </template>
       </div>
       <div v-show="showNumber" class="flex-none text-gray-400">
         <span class="font-extrabold text-xs">{{ getNumberTitle }}</span>
       </div>
-      <a class="block break-all ml-1 hover:underline min-w-[120px]"
+      <a v-if="node.title"
+         class="block break-all ml-1 hover:underline"
          :class="{'underline': isActive||showBlueBorder}"
          :href="'#'+node.href"
          @click="onClickItem">
@@ -33,6 +38,7 @@
           <span v-else>{{ node.title || '-' }}</span>
         </span>
       </a>
+      <div v-else class="block break-all ml-1">-</div>
     </div>
     <transition name="yiu-fade-in">
       <div v-show="!node.isNode || (isOpen && node?.child && node?.child?.length)" class="ml-[18px]">
@@ -91,9 +97,12 @@
       const isOpen = ref(true)
       const getNumberTitle = computed(() => prop.node.orderNum.reduce((acc, t) => acc + t + '.', ''))
       const onClickItem = (e) => {
+        if (!prop?.node?.isNode) {
+          e.preventDefault()
+        }
         if (!activeElId.value) return
-        if (!prop?.node?.href) return
-        if (activeElId.value === prop.node.href) {
+        if (!prop?.node?.href
+            || activeElId.value === prop.node.href) {
           e.preventDefault()
         }
         //   if (!activeElId.value) return
@@ -174,9 +183,5 @@
   .arrow-icon:hover {
     @apply border border-blue-200 bg-blue-100;
     /*--tw-bg-opacity: 1;*/
-  }
-
-  .arrow-icon:active {
-    @apply select-none;
   }
 </style>
