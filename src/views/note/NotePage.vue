@@ -251,7 +251,7 @@
               </i>
             </div>
           </div>
-          <div class="mx-auto" :class="{'hide-order': !showDocumentNum}" v-html="pageContent"></div>
+          <div class="mx-auto yiu-note-box" :class="{'hide-order': !showDocumentNum}" v-html="pageContent"></div>
           <div v-if="!pageContent" class="h-full w-full fa-center text-gray-500">
             <span class="iconify text-xl mr-1" data-icon="mdi:script-outline" data-inline="false"></span>
             <span>文档为空!</span>

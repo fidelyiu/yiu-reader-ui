@@ -11,8 +11,8 @@
 
 .inline-code-div:hover .inline-code-copy {
     /*display: inline-block;*/
-    right: -1em;
-    width: 1.8em;
+    right: -.8em;
+    width: 1.4em;
 }
 
 .inline-code-copy {

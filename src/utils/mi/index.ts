@@ -231,19 +231,13 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             let topPx = 32
             if (index === 0) {
                 topPx = 16
-                const classStr = token.attrGet('class')
-                if (classStr) {
-                    token.attrSet('class', `${classStr} pt-[${topPx}px] ml-[-1rem]`)
-                } else {
-                    token.attrSet('class', `pt-[${topPx}px] ml-[-1.25rem]`)
-                }
+                // const classStr = token.attrGet('class')
+                // if (classStr) {
+                //     token.attrSet('class', `${classStr} pt-[${topPx}px] ml-[-1rem]`)
+                // } else {}
+                token.attrJoin('class', `pt-[${topPx}px] ml-[-1.25rem]`)
             } else {
-                const classStr = token.attrGet('class')
-                if (classStr) {
-                    token.attrSet('class', `${classStr} pt-[${topPx}px] mt-[64px] ml-[-1rem]`)
-                } else {
-                    token.attrSet('class', `pt-[${topPx}px] mt-[64px] ml-[-1.25rem]`)
-                }
+                token.attrJoin('class', `pt-[${topPx}px] mt-[64px] ml-[-1.25rem]`)
             }
 
             const titleBlock = tokens[index + 1]
@@ -281,6 +275,7 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
         const aIndex = tokens[idx].attrIndex('target')
         if (aIndex < 0) {
             tokens[idx].attrPush(['target', '_blank'])
+            tokens[idx].attrJoin('class', 'yiu-link')
         } else {
             tokens[idx].attrs[aIndex][1] = '_blank'
         }
