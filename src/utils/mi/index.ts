@@ -152,6 +152,16 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             markdownItem.hGrade = hGrade
 
             tokens[index + 1].children?.unshift(
+                Object.assign(new state.Token('yiu_link_open', 'a', 1), {
+                    attrs: [
+                        // italic mr-2
+                        ['class', 'text mr-[0.25rem] text-transparent hover:text-blue-400 cursor-pointer'],
+                    ],
+                }),
+                Object.assign(new state.Token('text', '', 0), {
+                    content: '#',
+                }),
+                new state.Token('yiu_link_close', 'a', -1),
                 Object.assign(new state.Token('yiu_anchor_open', 'span', 1), {
                     attrs: [
                         // italic mr-2
@@ -195,6 +205,8 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             token.attrSet('id', slug)
             markdownItem.href = slug
             markdownItemArr.push(markdownItem)
+
+            tokens[index + 1].children[0].attrSet('href', `#${slug}`)
         }
     })
 
@@ -217,12 +229,20 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             const index = tokens.indexOf(token)
 
             let topPx = 32
-            if (index !== 0) {
+            if (index === 0) {
+                topPx = 16
                 const classStr = token.attrGet('class')
                 if (classStr) {
-                    token.attrSet('class', `${classStr} pt-[${topPx}px]`)
+                    token.attrSet('class', `${classStr} pt-[${topPx}px] ml-[-1rem]`)
                 } else {
-                    token.attrSet('class', `pt-[${topPx}px]`)
+                    token.attrSet('class', `pt-[${topPx}px] ml-[-1.25rem]`)
+                }
+            } else {
+                const classStr = token.attrGet('class')
+                if (classStr) {
+                    token.attrSet('class', `${classStr} pt-[${topPx}px] mt-[64px] ml-[-1rem]`)
+                } else {
+                    token.attrSet('class', `pt-[${topPx}px] mt-[64px] ml-[-1.25rem]`)
                 }
             }
 
