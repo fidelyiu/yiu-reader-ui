@@ -260,7 +260,7 @@
                     </div>
                   </template>
                   <template #text>
-                    <div class="text-red-400 mr-1 cursor-pointer" @click="onSelectEl">
+                    <div class="text-red-400 mr-1 cursor-pointer select-all">
                       {{ slotProps.node.data.absPath || '-' }}
                     </div>
                   </template>
@@ -466,8 +466,7 @@
           <div class="border-1 border-red-500 bg-red-50 px-4 py-2 mb-5">
             <div class="mb-2">删除本地文件将无法恢复。</div>
             <div class="mb-2">为防止意外，确认继续操作请输入以下内容：</div>
-            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500"
-                  @click="onSelectEl">{{ tempNodeData.name }}</span>
+            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500 select-all">{{ tempNodeData.name }}</span>
           </div>
           <input
               v-model="delStr"
@@ -776,16 +775,6 @@
         mainStore.setMainBoxShowNum(!mainStore.mainBoxShowNum)
       }
 
-      const onSelectEl = (e) => {
-        if (!e.target) return
-        let selection = window.getSelection()
-        if (!selection) return
-        selection.removeAllRanges()
-        let range = new Range()
-        range.selectNodeContents(e.target)
-        selection.addRange(range)
-      }
-
       const onEditMarkDown = (data) => {
         logStore.pushLog(String(Date.now()), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + data.absPath)
         yiuHttp({
@@ -930,7 +919,6 @@
         changeShowBtnText,
         changeShowBtIcon,
         changeShowBtNum,
-        onSelectEl,
         onEditMarkDown,
         // ↓添加
         addRef,

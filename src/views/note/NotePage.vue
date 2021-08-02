@@ -213,6 +213,15 @@
             </div>
           </div>
         </div>
+        <div class="h-[8px] bg-blue-50 flex-none"></div>
+        <div v-if="previousNote"
+             class="h-[86px] bg-white border p-2">
+          <div class="text-gray-400 font-semibold mb-2">上一篇</div>
+          <a class="inline-block break-all hover:underline"
+             :href="'/note/'+previousNote.data.id">
+            {{ previousNote.data.name || '-' }}
+          </a>
+        </div>
       </div>
       <!--左填充空格-->
       <div class="flex-none w-[16px] bg-blue-50"></div>
@@ -332,6 +341,15 @@
                              :active-el-id="activeElId"></MainPointTree>
             </div>
           </div>
+        </div>
+        <div class="h-[8px] bg-blue-50 flex-none"></div>
+        <div v-if="nextNote"
+             class="h-[86px] bg-white border p-2 text-right">
+          <div class="text-gray-400 font-semibold mb-2">下一篇</div>
+          <a class="inline-block break-all hover:underline"
+             :href="'/note/'+nextNote.data.id">
+            {{ nextNote.data.name || '-' }}
+          </a>
         </div>
       </div>
       <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
@@ -623,6 +641,7 @@
         return _setDirNumber(arr, [])
       }
       const dirTreeRef = ref()
+      const dirLoadEnd = ref(false)
       const loadDir = (id) => {
         yiuHttp({
           api: SERVER_API.noteApi.dirTree,
@@ -631,6 +650,7 @@
           tips: { anyObj: notification, error: { show: true } },
           success: (res) => {
             if (res.data.result) {
+              dirLoadEnd.value = true
               dirTree.value = setDirNumber(res.data.result)
             }
           },
@@ -638,6 +658,49 @@
       }
       loadDir(route.params.id)
       const searchDirKey = ref('')
+
+      const previousNote = ref<any>()
+      const nextNote = ref<any>()
+      const getPreAndNextNote = () => {
+        if (!noteId.value) return
+        previousNote.value = undefined
+        nextNote.value = undefined
+        const getNoteArr = (arr) => {
+          const result: Array<any> = []
+          if (arr && arr.length) {
+            for (let arrEl of arr) {
+              if (arrEl) {
+                if (arrEl.data.isDir) {
+                  if (arrEl.child && arrEl.child.length) {
+                    result.push(...getNoteArr(arrEl.child))
+                  }
+                } else {
+                  result.push(arrEl)
+                }
+              }
+            }
+          }
+          return result
+        }
+        const noteArr = getNoteArr(dirTree.value)
+        if (noteArr && noteArr.length) {
+          const noteIndex = noteArr.findIndex(item => item.data.id === noteId.value)
+          const preIndex = noteIndex - 1
+          const nextIndex = noteIndex + 1
+          if (preIndex >= 0 && preIndex < noteArr.length) {
+            previousNote.value = noteArr[preIndex]
+          }
+          if (nextIndex >= 1 && preIndex < noteArr.length) {
+            nextNote.value = noteArr[nextIndex]
+          }
+        }
+      }
+
+      watch([noteId, dirTree], () => {
+        if (noteId.value && dirLoadEnd.value) {
+          getPreAndNextNote()
+        }
+      })
 
       watch(() => route.params, (toParams, previousParams) => {
         if (toParams.id !== previousParams.id) {
@@ -852,6 +915,8 @@
         changeMainPointTxt,
         onPosition,
         onEditMarkDown,
+        previousNote,
+        nextNote,
       }
     },
   })
