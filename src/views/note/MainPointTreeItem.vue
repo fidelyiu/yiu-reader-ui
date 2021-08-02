@@ -5,11 +5,11 @@
       <div class="flex-none border border-transparent mr-1 active:select-none"
            :class="{'arrow-icon':node.child.length&&node.isNode}"
            @click="onChangeOpen">
-        <div v-if="!node.isNode" class="mt-[-3px] max-h-[15px]">
+        <div v-if="!node.isNode" class="mt-[-2px] max-h-[15px]">
           <span class="iconify text-xl text-gray-400" data-icon="mdi:menu-down-outline" data-inline="false"></span>
         </div>
         <template v-else>
-          <div v-show="!node.child.length" class="mt-[-4px] max-h-[15px]">
+          <div v-show="!node.child.length" class="mt-[-2px] max-h-[15px]">
             <span class="iconify text-2xl text-gray-200" data-icon="mdi:circle-small" data-inline="false"></span>
           </div>
           <div v-show="node.child.length && isOpen" class="mt-[-4px] max-h-[15px]">

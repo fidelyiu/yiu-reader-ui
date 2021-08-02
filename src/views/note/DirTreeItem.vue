@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex p-[5px] border-t border-b border-transparent"
+    <div class="flex p-[5px] border-t border-b border-transparent min-w-[150px]"
          :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder}">
       <div class="flex-none border border-transparent mr-1"
            :class="{'arrow-icon':node.data.isDir}"
@@ -18,7 +18,7 @@
       <div v-show="showNumber" class="flex-none text-gray-400">
         <span class="font-extrabold text-xs">{{ getNumberTitle }}</span>
       </div>
-      <a class="block break-all ml-1 hover:underline min-w-[120px]"
+      <a class="block break-all ml-1 hover:underline"
          :class="{'underline': isActive||showBlueBorder}"
          :href="'/note/'+node.data.id"
          @click="onClickItem">
