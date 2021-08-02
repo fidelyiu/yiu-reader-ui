@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="flex p-[5px] border-t border-b border-transparent"
+    <div v-if="node.isNode"
+         class="flex p-[5px] border-t border-b border-transparent"
          :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder}">
       <div class="flex-none border border-transparent mr-1"
            :class="{'arrow-icon':node.child.length}"
@@ -34,7 +35,7 @@
       </a>
     </div>
     <transition name="yiu-fade-in">
-      <div v-show="isOpen && node?.child && node?.child?.length" class="ml-[18px]">
+      <div v-show="!node.isNode || (isOpen && node?.child && node?.child?.length)" class="ml-[18px]">
         <MainPointTreeItem v-for="item in node.child"
                            :id="'yiu-main-point-'+item.href"
                            :ref="setItemRef"

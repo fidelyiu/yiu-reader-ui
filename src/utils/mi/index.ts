@@ -9,7 +9,7 @@ const slugify = (s) => encodeURIComponent(String(s).trim().toLowerCase().replace
 function uniqueSlug(slug, slugs) {
     let uniq = slug
     let i = 1
-    if (!Object.prototype.hasOwnProperty.call(slugs, uniq)) {
+    if (Object.prototype.hasOwnProperty.call(slugs, uniq)) {
         while (Object.prototype.hasOwnProperty.call(slugs, uniq)) {
             uniq = `${slug}-${i}`
             i += 1
@@ -175,6 +175,7 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             )
 
             let inYiuAnchor = false
+            let inYiuLink = false
             const title = tokens[index + 1]
                 .children
                 .filter(token => {
@@ -184,7 +185,13 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
                     if (token.type === 'yiu_anchor_close') {
                         inYiuAnchor = false
                     }
-                    if (inYiuAnchor) {
+                    if (token.type === 'yiu_link_open') {
+                        inYiuLink = true
+                    }
+                    if (token.type === 'yiu_link_close') {
+                        inYiuLink = false
+                    }
+                    if (inYiuAnchor || inYiuLink) {
                         return false
                     }
                     return token.type === 'text' || token.type === 'code_inline'
