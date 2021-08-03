@@ -235,16 +235,14 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             }
             const index = tokens.indexOf(token)
 
-            let topPx = 32
             if (index === 0) {
-                topPx = 16
                 // const classStr = token.attrGet('class')
                 // if (classStr) {
                 //     token.attrSet('class', `${classStr} pt-[${topPx}px] ml-[-1rem]`)
                 // } else {}
-                token.attrJoin('class', `pt-[${topPx}px] ml-[-1.25rem]`)
+                token.attrJoin('class', `pt-[16px] ml-[-1.25rem]`)
             } else {
-                token.attrJoin('class', `pt-[${topPx}px] mt-[64px] ml-[-1.25rem]`)
+                token.attrJoin('class', `pt-[32px] mt-[64px] ml-[-1.25rem]`)
             }
 
             const titleBlock = tokens[index + 1]
