@@ -76,7 +76,8 @@
                  :src="'src/assets/note.png'"
                  alt="note">
           </template>
-          <img v-else class="w-[36px] h-[36px] mr-4"
+          <img v-else
+               class="w-[36px] h-[36px] mr-4"
                :src="item.img"
                alt="CustomizeImg">
         </template>
