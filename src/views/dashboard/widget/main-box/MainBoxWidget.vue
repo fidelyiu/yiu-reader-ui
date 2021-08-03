@@ -466,7 +466,9 @@
           <div class="border-1 border-red-500 bg-red-50 px-4 py-2 mb-5">
             <div class="mb-2">删除本地文件将无法恢复。</div>
             <div class="mb-2">为防止意外，确认继续操作请输入以下内容：</div>
-            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500 select-all">{{ tempNodeData.name }}</span>
+            <span class="font-semibold mr-1 border-dashed border-b-3 border-red-500 select-all">{{
+                tempNodeData.name
+              }}</span>
           </div>
           <input
               v-model="delStr"
@@ -498,7 +500,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue'
+  import { defineComponent, nextTick, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
@@ -571,6 +573,14 @@
           },
         })
       }
+
+      watch(
+          () => mainStore.currentWorkspace.id,
+          () => {
+            layoutDir.value = false
+            loadNote()
+          },
+      )
 
       const tempNodeData = ref<any>()
       const delStr = ref('')
@@ -671,6 +681,7 @@
         //连接关闭时触发
         ws.onclose = () => {
           loadNote()
+          refreshLoading.value = false
         }
       }
 

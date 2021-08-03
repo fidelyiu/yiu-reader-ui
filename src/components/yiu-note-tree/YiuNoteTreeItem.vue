@@ -1,6 +1,8 @@
 <template>
   <div class="w-full">
-    <div class="flex hover:bg-blue-50 p-2 cursor-pointer" @click.stop="onClick">
+    <div class="flex hover:bg-blue-50 p-2"
+         :class="{'cursor-pointer': node?.data?.isDir}"
+         @click.stop="onClick">
       <div v-show="showNumber" class="flex-none fa-center text-gray-500 mr-1">
         <span class="italic font-normal"
               :class="{'text-red-400': isInvalidFile}">{{ numberTitle }}</span>

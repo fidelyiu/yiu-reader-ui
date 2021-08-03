@@ -59,12 +59,26 @@
         </template>
         <template v-else>
           <template v-if="isDefImg(item.img)">
-            <img v-if="item.img==='typora'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/typora.png'">
-            <img v-if="item.img==='vs_code'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/vs_code.png'">
-            <img v-if="item.img==='sublime'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/sublime.png'">
-            <img v-if="item.img==='note'" class="w-[36px] h-[36px] mr-4" :src="'src/assets/note.png'">
+            <img v-if="item.img==='typora'"
+                 class="w-[36px] h-[36px] mr-4"
+                 :src="'src/assets/typora.png'"
+                 alt="typora">
+            <img v-if="item.img==='vs_code'"
+                 class="w-[36px] h-[36px] mr-4"
+                 :src="'src/assets/vs_code.png'"
+                 alt="vs_code">
+            <img v-if="item.img==='sublime'"
+                 class="w-[36px] h-[36px] mr-4"
+                 :src="'src/assets/sublime.png'"
+                 alt="sublime">
+            <img v-if="item.img==='note'"
+                 class="w-[36px] h-[36px] mr-4"
+                 :src="'src/assets/note.png'"
+                 alt="note">
           </template>
-          <img v-else class="w-[36px] h-[36px] mr-4" :src="item.img">
+          <img v-else class="w-[36px] h-[36px] mr-4"
+               :src="item.img"
+               alt="CustomizeImg">
         </template>
         <!--名字-->
         <div class="flex-grow w-0 mr-4">
@@ -401,7 +415,12 @@
           api: SERVER_API.editSoftApi.del,
           pathData: { id },
           tips: { anyObj: notification, error: { show: true } },
-          success: (_res) => onSearch(),
+          success: (_res) => {
+            if (id === mainStore.currentEditSoft.id) {
+              mainStore.setCurrentEditSoftNull()
+            }
+            onSearch()
+          },
         })
       }
 

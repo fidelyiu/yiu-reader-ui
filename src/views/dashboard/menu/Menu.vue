@@ -4,8 +4,8 @@
     <div class="h-[64px] px-[16px] flex-none flex items-center">
       <div class="w-full fa-center">
         <n-popover trigger="click"
-                   :show-arrow="false"
-                   placement="bottom-start">
+                   :placement="show?'bottom':'bottom-start'"
+                   :style="{ width: show?'190px':'auto', padding: 0 }">
           <template #trigger>
             <button class="header-btn" :class="{'px-4': show}">
               <span v-show="show" class="w-full fa-center block">
@@ -18,9 +18,23 @@
             </button>
           </template>
           <div>
-            <div>倒序{{ show }}</div>
-            <div>设置</div>
-            <div>关于</div>
+            <button class="btn-item" @click="onClickSetting">
+              <span class="iconify mr-1 text-sm mt-[-1px]" data-icon="mdi:cog-outline" data-inline="false"></span>
+              <div>设置</div>
+            </button>
+            <div class="my-1 border-b border-gray-100"></div>
+            <button class="btn-item">
+              <span class="iconify mr-1 text-sm mt-[-1px]"
+                    data-icon="mdi:help-circle-outline"
+                    data-inline="false"></span>
+              <div>帮助</div>
+            </button>
+            <button class="btn-item">
+              <span class="iconify mr-1 text-sm mt-[-1px]"
+                    data-icon="mdi:information-outline"
+                    data-inline="false"></span>
+              <div>关于</div>
+            </button>
           </div>
         </n-popover>
       </div>
@@ -29,7 +43,9 @@
     <div class="flex-grow h-0 overflow-y-auto">
       <n-spin :show="searchLoading" size="small">
         <template v-for="item in workspaceList" :key="item.id">
-          <MenuItem :active="isActiveItem(item)" :show-dot="show" :workspace="item"></MenuItem>
+          <MenuItem :active="isActiveItem(item)"
+                    :show-dot="show"
+                    :workspace="item"></MenuItem>
         </template>
       </n-spin>
     </div>
@@ -56,6 +72,7 @@
   import { useMainStore } from '/@/store/modules/main'
   import { ObjStatus } from '/@/vo/enum/obj-status'
   import { propTypes } from '/@/utils/propTypes'
+  import router from '/@/router'
 
   export default defineComponent({
     name: 'Menu',
@@ -96,12 +113,17 @@
         return mainStore.currentWorkspace.id === item?.id
       }
       onSearch()
+
+      const onClickSetting = () => {
+        router.push('/system')
+      }
       return {
         workspaceList,
         searchLoading,
         searchSort,
         changeShowMenu,
         isActiveItem,
+        onClickSetting,
       }
     },
   })
@@ -119,5 +141,12 @@
 
   .header-btn:active {
     background: rgba(219, 234, 254, .8)
+  }
+
+  .btn-item {
+    @apply px-[14px] py-[6px] w-full;
+    @apply flex items-center;
+    @apply hover:bg-blue-50;
+    @apply active:bg-blue-100;
   }
 </style>

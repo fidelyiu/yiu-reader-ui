@@ -1,7 +1,9 @@
 <template>
   <n-popover trigger="hover" placement="left">
     <template #trigger>
-      <div class="w-full h-[44px] px-[6px] flex hover:bg-blue-50 justify-center" :class="{'bg-blue-50':active}">
+      <div class="w-full h-[44px] px-[6px] flex hover:bg-blue-50 justify-center cursor-pointer"
+           :class="{'bg-blue-50':active}"
+           @click="onChangeWorkSpace">
         <!--前面的点-->
         <div v-show="showDot" class="w-[6px] mr-[6px] fa-center">
           <div class="w-[6px] h-[6px] rounded" :class="{'bg-blue-400':active}"></div>
@@ -30,8 +32,11 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { NPopover } from 'naive-ui'
+  import { NPopover, useNotification } from 'naive-ui'
   import { propTypes } from '/@/utils/propTypes'
+  import { yiuHttp } from '/@/utils/http'
+  import SERVER_API from '/@/api'
+  import { useMainStore } from '/@/store/modules/main'
 
   export default defineComponent({
     name: 'MenuItem',
@@ -41,15 +46,34 @@
       showDot: propTypes.bool.def(true),
       workspace: propTypes.any,
     },
-    setup() {
+    setup(props) {
+      const mainStore = useMainStore()
+      const notification = useNotification()
       const getTitleAbridge = (title) => {
         if (!title) {
           return '?'
         }
         return title.slice(0, 1)
       }
+
+      const onChangeWorkSpace = () => {
+        if (!props.workspace.id) return
+        mainStore.changingWorkspace = true
+        yiuHttp({
+          api: SERVER_API.mainApi.setCurrentWorkspace,
+          tips: { anyObj: notification, error: { show: true } },
+          pathData: { id: props.workspace.id },
+          success: (res) => {
+            mainStore.setCurrentWorkspace(res?.data?.result)
+          },
+          finally: () => {
+            mainStore.changingWorkspace = false
+          },
+        })
+      }
       return {
         getTitleAbridge,
+        onChangeWorkSpace,
       }
     },
   })

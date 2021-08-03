@@ -4,9 +4,12 @@
           :show="mainStore.getSidebarStatus"
           @changeShow="changeMenu"></Menu>
     <div class="w-full flex flex-col">
-      <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px]">
-        <div class="fa-center text-2xl flex-grow w-0">
-          <span class="w-full truncate">{{ mainStore.currentWorkspace.name || '-' }}</span>
+      <div class="flex-none h-[64px] bg-blue-200 flex justify-between px-[8px]">
+        <div class="flex items-center text-2xl flex-grow w-0">
+          <span class="truncate flex-none">{{ mainStore.currentWorkspace.name || '-' }}</span>
+          <span class="flex-none" v-show="mainStore.changingWorkspace">
+            <n-spin class="ml-[8px] p-[4px]"/>
+          </span>
         </div>
         <div class="fa-center flex-none">
           <button class="yiu-blue-big-circular-btn fa-center mr-2 focus:outline-none">
@@ -39,7 +42,7 @@
           </button>
         </div>
       </div>
-      <div class="bg-blue-50 h-full overflow-hidden flex">
+      <div class="bg-blue-100 h-full overflow-hidden flex">
         <div class="w-0 h-full flex-grow relative p-2">
           <div v-if="layoutLoading"
                class="absolute inset-0 grid justify-center content-center z-50 bg-white"

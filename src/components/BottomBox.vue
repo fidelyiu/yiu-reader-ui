@@ -35,7 +35,8 @@
     </div>
   </div>
   <div class="flex-none max-h-7 h-7 bg-gray-800 text-white flex">
-    <div class="box-item flex-none flex h-full cursor-pointer fa-center" @click="onToSystem">
+    <div class="box-item flex-none flex h-full cursor-pointer fa-center active:select-none"
+         @click="onPush">
       <span class="iconify text-base" data-icon="mdi:home" data-inline="false"></span>
     </div>
     <div class="box-item flex-none fa-center cursor-default">
@@ -65,6 +66,7 @@
   import LogItem from '/@/components/LogItem.vue'
   import { useLogStore } from '/@/store/modules/log'
   import { useMainStore } from '/@/store/modules/main'
+  import { statusIsNotValid } from '/@/vo/enum/obj-status'
 
   export default defineComponent({
     name: 'BottomBox',
@@ -76,8 +78,11 @@
       const showLog = ref(false)
       const logBox = ref()
       const logStore = useLogStore()
-      const onToSystem = () => {
-        router.push('/system')
+      const onPush = () => {
+        if (statusIsNotValid(mainStore.getCurrentWorkspace.status)) {
+          return
+        }
+        router.push('/dashboard')
       }
       const scrollToBottom = () => {
         if (logBox.value) {
@@ -88,7 +93,7 @@
         showLog,
         mainStore,
         logStore,
-        onToSystem,
+        onPush,
         logBox,
         scrollToBottom,
       }

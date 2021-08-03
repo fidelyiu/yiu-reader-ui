@@ -16,14 +16,15 @@
 }
 
 .inline-code-copy {
+    line-height: normal;
     text-align: right;
     padding-right: .5em;
     position: absolute;
     /*display: none;*/
     display: inline-block;
     width: 0;
-    height: 90%;
-    top: 1px;
+    height: 64%;
+    top: 6px;
     right: .5em;
     text-shadow: 0 1px rgba(0, 0, 0, 0.3);
     border-radius: .3em;

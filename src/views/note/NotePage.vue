@@ -1,6 +1,6 @@
 <template>
   <div class="h-full w-full flex flex-col">
-    <div class="flex-none h-[64px] bg-blue-100 flex justify-between px-[8px] border-b">
+    <div class="flex-none h-[64px] bg-blue-200 flex justify-between px-[8px] border-b">
       <div class="fa-center text-2xl flex-grow w-0">
         <div class="w-full truncate">
           <span>{{ noteName }}</span>
@@ -43,14 +43,14 @@
     <!--<div class="h-[16px] bg-blue-50 flex-none"></div>-->
     <div class="flex-grow h-0 flex">
       <!--左留白-->
-      <div v-show="width>990" class="flex-grow bg-blue-50"></div>
+      <div v-show="width>990" class="flex-grow bg-blue-100"></div>
       <!--目录-->
-      <div v-show="width>1270 && showDir" class="flex-none w-[16px] bg-blue-50"></div>
+      <div v-show="width>1270 && showDir" class="flex-none w-[16px] bg-blue-100"></div>
       <div v-show="width>1270 && showDir"
            style="width: 256px"
-           class="h-full overflow-auto flex-none bg-blue-50">
+           class="h-full overflow-auto flex-none bg-blue-100">
         <div style="height: calc(100% - 140px);" class="w-full bg-white flex flex-col">
-          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="h-[8px] bg-blue-100 flex-none"></div>
           <ToolBox title="文档工具栏">
             <div class="flex justify-between">
               <yiu-square-btn show-text
@@ -131,7 +131,7 @@
               </yiu-square-btn>
             </div>
           </ToolBox>
-          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="h-[8px] bg-blue-100 flex-none"></div>
           <ToolBox title="目录工具栏">
             <div class="flex justify-between">
               <yiu-square-btn show-text
@@ -199,8 +199,8 @@
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
-          <div class="h-[8px] bg-blue-50 flex-none"></div>
-          <div class="flex-grow h-0 w-full flex flex-col border">
+          <div class="h-[8px] bg-blue-100 flex-none"></div>
+          <div class="flex-grow h-0 w-full flex flex-col border-t border-l border-r shadow">
             <div class="flex-none p-[8px]">
               <SearchInput v-model="searchDirKey" :size="25"></SearchInput>
             </div>
@@ -221,9 +221,9 @@
             </div>
           </div>
         </div>
-        <div class="h-[8px] bg-blue-50 flex-none"></div>
+        <div class="h-[8px] bg-blue-100 flex-none"></div>
         <div v-if="previousNote"
-             class="h-[86px] bg-white border p-2">
+             class="h-[86px] bg-white border-t border-l border-r shadow p-2">
           <div class="text-gray-400 font-semibold mb-2">上一篇</div>
           <a class="inline-block break-all hover:underline"
              :href="'/note/'+previousNote.data.id">
@@ -233,16 +233,16 @@
         </div>
       </div>
       <!--左填充空格-->
-      <div class="flex-none w-[16px] bg-blue-50"></div>
+      <div class="flex-none w-[16px] bg-blue-100"></div>
       <!--中间部门-->
       <div class="flex-none note-page-white overflow-hidden h-full flex flex-col"
            :class="{'flex-none': width>990,'flex-grow': width<=990}"
            :style="{'width': width>990?'960px':'0'}">
-        <div class="h-[8px] bg-blue-50 flex-none"></div>
+        <div class="h-[8px] bg-blue-100 flex-none"></div>
         <div id="yiu-note-container"
              style="width: 100%;"
              :style="{'padding': width>900?'32px  96px 128px':'16px'}"
-             class="border overflow-auto flex-grow h-0">
+             class="shadow overflow-auto flex-grow h-0">
           <div v-if="noteLoading" class="h-full w-full fa-center">
             <div class="text-center">
               <div class="text-gray-500">文档渲染中...</div>
@@ -260,14 +260,14 @@
         </div>
       </div>
       <!--右填充空格-->
-      <div class="flex-none w-[16px] bg-blue-50"></div>
+      <div class="flex-none w-[16px] bg-blue-100"></div>
       <!--大纲-->
       <div v-show="width>1270 && showMainPoint"
            style="width: 256px"
-           class="h-full overflow-auto flex-none bg-blue-50">
+           class="h-full overflow-auto flex-none bg-blue-100">
         <div style="height: calc(100% - 140px);"
              class="w-full bg-white flex flex-col">
-          <div class="h-[8px] bg-blue-50 flex-none"></div>
+          <div class="h-[8px] bg-blue-100 flex-none"></div>
           <!--grid grid-cols-5 gap-2-->
           <!--工具栏-->
           <ToolBox title="大纲工具栏">
@@ -337,8 +337,8 @@
               <div class="w-[28px] h-[28px] flex-none"></div>
             </div>
           </ToolBox>
-          <div class="h-[8px] bg-blue-50 flex-none"></div>
-          <div class="flex-grow h-0 w-full flex flex-col border">
+          <div class="h-[8px] bg-blue-100 flex-none"></div>
+          <div class="flex-grow h-0 w-full flex flex-col border-t border-l border-r shadow">
             <div class="flex-none p-[8px]">
               <SearchInput v-model="searchMainPointKey" :size="25"></SearchInput>
             </div>
@@ -359,9 +359,9 @@
             </div>
           </div>
         </div>
-        <div class="h-[8px] bg-blue-50 flex-none"></div>
+        <div class="h-[8px] bg-blue-100 flex-none"></div>
         <div v-if="nextNote"
-             class="h-[86px] bg-white border p-2 text-right">
+             class="h-[86px] bg-white border-t border-l border-r shadow p-2 text-right">
           <div class="text-gray-400 font-semibold mb-2">下一篇</div>
           <a class="inline-block break-all hover:underline"
              :href="'/note/'+nextNote.data.id">
@@ -370,9 +370,9 @@
           </a>
         </div>
       </div>
-      <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-50"></div>
+      <div v-show="width>1270 && showMainPoint" class="flex-none w-[16px] bg-blue-100"></div>
       <!--右留白-->
-      <div v-show="width>990" class="flex-grow bg-blue-50"></div>
+      <div v-show="width>990" class="flex-grow bg-blue-100"></div>
     </div>
   </div>
   <n-modal v-model:show="infoModal">
@@ -812,6 +812,7 @@
       const showDir = ref(false)
       // 展示大纲
       const onShowDir = () => {
+        systemChange = false
         if (1540 <= width.value) {
           showDir.value = true
         } else if (1270 <= width.value) {
@@ -836,10 +837,17 @@
       }
       initShowDirAndMainPoint()
 
+      // 如果是系统隐藏的，窗口放大后要响应处理
+      let systemChange = false
       watch(
           () => width.value,
           (v) => {
-            if (1270 <= v && showDir.value && showMainPoint.value) {
+            if (1540 <= v && !showDir.value && systemChange) {
+              systemChange = false
+              showDir.value = true
+            }
+            if (1270 <= v && v < 1540 && showDir.value && showMainPoint.value) {
+              systemChange = true
               showDir.value = false
             }
           },

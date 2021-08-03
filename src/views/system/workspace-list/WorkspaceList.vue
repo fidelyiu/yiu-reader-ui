@@ -418,7 +418,12 @@
           api: SERVER_API.workspaceApi.del,
           pathData: { id },
           tips: { anyObj: notification, error: { show: true } },
-          success: (_res) => onSearch(),
+          success: (_res) => {
+            if (id === mainStore.currentWorkspace.id) {
+              mainStore.setCurrentWorkspaceNull()
+            }
+            onSearch()
+          },
         })
       }
 

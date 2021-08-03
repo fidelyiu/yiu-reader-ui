@@ -17,6 +17,7 @@ export const useMainStore = defineStore({
                 status: ObjStatus.NoValue,
                 path: '',
             },
+            changingWorkspace: false,
             currentPath: '',
             // 是否初始化以下值
             initBool: false,
@@ -61,6 +62,25 @@ export const useMainStore = defineStore({
         getSidebarStatus(state) {return state.sidebarStatus},
     },
     actions: {
+        setCurrentWorkspaceNull() {
+            this.currentPath = ''
+            this.currentWorkspace = {
+                id: '',
+                name: '',
+                status: ObjStatus.NoValue,
+                path: '',
+            }
+        },
+        setCurrentEditSoftNull() {
+            this.currentEditSoftPath = ''
+            this.currentEditSoft = {
+                id: '',
+                name: '',
+                img: '',
+                status: ObjStatus.NoValue,
+                path: '',
+            }
+        },
         setCurrentWorkspace(workspace: WorkspaceEntity) {this.currentWorkspace = workspace as any},
         async refreshCurrentWorkspaceWithHttp() {
             try {

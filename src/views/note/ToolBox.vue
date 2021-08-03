@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full border">
+  <div class="w-full">
     <div class="flex justify-between text-xs tool-bar-bg">
       <div class="flex-grow p-2 text-gray-600 font-bold">{{ title }}</div>
       <div class="tool-bar-icon-box fa-center"
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div v-show="hidden" class="p-2 border-t">
+    <div v-show="hidden" class="p-2 border-t border-b">
       <slot></slot>
     </div>
   </div>
@@ -36,7 +36,7 @@
 
 <style scoped>
   .tool-bar-bg {
-    background-image: linear-gradient(to right, rgba(219, 234, 254), rgba(219, 234, 254), rgba(219, 234, 254), white);
+    background-image: linear-gradient(to right, rgb(191, 219, 254), rgb(191, 219, 254), rgb(191, 219, 254), white);
   }
 
   /*text-black*/

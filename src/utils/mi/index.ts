@@ -242,7 +242,7 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
                 // } else {}
                 token.attrJoin('class', `pt-[16px] ml-[-1.25rem]`)
             } else {
-                token.attrJoin('class', `pt-[32px] mt-[64px] ml-[-1.25rem]`)
+                token.attrJoin('class', `pt-[32px] ml-[-1.25rem]`)
             }
 
             const titleBlock = tokens[index + 1]
