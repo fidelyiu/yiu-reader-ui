@@ -7,7 +7,7 @@
       <div class="flex-none h-[64px] bg-blue-200 flex justify-between px-[8px]">
         <div class="flex items-center text-2xl flex-grow w-0">
           <span class="truncate flex-none">{{ mainStore.currentWorkspace.name || '-' }}</span>
-          <span class="flex-none" v-show="mainStore.changingWorkspace">
+          <span v-show="mainStore.changingWorkspace" class="flex-none">
             <n-spin class="ml-[8px] p-[4px]"/>
           </span>
         </div>
