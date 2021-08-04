@@ -29,7 +29,7 @@
     <div class="h-full overflow-y-auto overflow-x-hidden">
       <transition name="yiu-x">
         <template v-if="tabKey==='dbManage'">
-          <div>dbManage</div>
+          <DbList></DbList>
         </template>
         <template v-else-if="tabKey==='editSoft'">
           <div class="h-full">
@@ -63,6 +63,7 @@
   import { statusIsNotValid } from '/@/vo/enum/obj-status'
   import router from '/@/router'
   import EditSoftList from '/@/views/system/edit-soft-list/EditSoftList.vue'
+  import DbList from '/@/views/system/db-list/DbList.vue'
 
   export default defineComponent({
     name: 'System',
@@ -70,6 +71,7 @@
       SystemTab,
       EditSoftList,
       WorkspaceList,
+      DbList,
       NTooltip,
     },
     setup() {
