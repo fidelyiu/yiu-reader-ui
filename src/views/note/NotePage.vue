@@ -87,7 +87,7 @@
               </yiu-square-btn>
               <yiu-square-btn :padding-px="6"
                               :show-text="mainStore.showDocumentTxt"
-                              @btnClick="positionDocument(false, false)">
+                              @btnClick="positionDocument">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
@@ -168,7 +168,7 @@
               </yiu-square-btn>
               <yiu-square-btn :show-text="mainStore.showDirTxt"
                               :padding-px="6"
-                              @btnClick="positionMainPointTree">
+                              @btnClick="positionDirTree">
                 <template #icon>
                   <span class="iconify block" data-icon="mdi:map-marker-outline" data-inline="false"></span>
                 </template>
@@ -482,18 +482,18 @@
       const md = genMd(markdownTree)
       const { width } = useWindowSize()
 
-      const positionDocument = (pM: boolean, pD: boolean) => {
+      const positionDocument = () => {
         if (activeElId.value) {
           const titleDom = document.getElementById(activeElId.value)
           if (titleDom) {
             titleDom.scrollIntoView(true)
           }
-          if (pM) {
-            positionMainPointTree()
-          }
-          if (pD) {
-            positionDirTree()
-          }
+          // if (pM) {
+          //   positionMainPointTree()
+          // }
+          // if (pD) {
+          //   positionDirTree()
+          // }
         }
       }
 
@@ -506,7 +506,7 @@
 
       const positionDirTree = () => {
         openAllDirTreeItem()
-        if (dirTreeRef.value && isFunction(dirTreeRef.value.setScrollMainPoint)) {
+        if (dirTreeRef.value && isFunction(dirTreeRef.value.setScrollDir)) {
           dirTreeRef.value.setScrollDir(noteId.value)
         }
       }
@@ -540,7 +540,7 @@
               nextTick(() => {
                 if (window && window.Prism && isFunction(window.Prism.highlightAll)) {
                   window.Prism.highlightAll()
-                  positionDocument(true, true)
+                  positionDocument()
                 }
               })
             }
@@ -675,6 +675,16 @@
         })
       }
       loadDir(route.params.id)
+
+      watch(
+          () => [route.params.id, dirTree.value],
+          () => {
+            nextTick(() => {
+              positionDirTree()
+            })
+          },
+      )
+
       const searchDirKey = ref('')
 
       const previousNote = ref<any>()
@@ -746,7 +756,10 @@
               activeElId.value = v.slice(symbolIndex + 1)
             }
             if (!noteLoading.value) {
-              positionDocument(false, false)
+              positionDocument()
+              nextTick(() => {
+                positionMainPointTree()
+              })
             }
           },
           {

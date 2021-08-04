@@ -139,7 +139,7 @@
         }
       }
       const openAll = () => {
-        if (prop.node.isDir) {
+        if (prop.node.data.isDir) {
           isOpen.value = true
           for (const refItem of itemRef.value) {
             if (refItem && isFunction(refItem.openAll)) {
@@ -162,6 +162,7 @@
         noteName,
         closeAll,
         openAll,
+        hasChildActive,
       }
     },
   })

@@ -9,10 +9,24 @@
     display: inline-block;
 }
 
+a .inline-code-div {
+    text-decoration: underline;
+    color: #f8f8f2;
+}
+
+a .inline-code-copy {
+    display: none;
+}
+
 .inline-code-div:hover .inline-code-copy {
     /*display: inline-block;*/
     right: -.8em;
     width: 1.4em;
+}
+
+li .inline-code-copy {
+    height: 19px !important;
+    top: 1px !important;
 }
 
 .inline-code-copy {

@@ -148,13 +148,14 @@
           </div>
           <!--删除按钮-->
           <div class="self-center">
-            <n-popconfirm placement="top-end"
+            <n-popconfirm class="!pb-[16px] !pl-[8px]"
+                          placement="top-end"
                           negative-text="取消"
                           positive-text="确认"
                           @positive-click="onDelete(item?.id)">
               <template #icon>
                 <span style="color: #ff7875;"
-                      class="iconify block"
+                      class="iconify block ml-[4px] mt-2"
                       data-icon="mdi:alert-circle"
                       data-inline="false"></span>
               </template>
@@ -163,7 +164,7 @@
                   <span class="iconify block" data-icon="mdi:delete-forever-outline" data-inline="false"></span>
                 </button>
               </template>
-              <span class="max-w-55">是否删除该工作空间，此操作将删除该工作空间下所有YR记录?</span>
+              <span class="max-w-55 pt-2">是否删除该工作空间，此操作将删除该工作空间下所有YR记录?</span>
             </n-popconfirm>
           </div>
         </div>
