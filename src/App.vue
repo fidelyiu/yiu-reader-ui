@@ -1,5 +1,7 @@
 <template>
-  <n-config-provider class="h-full" :theme-overrides="themeOverrides">
+  <n-config-provider class="h-full"
+                     :locale="locale"
+                     :theme-overrides="themeOverrides">
     <n-notification-provider :scrollable="false">
       <div class="h-full flex flex-col overflow-hidden">
         <div class="flex-grow flex-shrink-0 flex flex-col h-0">
@@ -12,9 +14,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import BottomBox from '/@/components/BottomBox.vue'
   import { NConfigProvider, NNotificationProvider } from 'naive-ui'
+  import { zhCN, dateZhCN } from 'naive-ui'
 
   export default defineComponent({
     name: 'App',
@@ -43,6 +46,8 @@
         },
       }
       return {
+        locale: ref(zhCN),
+        dateLocale: ref(dateZhCN),
         themeOverrides,
       }
     },
