@@ -7,7 +7,8 @@
         <div class="text-base flex-none">表名：</div>
         <div class="px-2 mr-4 rounded-3xl bg-blue-50 border border-blue-100 flex-none">
           <select v-model="searchDb"
-                  class="rounded focus:outline-none h-[30px] bg-blue-50">
+                  class="rounded focus:outline-none h-[30px] bg-blue-50"
+                  @change="search">
             <option value="main">主表</option>
             <option value="layout">布局</option>
             <option value="workspace">工作空间</option>
