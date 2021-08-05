@@ -131,22 +131,24 @@
         isOpen.value = true
       }
       const closeAll = () => {
-        isOpen.value = false
-        for (const refItem of itemRef.value) {
-          if (refItem && isFunction(refItem.closeAll)) {
-            refItem.closeAll()
+        if (prop.node.data.isDir) {
+          for (const refItem of itemRef.value) {
+            if (refItem && isFunction(refItem.closeAll)) {
+              refItem.closeAll()
+            }
           }
         }
+        isOpen.value = false
       }
       const openAll = () => {
         if (prop.node.data.isDir) {
-          isOpen.value = true
           for (const refItem of itemRef.value) {
             if (refItem && isFunction(refItem.openAll)) {
               refItem.openAll()
             }
           }
         }
+        isOpen.value = true
       }
       return {
         setItemRef,
@@ -169,5 +171,7 @@
 </script>
 
 <style scoped>
-
+  .arrow-icon:hover {
+    @apply border border-blue-200 bg-blue-100;
+  }
 </style>

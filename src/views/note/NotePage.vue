@@ -916,6 +916,8 @@
         return ''
       }
 
+      mainStore.initCurrentEditSoft()
+
       return {
         mainStore,
         loadNote,

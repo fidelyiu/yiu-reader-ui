@@ -42,19 +42,28 @@
           el.scrollIntoView(true)
         })
       }
+
+      // const changingOpenClose = ref(false)
+
       const closeAll = () => {
+        // if (changingOpenClose.value) return
+        // changingOpenClose.value = true
         for (const refItem of itemRef.value) {
           if (refItem && isFunction(refItem.closeAll)) {
             refItem.closeAll()
           }
         }
+        // changingOpenClose.value = false
       }
       const openAll = () => {
+        // if (changingOpenClose.value) return
+        // changingOpenClose.value = true
         for (const refItem of itemRef.value) {
           if (refItem && isFunction(refItem.openAll)) {
             refItem.openAll()
           }
         }
+        // changingOpenClose.value = false
       }
       return {
         setItemRef,
