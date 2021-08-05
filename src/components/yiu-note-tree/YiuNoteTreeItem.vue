@@ -100,7 +100,9 @@
     setup(prop, { emit }) {
       const itemRef: Array<any> = []
       const setItemRef = (e: any) => {
-        itemRef.push(e)
+        if (itemRef.indexOf(e) === -1) {
+          itemRef.push(e)
+        }
       }
       const showErrFile = () => {
         if (isInvalidFile.value) {

@@ -29,7 +29,9 @@
     setup(prop) {
       const itemRef = ref<Array<any>>([])
       const setItemRef = (e: any) => {
-        itemRef.value.push(e)
+        if (itemRef.value.indexOf(e) === -1) {
+          itemRef.value.push(e)
+        }
       }
       provide('showNumber', computed(() => prop.showNumber))
       provide('searchStr', computed(() => prop.searchStr))

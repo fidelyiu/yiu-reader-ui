@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex p-[5px] border-t border-b border-transparent min-w-[150px]"
-         :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder}">
+    <div class="flex p-[5px] border-t border-b border-transparent"
+         :class="{'bg-blue-50': isActive, '!border-blue-200': showBlueBorder, 'min-w-[150px]': !showNumber, 'min-w-[190px]': showNumber}">
       <div class="flex-none border border-transparent mr-1"
            :class="{'arrow-icon':node.data.isDir}"
            @click="onChangeOpen">
@@ -60,7 +60,9 @@
     setup(prop, { emit }) {
       const itemRef = ref<Array<any>>([])
       const setItemRef = (e: any) => {
-        itemRef.value.push(e)
+        if (itemRef.value.indexOf(e) === -1) {
+          itemRef.value.push(e)
+        }
       }
       const showNumber: any = inject('showNumber')
       const searchStr: any = inject('searchStr')

@@ -28,7 +28,9 @@
     setup(prop) {
       const itemRef = ref<Array<any>>([])
       const setItemRef = (e: any) => {
-        itemRef.value.push(e)
+        if (itemRef.value.indexOf(e) === -1) {
+          itemRef.value.push(e)
+        }
       }
       provide('showNumber', computed(() => prop.showNumber))
       provide('searchStr', computed(() => prop.searchStr))
@@ -43,27 +45,19 @@
         })
       }
 
-      // const changingOpenClose = ref(false)
-
       const closeAll = () => {
-        // if (changingOpenClose.value) return
-        // changingOpenClose.value = true
         for (const refItem of itemRef.value) {
           if (refItem && isFunction(refItem.closeAll)) {
             refItem.closeAll()
           }
         }
-        // changingOpenClose.value = false
       }
       const openAll = () => {
-        // if (changingOpenClose.value) return
-        // changingOpenClose.value = true
         for (const refItem of itemRef.value) {
           if (refItem && isFunction(refItem.openAll)) {
             refItem.openAll()
           }
         }
-        // changingOpenClose.value = false
       }
       return {
         setItemRef,
