@@ -3,6 +3,10 @@
     <div class="flex-none h-[64px] bg-blue-200 flex justify-between px-[8px] border-b">
       <div class="fa-center text-2xl flex-grow w-0">
         <div class="w-full truncate">
+          <button class="yiu-blue-square-btn-2 mr-3"
+                  @click="onBack">
+            <span class="iconify block text-xl" data-icon="mdi:keyboard-backspace" data-inline="false"></span>
+          </button>
           <span>{{ noteName }}</span>
           <span v-show="noteLoading">
             <n-spin class="ml-[8px] p-[4px]"/>
@@ -441,6 +445,7 @@
   import DirTree from '/@/views/note/DirTree.vue'
   import { useMainStore } from '/@/store/modules/main'
   import { useLogStore } from '/@/store/modules/log'
+  import router from '/@/router'
 
   export default defineComponent({
     name: 'NotePage',
@@ -916,6 +921,10 @@
         return ''
       }
 
+      const onBack = () => {
+        router.replace('/dashboard')
+      }
+
       mainStore.initCurrentEditSoft()
 
       return {
@@ -966,6 +975,7 @@
         previousNote,
         nextNote,
         getNumArrStr,
+        onBack,
       }
     },
   })
