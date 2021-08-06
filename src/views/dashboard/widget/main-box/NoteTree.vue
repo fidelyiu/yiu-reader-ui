@@ -276,6 +276,54 @@
         getRenderingList()
       }
 
+      const openParent = (item: DataItem) => {
+        if (item.parentIndex && item.parentIndex.length) {
+          item.parentIndex.forEach(el => {
+            dataList.value[el].isOpen = true
+          })
+        }
+      }
+
+      watch(
+          () => prop.searchStr,
+          (v) => {
+            if (!v) return
+            dataList.value.forEach(item => {
+              item.isOpen = false
+              if (item.name && item.name.indexOf(v) !== -1) {
+                openParent(item)
+              }
+            })
+            getRenderingList()
+          },
+      )
+
+      const showErrFile = () => {
+        dataList.value.forEach(item => {
+          item.isOpen = false
+          if (statusIsInvalid(item.data.status)) {
+            openParent(item)
+          }
+        })
+        getRenderingList()
+      }
+
+      const openAll = () => {
+        dataList.value.forEach(item => {
+          if (item.isDir) {
+            item.isOpen = true
+          }
+        })
+        getRenderingList()
+      }
+
+      const closeAll = () => {
+        dataList.value.forEach(item => {
+          item.isOpen = false
+        })
+        getRenderingList()
+      }
+
       return {
         renderingList,
         boxHeight,
@@ -285,6 +333,9 @@
         statusIsInvalid,
         getNumberTitle,
         onClick,
+        showErrFile,
+        openAll,
+        closeAll,
       }
     },
   })

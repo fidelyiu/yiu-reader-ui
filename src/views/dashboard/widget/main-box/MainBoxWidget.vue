@@ -24,6 +24,28 @@
                 <span v-show="!mainStore.mainBoxShowText">查看按钮提示</span>
               </template>
             </yiu-square-btn>
+            <!--关闭所有-->
+            <yiu-square-btn class="mr-2"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onCloseAllFile">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:arrow-collapse-vertical" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>关闭所有</span>
+              </template>
+            </yiu-square-btn>
+            <!--展开所有-->
+            <yiu-square-btn class="mr-2"
+                            :show-text="mainStore.mainBoxShowText"
+                            @btnClick="onOpenAllFile">
+              <template #icon>
+                <span class="iconify block" data-icon="mdi:arrow-expand-vertical" data-inline="false"></span>
+              </template>
+              <template #text>
+                <span>展开所有</span>
+              </template>
+            </yiu-square-btn>
             <!--刷新目录按钮-->
             <yiu-square-btn v-show="layoutDir"
                             class="mr-2"
@@ -191,17 +213,18 @@
         </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
-          <NoteTree :data="treeData"
+          <NoteTree ref="treeRef"
+                    :data="treeData"
                     :item-height="48"
                     :item-padding="8"
                     :show-number="mainStore.mainBoxShowNum"
                     :show-icon="mainStore.mainBoxShowIcon"
                     :search-str="searchKey">
-          <!--<YiuNoteTree ref="treeRef"-->
-          <!--             :data="treeData"-->
-          <!--             :show-number="mainStore.mainBoxShowNum"-->
-          <!--             :show-icon="mainStore.mainBoxShowIcon"-->
-          <!--             :search-str="searchKey">-->
+            <!--<YiuNoteTree ref="treeRef"-->
+            <!--             :data="treeData"-->
+            <!--             :show-number="mainStore.mainBoxShowNum"-->
+            <!--             :show-icon="mainStore.mainBoxShowIcon"-->
+            <!--             :search-str="searchKey">-->
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏提示-->
@@ -374,7 +397,7 @@
                 </yiu-square-btn>
               </div>
             </template>
-          <!--</YiuNoteTree>-->
+            <!--</YiuNoteTree>-->
           </NoteTree>
         </div>
       </div>
@@ -878,6 +901,18 @@
         }
       }
 
+      const onOpenAllFile = () => {
+        if (treeRef.value && isFunction(treeRef.value.openAll)) {
+          treeRef.value.openAll()
+        }
+      }
+
+      const onCloseAllFile = () => {
+        if (treeRef.value && isFunction(treeRef.value.closeAll)) {
+          treeRef.value.closeAll()
+        }
+      }
+
       const delBadLoading = ref(false)
 
       const onDelBad = () => {
@@ -968,6 +1003,8 @@
         onEditSuccess,
         onEditError,
         onPositionErrFile,
+        onOpenAllFile,
+        onCloseAllFile,
         delBadLoading,
         onDelBad,
         onReadMD,
