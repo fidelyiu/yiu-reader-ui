@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, nextTick, ref, watch } from 'vue'
+  import { computed, defineComponent, nextTick, onDeactivated, ref, watch } from 'vue'
   import { propTypes } from '/@/utils/propTypes'
   import { throttle } from 'lodash'
   import { statusIsInvalid } from '/@/vo/enum/obj-status'
@@ -131,6 +131,12 @@
             }
             updateHeight = prop.itemHeight * showNumValue.value / 2
           }
+        }
+      })
+
+      onDeactivated(()=>{
+        if (el) {
+          el.removeEventListener('scroll', onScroll)
         }
       })
       // 上一次更新视图元素时，滚动高度
