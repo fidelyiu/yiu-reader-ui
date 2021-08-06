@@ -1,7 +1,9 @@
 <template>
   <div class="w-full h-full overflow-hidden pr-1 pb-3 pt-3">
-    <div class="w-full h-full overflow-auto">
-      <div class="relative w-full" :class="{'h-full': treeLoading||!treeData?.length}">
+    <div id="yiu-note-tree-box"
+         class="w-full h-full overflow-auto">
+      <div class="relative w-full"
+           :class="{'h-full': treeLoading||!treeData?.length}">
         <div class="sticky top-0 pb-2 px-4 bg-white flex-none flex">
           <SearchInput v-model="searchKey" class="flex-grow mr-2"></SearchInput>
           <div class="flex-none flex">
@@ -189,11 +191,17 @@
         </div>
         <!--内容部分-->
         <div class="w-full overflow-auto px-2">
-          <YiuNoteTree ref="treeRef"
-                       :data="treeData"
-                       :show-number="mainStore.mainBoxShowNum"
-                       :show-icon="mainStore.mainBoxShowIcon"
-                       :search-str="searchKey">
+          <NoteTree :data="treeData"
+                    :item-height="48"
+                    :item-padding="8"
+                    :show-number="mainStore.mainBoxShowNum"
+                    :show-icon="mainStore.mainBoxShowIcon"
+                    :search-str="searchKey">
+          <!--<YiuNoteTree ref="treeRef"-->
+          <!--             :data="treeData"-->
+          <!--             :show-number="mainStore.mainBoxShowNum"-->
+          <!--             :show-icon="mainStore.mainBoxShowIcon"-->
+          <!--             :search-str="searchKey">-->
             <template #default="slotProps">
               <div class="flex">
                 <!--隐藏提示-->
@@ -366,7 +374,8 @@
                 </yiu-square-btn>
               </div>
             </template>
-          </YiuNoteTree>
+          <!--</YiuNoteTree>-->
+          </NoteTree>
         </div>
       </div>
     </div>
@@ -504,7 +513,7 @@
   import { propTypes } from '/@/utils/propTypes'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
-  import YiuNoteTree from '/@/components/yiu-note-tree'
+  // import YiuNoteTree from '/@/components/yiu-note-tree'
   import SearchInput from '/@/components/SearchInput.vue'
   import { NButton, NCard, NModal, NSpin, useNotification } from 'naive-ui'
   import { useLogStore } from '/@/store/modules/log'
@@ -532,12 +541,14 @@
   import { isFunction } from 'lodash'
   import router from '/@/router'
   import YiuSquareBtn from '/@/components/yiu-btn/YiuSquareBtn.vue'
+  import NoteTree from '/@/views/dashboard/widget/main-box/NoteTree.vue'
 
   export default defineComponent({
     name: 'MainBoxWidget',
     components: {
       SearchInput,
-      YiuNoteTree,
+      NoteTree,
+      // YiuNoteTree,
       NModal,
       NCard,
       NButton,
