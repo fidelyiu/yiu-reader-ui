@@ -177,7 +177,7 @@
       ]
       const onPageChane = (changePage: number) => {
         if (changePage > 0) {
-          if (totalPage.value && changePage <= totalPage.value) {
+          if (totalPage.value && changePage <= (totalPage.value || 0)) {
             page.value = changePage
           }
         }

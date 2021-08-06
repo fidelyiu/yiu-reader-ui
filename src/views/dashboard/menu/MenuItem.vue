@@ -58,6 +58,7 @@
 
       const onChangeWorkSpace = () => {
         if (!props.workspace.id) return
+        if (mainStore.currentWorkspace.id === props.workspace.id) return
         mainStore.changingWorkspace = true
         yiuHttp({
           api: SERVER_API.mainApi.setCurrentWorkspace,
