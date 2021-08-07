@@ -21,23 +21,23 @@
                   :class="{'!border-blue-400': model.img==='typora'}"
                   @click="model.img='typora'">
               <img class="w-[48px] h-[48px]"
-                   src="src/assets/typora.png"
+                   src="../../../../src/assets/typora.png"
                    @click="model.img='typora'">
             </span>
             <span class="image-box mr-2"
                   :class="{'!border-blue-400': model.img==='vs_code'}"
                   @click="model.img='vs_code'">
-              <img class="w-[48px] h-[48px]" src="src/assets/vs_code.png">
+              <img class="w-[48px] h-[48px]" src="../../../../src/assets/vs_code.png">
             </span>
             <span class="image-box mr-2"
                   :class="{'!border-blue-400': model.img==='sublime'}"
                   @click="model.img='sublime'">
-              <img class="w-[48px] h-[48px]" src="src/assets/sublime.png">
+              <img class="w-[48px] h-[48px]" src="../../../../src/assets/sublime.png">
             </span>
             <span class="image-box"
                   :class="{'!border-blue-400': model.img==='note'}"
                   @click="model.img='note'">
-              <img class="w-[48px] h-[48px]" src="src/assets/note.png">
+              <img class="w-[48px] h-[48px]" src="../../../../src/assets/note.png">
             </span>
           </div>
         </n-formItem>

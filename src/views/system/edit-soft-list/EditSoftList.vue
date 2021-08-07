@@ -61,19 +61,19 @@
           <template v-if="isDefImg(item.img)">
             <img v-if="item.img==='typora'"
                  class="w-[36px] h-[36px] mr-4"
-                 :src="'src/assets/typora.png'"
+                 src="../../../../src/assets/typora.png"
                  alt="typora">
             <img v-if="item.img==='vs_code'"
                  class="w-[36px] h-[36px] mr-4"
-                 :src="'src/assets/vs_code.png'"
+                 src="../../../../src/assets/vs_code.png"
                  alt="vs_code">
             <img v-if="item.img==='sublime'"
                  class="w-[36px] h-[36px] mr-4"
-                 :src="'src/assets/sublime.png'"
+                 src="../../../../src/assets/sublime.png"
                  alt="sublime">
             <img v-if="item.img==='note'"
                  class="w-[36px] h-[36px] mr-4"
-                 :src="'src/assets/note.png'"
+                 src="../../../../src/assets/note.png"
                  alt="note">
           </template>
           <img v-else

@@ -10,7 +10,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,

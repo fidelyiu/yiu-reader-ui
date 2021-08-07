@@ -1,6 +1,7 @@
 <template>
   <n-config-provider class="h-full"
                      :locale="locale"
+                     :date-locale="dateLocale"
                      :theme-overrides="themeOverrides">
     <n-notification-provider :scrollable="false">
       <div class="h-full flex flex-col overflow-hidden">

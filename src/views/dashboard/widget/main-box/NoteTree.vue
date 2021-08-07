@@ -5,7 +5,7 @@
            :key="item.id"
            class="flex"
            @click.stop="onClick(item)">
-        <div v-for="i in (item.level-1)"
+        <div v-for="i in (item?.level||1-1)"
              :key="i"
              class="flex-none w-[16px] border-r border-blue-200 inline-block"
              :style="{'height': itemHeight + 'px'}"></div>
@@ -61,11 +61,11 @@
           <div class="flex-grow flex items-center w-0 select-none mr-2">
             <div class="truncate">
               <span class="mr-2 font-semibold" :class="{'text-red-400': statusIsInvalid(item.data.status)}">
-                <span v-if="item.name.indexOf(searchStr) > -1">{{
-                    item.name.substr(0, item.name.indexOf(searchStr))
+                <span v-if="(item?.name?.indexOf(searchStr) || 0) > -1">{{
+                    item?.name?.substr(0, item?.name?.indexOf(searchStr))
                   }}<span class="bg-yellow-200">{{
                       searchStr
-                    }}</span>{{ item.name.substr(item.name.indexOf(searchStr) + searchStr.length) }}</span>
+                    }}</span>{{ item?.name?.substr(item?.name?.indexOf(searchStr) + searchStr.length) }}</span>
                 <span v-else>{{ item.name }}</span>
               </span>
             </div>
@@ -134,7 +134,7 @@
         }
       })
 
-      onDeactivated(()=>{
+      onDeactivated(() => {
         if (el) {
           el.removeEventListener('scroll', onScroll)
         }
