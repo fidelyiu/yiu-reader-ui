@@ -457,10 +457,10 @@
       NFormItem,
       NButton,
       NSpin,
+      ToolBox,
       MainPointTree,
       SearchInput,
       YiuSquareBtn,
-      ToolBox,
       DirTree,
     },
     setup() {
@@ -484,7 +484,7 @@
 
       const markdownTree = ref<Array<MarkdownItemInfo>>([])
 
-      const md = genMd(markdownTree)
+      const md = genMd(markdownTree, noteId)
       const { width } = useWindowSize()
 
       const positionDocument = () => {
@@ -493,12 +493,6 @@
           if (titleDom) {
             titleDom.scrollIntoView(true)
           }
-          // if (pM) {
-          //   positionMainPointTree()
-          // }
-          // if (pD) {
-          //   positionDirTree()
-          // }
         }
       }
 
@@ -906,7 +900,9 @@
 
       const onEditMarkDown = () => {
         if (!noteId.value) return
-        logStore.pushLog(String(Date.now()), 'info', '执行命令行：' + mainStore.currentEditSoft.path + ' ' + note.value.absPath)
+        logStore.pushLog(String(Date.now()), 'info', '执行命令行：'
+            + mainStore.currentEditSoft.path
+            + ' ' + note.value.absPath)
         yiuHttp({
           api: SERVER_API.noteApi.editMarkdown,
           pathData: { id: noteId.value },

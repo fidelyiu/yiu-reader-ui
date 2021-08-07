@@ -109,7 +109,7 @@ const setListItemOrder = (list: Array<MarkdownItemInfo>, tree: Array<MarkdownIte
     _setListItemOrder(list, tree)
 }
 
-export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
+export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>, noteId: Ref<string>) => {
 
     const markdownItemArr: Array<MarkdownItemInfo> = []
 
@@ -285,6 +285,22 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>) => {
             tokens[idx].attrs[aIndex][1] = '_blank'
         }
     })
+
+    const imageDefaultRender = md.renderer.rules.image
+    md.renderer.rules.image = function (tokens, idx, options, env, self) {
+        const token = tokens[idx]
+        console.log(token)
+        // encodeURIComponent()
+        let aIndex = token.attrIndex('src')
+        if (token.attrs[aIndex][1] && noteId.value) {
+            const srcStr = 'http://localhost:8080/img/load?src='
+                + token.attrs[aIndex][1]
+                + '&id=' + noteId.value
+            console.log(1, srcStr)
+            return '<img src="' + srcStr + '" alt="" />'
+        }
+        return imageDefaultRender(tokens, idx, options, env, self);
+    }
 
     // 行内代码加语言名
     md.use(InlineCodeName)
