@@ -428,7 +428,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, nextTick, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
   import { yiuHttp } from '/@/utils/http'
   import SERVER_API from '/@/api'
   import { NBackTop, NButton, NCard, NForm, NFormItem, NModal, NSpin, useNotification } from 'naive-ui'
@@ -447,7 +447,7 @@
   import { useLogStore } from '/@/store/modules/log'
   import router from '/@/router'
 
-  export default defineComponent({
+  export default {
     name: 'NotePage',
     components: {
       NBackTop,
@@ -974,7 +974,7 @@
         onBack,
       }
     },
-  })
+  }
 </script>
 
 <style scoped>
