@@ -289,17 +289,15 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>, noteId: Ref<st
     const imageDefaultRender = md.renderer.rules.image
     md.renderer.rules.image = function (tokens, idx, options, env, self) {
         const token = tokens[idx]
-        console.log(token)
-        // encodeURIComponent()
         const aIndex = token.attrIndex('src')
         if (token.attrs[aIndex][1] && noteId.value) {
             const srcStr = 'http://localhost:8080/img/load?src='
                 + token.attrs[aIndex][1]
                 + '&id=' + noteId.value
             console.log(1, srcStr)
-            return '<img src="' + srcStr + '" alt="" />'
+            return '<img src="' + srcStr + '" alt="' + token.content + '" />'
         }
-        return imageDefaultRender(tokens, idx, options, env, self);
+        return imageDefaultRender(tokens, idx, options, env, self)
     }
 
     // 行内代码加语言名
