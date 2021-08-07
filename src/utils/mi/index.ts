@@ -291,7 +291,7 @@ export const genMd = (markdownTree: Ref<Array<MarkdownItemInfo>>, noteId: Ref<st
         const token = tokens[idx]
         console.log(token)
         // encodeURIComponent()
-        let aIndex = token.attrIndex('src')
+        const aIndex = token.attrIndex('src')
         if (token.attrs[aIndex][1] && noteId.value) {
             const srcStr = 'http://localhost:8080/img/load?src='
                 + token.attrs[aIndex][1]
